@@ -11,11 +11,11 @@ const app = express();
 const server = httpMod.createServer(app);
 const PORT = process.env.PORT || 3000;
 
-// Directorios principales en el servidor Linux (Usuario: dgdysnem1)
+// Directorios principales adaptados de forma segura y portable para la nube
 const uploadDir = path.join(__dirname, 'uploads');
 const frapcUploadDir = path.join(uploadDir, 'frapc');
-const minutasUploadDir = '/home/dgdysnem1/Master_servidor_UIPC/uploads/minutas/';
-const rutaRedFormato = '/home/dgdysnem1/Master_servidor_UIPC/uploads/RED_Formato/';
+const minutasUploadDir = path.join(uploadDir, 'minutas');
+const rutaRedFormato = path.join(uploadDir, 'RED_Formato');
 
 // Archivos de base de datos JSON
 const dbFile = path.join(__dirname, 'usuarios.json');
@@ -27,7 +27,7 @@ const eventosFile = path.join(__dirname, 'eventos.json');
 
 const activeUsers = {};
 
-// Crear carpetas si no existen
+// Crear carpetas si no existen de forma segura
 if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
 if (!fs.existsSync(frapcUploadDir)) fs.mkdirSync(frapcUploadDir, { recursive: true });
 if (!fs.existsSync(minutasUploadDir)) fs.mkdirSync(minutasUploadDir, { recursive: true });
@@ -76,12 +76,13 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname));
 
-// NUEVO: Exponer carpeta uploads de forma pública para visualizar PDFs y FRAPCs
+// Exponer carpeta uploads de forma pública para visualizar PDFs y FRAPCs
 app.use('/uploads', express.static(uploadDir));
 
-// RUTA INICIAL
+// RUTAS INICIALES Y VISTAS PRINCIPALES
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'loginuipc.html')));
 app.get('/login.html', (req, res) => res.sendFile(path.join(__dirname, 'loginuipc.html')));
+app.get('/dashboard_mobile.html', (req, res) => res.sendFile(path.join(__dirname, 'dashboard_mobile.html')));
 
 // API AUTENTICACIÓN
 app.post('/api/login', (req, res) => {
@@ -252,7 +253,7 @@ app.post('/api/poblacion/delete', (req, res) => {
     records = records.filter(r => r.id !== id);
     
     if (records.length < initialLength) {
-        fs.writeFileSync(pobFile, JSON.stringify(records, null, 2));
+        fs.writeFileSync(poblacionFile, JSON.stringify(records, null, 2)); // Corregido por consistencia
         res.json({ success: true, message: 'Registro eliminado correctamente.' });
     } else {
         res.status(404).json({ success: false, message: 'Registro no encontrado.' });
@@ -355,7 +356,7 @@ app.get('/api/file/red', (req, res) => {
     else res.status(404).send('Archivo no encontrado.');
 });
 
-// NUEVO ENDPOINT: API FRAPC para leer automáticamente la carpeta física uploads/frapc
+// API FRAPC
 app.get('/api/frapcs', (req, res) => {
     if (!fs.existsSync(frapcUploadDir)) {
         fs.mkdirSync(frapcUploadDir, { recursive: true });
@@ -410,7 +411,7 @@ app.post('/api/upload-frapc', upload.single('pdfFile'), (req, res) => {
     res.json({ success: true, file: newFile });
 });
 
-// SUBIDA GENERAL Y PROCESO DE ESCANEOS (EXTRACCIÓN SANITIZADA)
+// SUBIDA GENERAL Y PROCESO DE ESCANEOS
 app.post('/api/upload', upload.single('pdfFile'), async (req, res) => {
     if (!req.file) return res.status(400).json({ success: false, message: 'No se adjuntó archivo.' });
     
@@ -450,7 +451,7 @@ app.post('/api/upload', upload.single('pdfFile'), async (req, res) => {
         finalPath = `/uploads/${userIdClean}/${req.file.originalname}`;
     }
 
-    // PROCESAMIENTO OCR EN SEGUNDO PLANO PARA ESCANEOS
+    // OCR EN SEGUNDO PLANO
     const absolutePdfPath = path.join(__dirname, finalPath.replace(/^\//, ''));
     if (fs.existsSync(absolutePdfPath) && req.file.originalname.toLowerCase().endsWith('.pdf') && !isMinuta) {
         const baseDir = path.dirname(absolutePdfPath);
@@ -612,9 +613,9 @@ app.post('/api/eventos/rapido', (req, res) => {
         let eventosAgregados = 0;
 
         bloquesCrudos.forEach(bloque => {
-            const textoLimpio = bloque.trim();
-            if (textoLimpio.length > 10) {
-                data.lista.push({ id: Date.now() + Math.random(), texto_completo: textoLimpio, hora_registro: horaActual });
+            const tekstLimpio = bloque.trim();
+            if (tekstLimpio.length > 10) {
+                data.lista.push({ id: Date.now() + Math.random(), texto_completo: tekstLimpio, hora_registro: horaActual });
                 eventosAgregados++;
             }
         });
