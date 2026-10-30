@@ -11,11 +11,11 @@ const app = express();
 const server = httpMod.createServer(app);
 const PORT = process.env.PORT || 3000;
 
-// Directorios principales en el servidor Linux (Usuario: dgdysnem1)
+// Directorios principales adaptados de forma segura para cualquier servidor
 const uploadDir = path.join(__dirname, 'uploads');
 const frapcUploadDir = path.join(uploadDir, 'frapc');
-const minutasUploadDir = '/home/dgdysnem1/Master_servidor_UIPC/uploads/minutas/';
-const rutaRedFormato = '/home/dgdysnem1/Master_servidor_UIPC/uploads/RED_Formato/';
+const minutasUploadDir = path.join(uploadDir, 'minutas');
+const rutaRedFormato = path.join(uploadDir, 'RED_Formato');
 
 // Archivos de base de datos JSON
 const dbFile = path.join(__dirname, 'usuarios.json');
@@ -76,7 +76,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname));
 
-// NUEVO: Exponer carpeta uploads de forma pública para visualizar PDFs y FRAPCs
+// Exponer carpeta uploads de forma pública para visualizar PDFs y FRAPCs
 app.use('/uploads', express.static(uploadDir));
 
 // RUTA INICIAL
