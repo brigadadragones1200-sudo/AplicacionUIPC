@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Avisos UIPC</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-color: #0f172a;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            height: 75px;
+            overflow: hidden;
+        }
+
+        .btn-avisos {
+            background: linear-gradient(to right, #f59e0b, #dc2626);
+            color: white;
+            font-weight: 900;
+            font-size: 15px;
+            padding: 10px 25px;
+            border-radius: 9999px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease-in-out;
+            letter-spacing: 0.5px;
+            border: 1px solid #fcd34d;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .btn-avisos:hover {
+            background: linear-gradient(to right, #d97706, #b91c1c);
+            transform: scale(1.03);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.4);
+        }
+
+        .icono-container {
+            transition: transform 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .icono-container:hover {
+            transform: scale(1.1);
+        }
+
+        .linea-peligro {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: repeating-linear-gradient(
+                45deg,
+                #f59e0b,
+                #f59e0b 10px,
+                #0f172a 10px,
+                #0f172a 20px
+            );
+        }
+    </style>
+</head>
+<body class="relative flex items-center justify-center px-6 gap-6">
+
+    <!-- Icono Izquierdo corregido con ../ -->
+    <a href="../uploads/REPORTE_SIMULACRO_19-SEP-26.pdf" target="_blank" title="Abrir Reporte de Simulacro" class="icono-container text-white w-1/6">
+        <svg width="40" height="40" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="48" stroke="#fcd34d" stroke-width="4" fill="#0f172a"/>
+            <path d="M50 15L85 75H15L50 15Z" stroke="#fcd34d" stroke-width="5" fill="#ef4444"/>
+            <text x="50" y="70" font-family="Arial, sans-serif" font-size="30" font-weight="bold" fill="#fcd34d" text-anchor="middle">PC</text>
+        </svg>
+        <span class="text-[9px] font-bold mt-0.5 text-yellow-300 uppercase tracking-wider">PDF</span>
+    </a>
+
+    <!-- Sección Central: Botón corregido con ../ -->
+    <div class="w-4/6 flex justify-center">
+        <a href="../uploads/REPORTE_SIMULACRO_19-SEP-26.pdf" target="_blank" class="btn-avisos text-center no-underline">
+            REPORTE SIMULACRO 19 SEP 26
+        </a>
+    </div>
+
+    <!-- Icono Derecho corregido con ../ -->
+    <a href="../uploads/REPORTE_SIMULACRO_19-SEP-26.pdf" target="_blank" title="Abrir Reporte de Simulacro" class="icono-container text-white w-1/6">
+        <svg width="40" height="40" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="48" stroke="#fcd34d" stroke-width="4" fill="#0f172a"/>
+            <path d="M50 15L85 75H15L50 15Z" stroke="#fcd34d" stroke-width="5" fill="#ef4444"/>
+            <text x="50" y="70" font-family="Arial, sans-serif" font-size="30" font-weight="bold" fill="#fcd34d" text-anchor="middle">PC</text>
+        </svg>
+        <span class="text-[9px] font-bold mt-0.5 text-yellow-300 uppercase tracking-wider">PDF</span>
+    </a>
+
+    <div class="linea-peligro"></div>
+
+</body>
+</html>

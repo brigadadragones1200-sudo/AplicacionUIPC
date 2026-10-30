@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil y Directorio de Usuario</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: transparent;
+            font-family: 'Inter', sans-serif;
+        }
+        @keyframes pulsoLlamativo {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(119, 175, 156, 0.4); }
+            50% { transform: scale(1.01); box-shadow: 0 0 15px 3px rgba(119, 175, 156, 0.25); }
+        }
+        .btn-animado {
+            animation: pulsoLlamativo 3s infinite;
+        }
+    </style>
+</head>
+<body class="min-h-full flex flex-col justify-between text-slate-800 p-2 m-0">
+
+    <main class="max-w-5xl mx-auto w-full bg-white/95 backdrop-blur-md rounded-2xl shadow-xl border-2 border-[#77af9c] p-4 sm:p-5 space-y-3">
+        
+        <!-- Header Compacto e Integrado -->
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-slate-100 pb-3 gap-3">
+            <div class="flex items-center space-x-3">
+                <div class="w-9 h-9 text-white rounded-xl flex items-center justify-center shadow-md flex-shrink-0" style="background-color: #77af9c;">
+                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="text-sm sm:text-base font-extrabold text-slate-900 tracking-tight">Perfil y Directorio de Usuario</h1>
+                    <p class="text-[11px] text-slate-500">Información institucional en tiempo real</p>
+                </div>
+            </div>
+
+            <!-- Botones superiores integrados (Asistencia + Lista General) -->
+            <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
+                <a href="pase_lista.html" target="_blank" rel="noopener noreferrer" style="background-color: #9baec8;" class="hover:bg-[#889cb7] text-white px-3.5 py-2 rounded-xl text-xs font-bold shadow-sm transition-all flex items-center gap-1.5 no-underline cursor-pointer shrink-0">
+                    <svg class="w-4 h-4 text-amber-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012-2m-6 9l2 2 4-4"></path></svg>
+                    <span>Lista General</span>
+                </a>
+                
+                <button onclick="abrirModalAsistencia()" style="background-color: #77af9c;" class="btn-animado hover:bg-[#5e9381] px-4 py-2 text-white rounded-xl text-xs font-black shadow-md transition-all cursor-pointer flex items-center gap-1.5 border border-white/40 shrink-0">
+                    <svg class="w-4 h-4 text-amber-300 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <span>¡REGISTRAR ASISTENCIA!</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Info Grid Compacto y Uniforme (Sin espacios vacíos) -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
+            
+            <div class="bg-slate-50 border border-slate-200/70 rounded-xl p-2.5 shadow-xs space-y-0.5">
+                <div class="text-[9px] font-extrabold text-slate-400 uppercase tracking-wider">UR Asignada:</div>
+                <div id="userUr" class="text-xs font-black font-mono" style="color: #77af9c;">Cargando...</div>
+                <div class="pt-1 border-t border-slate-200/50 mt-1">
+                    <span class="text-[9px] font-extrabold text-slate-400 uppercase tracking-wider">Usuario (ID):</span>
+                    <div id="userId" class="text-[11px] font-bold text-slate-700 font-mono truncate">--</div>
+                </div>
+            </div>
+
+            <div class="bg-slate-50 border border-slate-200/70 rounded-xl p-2.5 shadow-xs space-y-0.5 sm:col-span-2 lg:col-span-2">
+                <div class="text-[9px] font-extrabold text-slate-400 uppercase tracking-wider">Nombre Completo:</div>
+                <div id="userName" class="text-xs sm:text-sm font-black text-slate-900 truncate" title="Cargando...">Cargando...</div>
+                <div class="pt-1 border-t border-slate-200/50 mt-1 flex justify-between items-center gap-2">
+                    <div class="truncate">
+                        <span class="text-[9px] font-extrabold text-slate-400 uppercase tracking-wider block">Correo Institucional:</span>
+                        <div id="userEmail" class="text-[11px] font-bold truncate" style="color: #77af9c;">--</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-slate-50 border border-slate-200/70 rounded-xl p-2.5 shadow-xs space-y-0.5">
+                <div class="text-[9px] font-extrabold text-slate-400 uppercase tracking-wider">Indicativo / Cargo:</div>
+                <div id="userIndicativo" class="text-xs font-black text-amber-600 font-mono">--</div>
+                <div class="pt-1 border-t border-slate-200/50 mt-1">
+                    <div id="userCargo" class="text-[11px] font-bold text-slate-800 leading-snug truncate" title="Cargando...">Cargando...</div>
+                </div>
+            </div>
+
+            <div class="bg-slate-50 border border-slate-200/70 rounded-xl p-2.5 shadow-xs space-y-0.5">
+                <div class="text-[9px] font-extrabold text-slate-400 uppercase tracking-wider">Suplente:</div>
+                <div id="userSuplente" class="text-[11px] font-bold text-slate-700 truncate">--</div>
+                <div class="pt-1 border-t border-slate-200/50 mt-1">
+                    <span class="text-[9px] font-extrabold text-slate-400 uppercase tracking-wider">Ubicación:</span>
+                    <div id="userUbicacion" class="text-[11px] font-bold text-slate-800 truncate">--</div>
+                </div>
+            </div>
+
+            <div class="bg-slate-50 border border-slate-200/70 rounded-xl p-2.5 shadow-xs space-y-0.5 sm:col-span-2 lg:col-span-3 flex flex-col justify-between">
+                <div>
+                    <div class="text-[9px] font-extrabold text-slate-400 uppercase tracking-wider">Extensión Telefónica (Canal seguro UIPC):</div>
+                    <div id="userExtension" class="text-xs font-black font-mono" style="color: #77af9c;">--</div>
+                </div>
+                <div class="pt-1 border-t border-slate-200/50 mt-1 text-[10px] text-slate-500 font-medium flex justify-between items-center">
+                    <span>Estatus de asistencia diario:</span>
+                    <span id="asistenciaStatusBadge" class="text-slate-400 font-bold">Sin registrar</span>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- MODAL DE ASISTENCIA / CHECADOR -->
+    <div id="modalAsistencia" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs hidden items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-2xl shadow-2xl border border-slate-200 max-w-md w-full p-6 space-y-5">
+            <div class="flex justify-between items-center border-b pb-3">
+                <h3 class="text-base font-extrabold text-slate-900">Registro de Asistencia Diario</h3>
+                <button onclick="cerrarModalAsistencia()" class="text-slate-400 hover:text-slate-600 font-bold text-lg cursor-pointer">&times;</button>
+            </div>
+
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-2 uppercase tracking-wide">Seleccione su estatus actual:</label>
+                    <div class="grid grid-cols-3 gap-2">
+                        <button type="button" onclick="seleccionarEstatusBtn('En el inmueble')" id="btnInmueble" class="p-3 text-xs font-extrabold rounded-xl border border-slate-200 bg-slate-50 text-slate-700 hover:bg-emerald-50 hover:border-emerald-300 hover:text-emerald-700 transition-all cursor-pointer">
+                            🏠 En el inmueble
+                        </button>
+                        <button type="button" onclick="seleccionarEstatusBtn('En casa')" id="btnCasa" class="p-3 text-xs font-extrabold rounded-xl border border-slate-200 bg-slate-50 text-slate-700 hover:bg-blue-50 hover:border-blue-300 hover:text-blue-700 transition-all cursor-pointer">
+                            💻 En casa
+                        </button>
+                        <button type="button" onclick="seleccionarEstatusBtn('En comisión')" id="btnComision" class="p-3 text-xs font-extrabold rounded-xl border border-slate-200 bg-slate-50 text-slate-700 hover:bg-amber-50 hover:border-amber-300 hover:text-amber-700 transition-all cursor-pointer">
+                            🚗 En comisión
+                        </button>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1 uppercase tracking-wide">Observaciones (Opcional):</label>
+                    <textarea id="inputObservaciones" rows="3" placeholder="Ej. Comisionado en piso 5, junta externa, etc." class="w-full p-3 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#77af9c] font-medium"></textarea>
+                </div>
+            </div>
+
+            <div id="alertaModal" class="hidden p-2.5 rounded-xl text-xs font-bold text-center"></div>
+
+            <div class="flex space-x-3 pt-2">
+                <button onclick="cerrarModalAsistencia()" class="w-1/2 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold py-2.5 rounded-xl text-xs transition-all cursor-pointer">Cancelar</button>
+                <button onclick="guardarAsistencia()" style="background-color: #77af9c;" class="w-1/2 hover:bg-[#5e9381] text-white font-bold py-2.5 rounded-xl text-xs transition-all shadow-md cursor-pointer">Guardar Registro</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentUserGlobal = null;
+        let estatusSeleccionado = '';
+
+        window.addEventListener('DOMContentLoaded', async () => {
+            let userData = null;
+            const userStr = localStorage.getItem('uipc_current_user') || sessionStorage.getItem('uipc_current_user');
+            if (userStr) {
+                try { userData = JSON.parse(userStr); } catch(e) {}
+            }
+
+            if (!userData) {
+                try {
+                    const res = await fetch('/api/admin/users');
+                    const data = await res.json();
+                    if (data.success && Array.isArray(data.users) && data.users.length > 0) {
+                        userData = data.users[1];
+                    }
+                } catch(e) {}
+            }
+
+            if (!userData) {
+                userData = {
+                    ur: 'DGDy8NEM',
+                    usuario: 'daniel.gonzalez',
+                    nombre: 'Daniel Fernando González Pacheco',
+                    correo: 'daniel.gonzalez@nube.sep.gob.mx',
+                    indicativo: 'Base 1',
+                    cargo: 'Coordinador Operativo Unidad Interna de Protección Civil',
+                    suplente: 'Eduardo Sánchez Salas',
+                    ubicacion: 'sector 2-4',
+                    extension: '62015'
+                };
+            }
+
+            currentUserGlobal = userData;
+
+            document.getElementById('userUr').innerText = userData.ur || 'DGDy8NEM';
+            document.getElementById('userId').innerText = userData.usuario || userData.username || 'invitado';
+            document.getElementById('userName').innerText = userData.nombre || 'Usuario General';
+            document.getElementById('userName').title = userData.nombre || 'Usuario General';
+            document.getElementById('userEmail').innerText = userData.correo || 'correo@sep.gob.mx';
+            document.getElementById('userIndicativo').innerText = userData.indicativo || 'Sin asignar';
+            document.getElementById('userCargo').innerText = userData.cargo || 'Operativo UIPC';
+            document.getElementById('userCargo').title = userData.cargo || 'Operativo UIPC';
+            document.getElementById('userSuplente').innerText = userData.suplente || 'N/A';
+            document.getElementById('userUbicacion').innerText = userData.ubicacion || 'Oficina Central';
+            document.getElementById('userExtension').innerText = userData.extension || '62015';
+
+            verificarEstatusActual();
+        });
+
+        function abrirModalAsistencia() {
+            document.getElementById('modalAsistencia').classList.remove('hidden');
+            document.getElementById('modalAsistencia').classList.add('flex');
+            document.getElementById('inputObservaciones').value = '';
+            estatusSeleccionado = '';
+            resetearBotonesEstatus();
+        }
+
+        function cerrarModalAsistencia() {
+            document.getElementById('modalAsistencia').classList.remove('flex');
+            document.getElementById('modalAsistencia').classList.add('hidden');
+            document.getElementById('alertaModal').classList.add('hidden');
+        }
+
+        function seleccionarEstatusBtn(estatus) {
+            estatusSeleccionado = estatus;
+            resetearBotonesEstatus();
+
+            const btnInmueble = document.getElementById('btnInmueble');
+            const btnCasa = document.getElementById('btnCasa');
+            const btnComision = document.getElementById('btnComision');
+
+            if (estatus === 'En el inmueble') {
+                btnInmueble.className = "p-3 text-xs font-extrabold rounded-xl border border-emerald-400 bg-emerald-600 text-white shadow-md transition-all cursor-pointer";
+            } else if (estatus === 'En casa') {
+                btnCasa.className = "p-3 text-xs font-extrabold rounded-xl border border-blue-400 bg-blue-600 text-white shadow-md transition-all cursor-pointer";
+            } else if (estatus === 'En comisión') {
+                btnComision.className = "p-3 text-xs font-extrabold rounded-xl border border-amber-400 bg-amber-600 text-white shadow-md transition-all cursor-pointer";
+            }
+        }
+
+        function resetearBotonesEstatus() {
+            document.getElementById('btnInmueble').className = "p-3 text-xs font-extrabold rounded-xl border border-slate-200 bg-slate-50 text-slate-700 hover:bg-emerald-50 hover:border-emerald-300 hover:text-emerald-700 transition-all cursor-pointer";
+            document.getElementById('btnCasa').className = "p-3 text-xs font-extrabold rounded-xl border border-slate-200 bg-slate-50 text-slate-700 hover:bg-blue-50 hover:border-blue-300 hover:text-blue-700 transition-all cursor-pointer";
+            document.getElementById('btnComision').className = "p-3 text-xs font-extrabold rounded-xl border border-slate-200 bg-slate-50 text-slate-700 hover:bg-amber-50 hover:border-amber-300 hover:text-amber-700 transition-all cursor-pointer";
+        }
+
+        async function guardarAsistencia() {
+            const alerta = document.getElementById('alertaModal');
+            alerta.classList.remove('hidden');
+
+            if (!estatusSeleccionado) {
+                alerta.className = "p-2.5 rounded-xl text-xs font-bold text-center bg-red-100 text-red-700";
+                alerta.innerText = "Por favor seleccione un estatus operativo.";
+                return;
+            }
+
+            if (!currentUserGlobal || !currentUserGlobal.usuario) {
+                alerta.className = "p-2.5 rounded-xl text-xs font-bold text-center bg-red-100 text-red-700";
+                alerta.innerText = "Error: No se detectó la sesión del usuario activo.";
+                return;
+            }
+
+            const observaciones = document.getElementById('inputObservaciones').value.trim();
+            const ahora = new Date().toLocaleString('es-MX', { timeZone: 'America/Mexico_City', hour12: false });
+
+            try {
+                const response = await fetch('/api/asistencia', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        usuario: currentUserGlobal.usuario,
+                        estatus: estatusSeleccionado,
+                        hora: ahora,
+                        observaciones: observaciones || 'Sin observaciones'
+                    })
+                });
+
+                const result = await response.json();
+
+                if (response.ok && result.success) {
+                    alerta.className = "p-2.5 rounded-xl text-xs font-bold text-center bg-emerald-100 text-emerald-800";
+                    alerta.innerText = "¡Asistencia registrada en el servidor!";
+
+                    setTimeout(() => {
+                        cerrarModalAsistencia();
+                        verificarEstatusActual();
+                    }, 1500);
+                } else {
+                    throw new Error(result.message || "Error al guardar");
+                }
+            } catch (err) {
+                alerta.className = "p-2.5 rounded-xl text-xs font-bold text-center bg-red-100 text-red-700";
+                alerta.innerText = "Error de conexión con el servidor.";
+            }
+        }
+
+        async function verificarEstatusActual() {
+            if (!currentUserGlobal || !currentUserGlobal.usuario) return;
+            try {
+                const res = await fetch('/api/asistencia');
+                const data = await res.json();
+                if (data.success && data.registros) {
+                    const reg = data.registros[currentUserGlobal.usuario];
+                    const badge = document.getElementById('asistenciaStatusBadge');
+
+                    if (reg && reg.estatus) {
+                        badge.innerText = `${reg.estatus} (${reg.hora})`;
+                        badge.className = "text-emerald-700 font-extrabold";
+                    } else {
+                        badge.innerText = "Sin registrar hoy";
+                        badge.className = "text-amber-600 font-extrabold";
+                    }
+                }
+            } catch(e) {}
+        }
+    </script>
+</body>
+</html>

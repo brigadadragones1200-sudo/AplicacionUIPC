@@ -1,0 +1,34 @@
+[
+  {
+    "id": "1",
+    "titulo": "Simulacro Trimestral",
+    "fecha": "2026-09-18",
+    "hora": "11:00 Hrs",
+    "sede": "Inmueble Central"
+  },
+  {
+    "id": "1788919267086",
+    "titulo": "reunion de la uipc",
+    "fecha": "2026-09-10",
+    "fechaFin": "2026-09-10",
+    "hora": "11 hrs",
+    "sede": "sala 8",
+    "modalidad": "Presencial",
+    "descripcion": "preparatorios para el simulacro",
+    "esCapacitacion": false,
+    "creadoPor": "coordinador.uipc"
+  },
+  {
+    "id": "1788920988162",
+    "titulo": "prevencion y combate de incendios",
+    "fecha": "2026-09-30",
+    "fechaFin": "2026-09-30",
+    "hora": "10 hrs",
+    "sede": "en linea",
+    "modalidad": "En línea",
+    "cupo": "60",
+    "descripcion": "",
+    "esCapacitacion": true,
+    "creadoPor": "coordinador.uipc"
+  }
+]

@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agenda de Eventos - Centro SEP</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f1f5f9; 
+            background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+        .espiral-libreta {
+            position: absolute;
+            left: -12px;
+            top: 0;
+            bottom: 0;
+            width: 24px;
+            background-image: radial-gradient(circle at 12px 20px, #0f172a 4px, transparent 5px);
+            background-size: 24px 40px;
+            background-repeat: repeat-y;
+        }
+        @keyframes pulse-slow {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.95; transform: scale(1.01); }
+        }
+        .alerta-activa {
+            animation: pulse-slow 2s infinite;
+        }
+    </style>
+</head>
+<body class="p-6">
+
+    <div class="max-w-4xl mx-auto">
+
+        <!-- ALERTA DINÁMICA: Auditorio y Explanada -->
+        <div id="alertaAuditorioExplanada" class="hidden mb-6 bg-gradient-to-r from-amber-500 via-orange-500 to-rose-600 text-white p-4 rounded-3xl shadow-2xl border-4 border-amber-300 flex items-center justify-between gap-4 alerta-activa">
+            <div class="flex items-center gap-3">
+                <div class="bg-white/20 p-3 rounded-2xl backdrop-blur-sm border border-white/30 animate-bounce">
+                    🚨
+                </div>
+                <div>
+                    <h3 class="text-base font-black tracking-wide uppercase">¡Alerta Operativa de Espacios Críticos!</h3>
+                    <p id="textoAlertaEspacios" class="text-xs text-amber-100 font-medium mt-0.5">Se han detectado eventos activos programados simultáneamente en el Auditorio y en la Explanada.</p>
+                </div>
+            </div>
+            <button onclick="document.getElementById('alertaAuditorioExplanada').classList.add('hidden')" class="bg-white/10 hover:bg-white/20 text-white text-xs font-bold px-3 py-1.5 rounded-xl border border-white/20 transition-all cursor-pointer">
+                Entendido
+            </button>
+        </div>
+
+        <!-- Encabezado de la Agenda -->
+        <div class="bg-gradient-to-r from-[#1A457B] to-[#26619C] text-white p-6 rounded-3xl shadow-xl mb-8 border border-[#1A457B] flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-4">
+                <div class="w-16 h-16 bg-white/10 rounded-2xl flex items-center justify-center backdrop-blur-sm border border-white/20">
+                    <svg class="w-8 h-8 text-amber-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                </div>
+                <div>
+                    <h1 class="text-3xl font-black tracking-tight drop-shadow-md">Agenda de Eventos</h1>
+                    <p class="text-sm text-blue-100 font-medium mt-1 opacity-90">Centro SEP Universidad 1200</p>
+                </div>
+            </div>
+            
+            <div class="flex flex-col items-end gap-2">
+                <!-- Botón de Cerrar Ventana -->
+                <button onclick="cerrarVentana()" class="bg-rose-600 hover:bg-rose-500 text-white font-black text-xs py-2 px-4 rounded-xl shadow transition-all cursor-pointer flex items-center gap-1.5 border border-rose-400">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    Cerrar
+                </button>
+
+                <div class="text-right">
+                    <p class="text-xs text-blue-200 font-bold uppercase tracking-widest mb-1">Día de Operación</p>
+                    <div id="fechaHoy" class="bg-black/20 px-4 py-2 rounded-xl text-sm font-bold border border-white/10">
+                        Cargando...
+                    </div>
+                </div>
+
+                <div class="flex gap-2">
+                    <!-- Botón Estadísticas -->
+                    <button onclick="abrirModalEstadisticas()" class="bg-indigo-500 hover:bg-indigo-400 text-white font-black text-xs py-2 px-4 rounded-xl shadow transition-all cursor-pointer flex items-center gap-1.5 border border-indigo-400">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                        Estadísticas UIPC
+                    </button>
+                    <!-- Botón Actualizar -->
+                    <button onclick="cargarAgenda()" class="bg-amber-400 hover:bg-amber-300 text-slate-900 font-black text-xs py-2 px-4 rounded-xl shadow transition-all cursor-pointer">
+                        Actualizar Muro
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Muro de Eventos -->
+        <div id="contenedorAgenda" class="space-y-6 relative ml-0 sm:ml-3">
+            <div class="absolute left-6 top-0 bottom-0 w-1 bg-blue-200 rounded-full hidden sm:block"></div>
+
+            <div id="mensajeVacio" class="text-center py-16 bg-white/80 backdrop-blur-sm rounded-3xl border border-slate-200 shadow-sm">
+                <svg class="w-16 h-16 mx-auto text-slate-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                <p class="text-lg font-bold text-slate-500">Agenda libre por el momento</p>
+                <p class="text-sm text-slate-400 mt-1">No hay eventos registrados para el día de hoy.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE ESTADÍSTICAS UIPC -->
+    <div id="modalEstadisticas" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white w-full max-w-2xl rounded-3xl shadow-2xl border-4 border-[#1A457B] overflow-hidden transform transition-all">
+            <div class="bg-gradient-to-r from-[#1A457B] to-[#26619C] text-white p-6 flex justify-between items-center">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center border border-white/20">
+                        📊
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-black">Panel Estadístico UIPC</h2>
+                        <p class="text-xs text-blue-100">Centro SEP Universidad 1200</p>
+                    </div>
+                </div>
+                <button onclick="cerrarModalEstadisticas()" class="bg-rose-600 hover:bg-rose-500 text-white font-black text-xs py-1.5 px-3 rounded-xl transition-all cursor-pointer border border-rose-400">
+                    ✕ Cerrar
+                </button>
+            </div>
+
+            <div class="p-6 space-y-4 max-h-[75vh] overflow-y-auto">
+                <!-- Tarjeta 1: Evento con más asistentes -->
+                <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 shadow-sm">
+                    <span class="block font-black text-[#1A457B] uppercase text-xs mb-1">👥 Evento con Mayor Afluencia de Asistentes</span>
+                    <p id="statMasAsistentes" class="text-slate-800 font-bold text-sm">Calculando...</p>
+                </div>
+
+                <!-- Tarjeta 2: UR con más eventos -->
+                <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 shadow-sm">
+                    <span class="block font-black text-[#1A457B] uppercase text-xs mb-1">🏢 Unidad Responsable (UR) con Más Actividad</span>
+                    <p id="statUrMasEventos" class="text-slate-800 font-bold text-sm">Calculando...</p>
+                </div>
+
+                <!-- Tarjeta 3: Distribución de Espacios (Idea 1) -->
+                <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 shadow-sm">
+                    <span class="block font-black text-[#1A457B] uppercase text-xs mb-1">📍 Estado de Espacios Críticos (Auditorio y Explanada)</span>
+                    <p id="statEspaciosCriticos" class="text-slate-800 font-bold text-sm">Calculando...</p>
+                </div>
+
+                <!-- Tarjeta 4: Total de Asistentes Registrados (Idea 2) -->
+                <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 shadow-sm">
+                    <span class="block font-black text-[#1A457B] uppercase text-xs mb-1">📈 Resumen General de Operación</span>
+                    <p id="statResumenGeneral" class="text-slate-800 font-bold text-sm">Calculando...</p>
+                </div>
+            </div>
+
+            <div class="bg-slate-100 p-4 border-t border-slate-200 text-center">
+                <button onclick="cerrarModalEstadisticas()" class="bg-[#26619C] hover:bg-[#1A457B] text-white font-black text-xs py-2.5 px-6 rounded-xl shadow transition-all cursor-pointer">
+                    Regresar a la Agenda
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let eventosGlobales = [];
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const opciones = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone: 'America/Mexico_City' };
+            const fechaStr = new Date().toLocaleDateString('es-MX', opciones);
+            document.getElementById('fechaHoy').innerText = fechaStr.charAt(0).toUpperCase() + fechaStr.slice(1);
+            
+            cargarAgenda();
+            setInterval(cargarAgenda, 15000);
+        });
+
+        function cerrarVentana() {
+            try {
+                window.close();
+                setTimeout(() => {
+                    if (!window.closed) {
+                        window.location.href = 'adminMaster.html'; 
+                    }
+                }, 300);
+            } catch (e) {
+                console.error("No se pudo cerrar la ventana", e);
+            }
+        }
+
+        function abrirModalEstadisticas() {
+            calcularEstadisticas();
+            document.getElementById('modalEstadisticas').classList.remove('hidden');
+        }
+
+        function cerrarModalEstadisticas() {
+            document.getElementById('modalEstadisticas').classList.add('hidden');
+        }
+
+        function calcularEstadisticas() {
+            if (!eventosGlobales || eventosGlobales.length === 0) {
+                document.getElementById('statMasAsistentes').innerText = "No hay eventos registrados.";
+                document.getElementById('statUrMasEventos').innerText = "No hay eventos registrados.";
+                document.getElementById('statEspaciosCriticos').innerText = "Sin actividad detectada.";
+                document.getElementById('statResumenGeneral').innerText = "Total de eventos activos: 0";
+                return;
+            }
+
+            // 1. Evento con más asistentes
+            let maxAsistentes = -1;
+            let eventoMax = null;
+
+            // 2. UR con más eventos
+            let conteoUis = {};
+
+            // 3. Auditorio / Explanada
+            let hayAuditorio = false;
+            let hayExplanada = false;
+
+            let totalAsistentesSuma = 0;
+
+            eventosGlobales.forEach(ev => {
+                let texto = ev.texto_completo || "";
+                
+                // Extraer número de asistentes
+                let matchNum = texto.match(/(\d+)\s*(personas|participantes|asistentes)/i);
+                let num = matchNum ? parseInt(matchNum[1]) : 0;
+                totalAsistentesSuma += num;
+
+                if (num > maxAsistentes) {
+                    maxAsistentes = num;
+                    eventoMax = texto;
+                }
+
+                // UR
+                let urMatch = texto.match(/\b(DGBTED|DGFCDD|SEB|DGGEyET|DGEIIB|DGETI|DGCFT|TecNM|UNEM|DGESUI|DGESUM|DGPPyEE|SEMS|DGETAYCM|DGSANEF|DGUTyP|DGRHO|DGRHYO|DGPyRF|CSI|DGDySNEM|CONAFE|SES|DGTIC|AEFCM|UnADM|USICAMM|DGAIR)\b/i);
+                if (urMatch) {
+                    let ur = urMatch[1].toUpperCase();
+                    conteoUis[ur] = (conteoUis[ur] || 0) + 1;
+                }
+
+                // Detectar Auditorio / Explanada
+                if (/auditorio/i.test(texto)) hayAuditorio = true;
+                if (/explanada/i.test(texto)) hayExplanada = true;
+            });
+
+            // Mostrar Evento con más asistentes
+            if (eventoMax) {
+                let lineas = eventoMax.split('\n').filter(l => l.trim() && !/\[.*\]/.test(l));
+                let tema = lineas.find(l => /^Tema:/i.test(l)) || lineas[1] || "Evento destacado";
+                document.getElementById('statMasAsistentes').innerHTML = `<span class="text-[#26619C]">${maxAsistentes} asistentes</span> — ${tema}`;
+            } else {
+                document.getElementById('statMasAsistentes').innerText = "No se pudieron calcular los asistentes.";
+            }
+
+            // Mostrar UR con más eventos
+            let urGanadora = "Ninguna";
+            let maxEventosUr = 0;
+            for (let ur in conteoUis) {
+                if (conteoUis[ur] > maxEventosUr) {
+                    maxEventosUr = conteoUis[ur];
+                    urGanadora = ur;
+                }
+            }
+            if (maxEventosUr > 0) {
+                document.getElementById('statUrMasEventos').innerHTML = `<span class="text-[#26619C] font-black">${urGanadora}</span> con ${maxEventosUr} evento(s) registrado(s).`;
+            } else {
+                document.getElementById('statUrMasEventos').innerText = "No se identificaron siglas de UR en los registros.";
+            }
+
+            // Espacios críticos
+            let estadoEspaciosTxt = [];
+            if (hayAuditorio) estadoEspaciosTxt.push("🟢 Auditorio ocupado");
+            else estadoEspaciosTxt.push("⚪ Auditorio libre");
+            
+            if (hayExplanada) estadoEspaciosTxt.push("🟢 Explanada ocupada");
+            else estadoEspaciosTxt.push("⚪ Explanada libre");
+
+            document.getElementById('statEspaciosCriticos').innerText = estadoEspaciosTxt.join(" | ");
+
+            // Resumen general
+            document.getElementById('statResumenGeneral').innerHTML = `Total de eventos en agenda: <b>${eventosGlobales.length}</b> | Suma estimada de asistencia: <b>${totalAsistentesSuma} personas</b>`;
+        }
+
+        function verificarAlertaAuditorioExplanada(eventos) {
+            let hayAuditorio = false;
+            let hayExplanada = false;
+
+            eventos.forEach(ev => {
+                let texto = (ev.texto_completo || "").toLowerCase();
+                if (texto.includes('auditorio')) hayAuditorio = true;
+                if (texto.includes('explanada')) hayExplanada = true;
+            });
+
+            const banner = document.getElementById('alertaAuditorioExplanada');
+            const textoAlerta = document.getElementById('textoAlertaEspacios');
+
+            if (hayAuditorio && hayExplanada) {
+                banner.classList.remove('hidden');
+                textoAlerta.innerText = "¡Atención Brigada! Hay eventos activos programados simultáneamente en el Auditorio y en la Explanada. Reforzar supervisión.";
+            } else if (hayAuditorio) {
+                banner.classList.remove('hidden');
+                textoAlerta.innerText = "¡Alerta Operativa! Se ha detectado un evento activo programado en el Auditorio del Centro SEP.";
+            } else if (hayExplanada) {
+                banner.classList.remove('hidden');
+                textoAlerta.innerText = "¡Alerta Operativa! Se ha detectado un evento activo programado en la Explanada del Centro SEP.";
+            } else {
+                banner.classList.add('hidden');
+            }
+        }
+
+        function extraerResumenEvento(textoBruto) {
+            let lineas = textoBruto.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+            lineas = lineas.filter(l => !/\[\d{1,2}:\d{2}.*\]/i.test(l) && !/José Madrigal Ventura/i.test(l));
+
+            let sede = "No especificada";
+            let fecha = "No especificada";
+            let horario = "No especificado";
+            let tema = "No especificado";
+            let asistentes = "No especificados";
+            let ur = "No especificada";
+
+            const regexSede = /(cubo|área|area|acceso|ala|bodega|auditorio|explanada|sala)/i;
+            const lineaSedeEncontrada = lineas.find(l => regexSede.test(l));
+            
+            if (lineaSedeEncontrada) {
+                sede = lineaSedeEncontrada;
+            } else if (lineas.length > 0 && !lineas[0].toUpperCase().includes('FECHA:')) {
+                sede = lineas[0];
+            }
+
+            lineas.forEach(linea => {
+                const upper = linea.toUpperCase();
+                if (upper.startsWith('FECHA:')) {
+                    fecha = linea.replace(/^fecha:\s*/i, '');
+                } else if (upper.startsWith('HORARIO:') || upper.startsWith('HORA:')) {
+                    horario = linea.replace(/^(horario|hora):\s*/i, '');
+                } else if (upper.startsWith('TEMA:')) {
+                    tema = linea.replace(/^tema:\s*/i, '');
+                } else if (upper.startsWith('ASISTENTES:') || upper.startsWith('PARTICIPANTES:') || upper.startsWith('ASISTENCIA PARA:') || upper.startsWith('ASISTENCIA:')) {
+                    asistentes = linea.replace(/^(asistentes|participantes|asistencia para|asistencia):\s*/i, '');
+                } else if (upper.startsWith('CARGO:') || upper.includes('UR') || upper.includes('DIRECCIÓN') || upper.includes('UNIDAD')) {
+                    ur = linea;
+                }
+            });
+
+            return `
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+                    <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                        <span class="block font-black text-[#1A457B] uppercase text-[11px] mb-1">📍 Sede / Ubicación</span>
+                        <span class="text-slate-800 font-semibold">${sede}</span>
+                    </div>
+                    <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                        <span class="block font-black text-[#1A457B] uppercase text-[11px] mb-1">📅 Fecha</span>
+                        <span class="text-slate-800 font-semibold">${fecha}</span>
+                    </div>
+                    <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                        <span class="block font-black text-[#1A457B] uppercase text-[11px] mb-1">⏰ Horario</span>
+                        <span class="text-slate-800 font-semibold">${horario}</span>
+                    </div>
+                    <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                        <span class="block font-black text-[#1A457B] uppercase text-[11px] mb-1">👥 Asistentes</span>
+                        <span class="text-slate-800 font-semibold">${asistentes}</span>
+                    </div>
+                    <div class="sm:col-span-2 bg-slate-50 p-3 rounded-xl border border-slate-100">
+                        <span class="block font-black text-[#1A457B] uppercase text-[11px] mb-1">📌 Tema del Evento</span>
+                        <span class="text-slate-800 font-semibold">${tema}</span>
+                    </div>
+                    <div class="sm:col-span-2 bg-slate-50 p-3 rounded-xl border border-slate-100">
+                        <span class="block font-black text-[#1A457B] uppercase text-[11px] mb-1">🏢 UR (Unidad Responsable)</span>
+                        <span class="text-slate-800 font-semibold">${ur}</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        async function cargarAgenda() {
+            const contenedor = document.getElementById('contenedorAgenda');
+            const mensajeVacio = document.getElementById('mensajeVacio');
+            
+            try {
+                const response = await fetch('/api/eventos');
+                const data = await response.json();
+
+                eventosGlobales = data.eventos || [];
+                verificarAlertaAuditorioExplanada(eventosGlobales);
+
+                const tarjetasViejas = contenedor.querySelectorAll('.tarjeta-evento');
+                tarjetasViejas.forEach(t => t.remove());
+
+                if(eventosGlobales.length > 0) {
+                    mensajeVacio.classList.add('hidden');
+                    
+                    eventosGlobales.slice().reverse().forEach((evento, index) => {
+                        const tarjeta = document.createElement('div');
+                        tarjeta.className = 'tarjeta-evento relative ml-0 sm:ml-12 bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden';
+                        
+                        const colores = ['bg-amber-400', 'bg-emerald-500', 'bg-rose-500', 'bg-indigo-500'];
+                        const colorPestana = colores[index % colores.length];
+
+                        tarjeta.innerHTML = `
+                            <div class="absolute -left-[54px] top-6 w-5 h-5 ${colorPestana} rounded-full border-4 border-[#f1f5f9] shadow-md hidden sm:block z-10"></div>
+                            <div class="absolute top-0 bottom-0 left-0 w-3 ${colorPestana}"></div>
+                            <div class="espiral-libreta"></div>
+
+                            <div class="pl-8 p-6 sm:p-8">
+                                <div class="flex justify-between items-start border-b border-slate-100 pb-3 mb-4">
+                                    <div class="text-slate-400 font-bold text-xs uppercase tracking-widest flex items-center gap-1">
+                                        🕒 Publicado a las: ${evento.hora_registro}
+                                    </div>
+                                    <div class="${colorPestana} bg-opacity-20 text-slate-800 text-xs font-black px-3 py-1 rounded-full border border-slate-200 uppercase">
+                                        Evento ${eventosGlobales.length - index}
+                                    </div>
+                                </div>
+                                <div class="leading-relaxed">
+                                    ${extraerResumenEvento(evento.texto_completo)}
+                                </div>
+                            </div>
+                        `;
+                        contenedor.appendChild(tarjeta);
+                    });
+                } else {
+                    mensajeVacio.classList.remove('hidden');
+                }
+            } catch (error) {
+                console.error("Error al sincronizar la agenda:", error);
+            }
+        }
+    </script>
+</body>
+</html>

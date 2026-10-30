@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil y Directorio de Usuario</title>
+    <!-- Tailwind CSS for modern responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: transparent;
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="min-h-[420px] flex flex-col justify-between text-slate-800 p-2 sm:p-4 m-0">
+
+    <!-- Main Profile Card Container -->
+    <main class="max-w-4xl mx-auto w-full bg-white/95 backdrop-blur-md rounded-2xl shadow-xl border border-slate-200/80 p-5 space-y-4">
+        
+        <!-- Header Title -->
+        <div class="flex items-center space-x-3 border-b border-slate-100 pb-3">
+            <div class="w-9 h-9 bg-blue-900 text-white rounded-xl flex items-center justify-center shadow-md">
+                <svg class="w-5 h-5 text-blue-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                </svg>
+            </div>
+            <div>
+                <h1 class="text-sm sm:text-base font-extrabold text-blue-950 tracking-tight">Perfil y Directorio de Usuario</h1>
+                <p class="text-[11px] text-slate-500">Información institucional en tiempo real</p>
+            </div>
+        </div>
+
+        <!-- Info Grid Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            
+            <!-- UR Asignada & Usuario -->
+            <div class="bg-slate-50 border border-slate-200/70 rounded-xl p-3 shadow-xs space-y-1">
+                <div class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">UR Asignada:</div>
+                <div id="userUr" class="text-xs sm:text-sm font-black text-blue-950 font-mono">Cargando...</div>
+                <div class="pt-1 border-t border-slate-200/50 mt-1">
+                    <span class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">Usuario (ID):</span>
+                    <div id="userId" class="text-xs font-bold text-slate-700 font-mono">--</div>
+                </div>
+            </div>
+
+            <!-- Nombre Completo & Correo -->
+            <div class="bg-slate-50 border border-slate-200/70 rounded-xl p-3 shadow-xs space-y-1">
+                <div class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">Nombre Completo:</div>
+                <div id="userName" class="text-xs sm:text-sm font-black text-slate-900 truncate" title="Cargando...">Cargando...</div>
+                <div class="pt-1 border-t border-slate-200/50 mt-1">
+                    <span class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">Correo Institucional:</span>
+                    <div id="userEmail" class="text-[11px] font-bold text-blue-900 truncate">--</div>
+                </div>
+            </div>
+
+            <!-- Cargo & Suplente -->
+            <div class="bg-slate-50 border border-slate-200/70 rounded-xl p-3 shadow-xs space-y-1">
+                <div class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">Cargo:</div>
+                <div id="userCargo" class="text-xs font-bold text-slate-800 leading-snug">Cargando...</div>
+                <div class="pt-1 border-t border-slate-200/50 mt-1">
+                    <span class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">Suplente:</span>
+                    <div id="userSuplente" class="text-xs font-bold text-slate-700">--</div>
+                </div>
+            </div>
+
+            <!-- Ubicación & Extensión -->
+            <div class="bg-slate-50 border border-slate-200/70 rounded-xl p-3 shadow-xs space-y-1">
+                <div class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">Ubicación:</div>
+                <div id="userUbicacion" class="text-xs font-bold text-slate-800">Cargando...</div>
+                <div class="pt-1 border-t border-slate-200/50 mt-1">
+                    <span class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">Extensión:</span>
+                    <div id="userExtension" class="text-xs font-bold text-slate-700 font-mono">--</div>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <footer class="text-center text-[10px] text-slate-400 py-1">
+        Unidad Interna de Protección Civil - Sesión Activa
+    </footer>
+
+    <script>
+        window.addEventListener('DOMContentLoaded', async () => {
+            let userData = null;
+            
+            // 1. Intentar obtener de localStorage de la sesión actual
+            const userStr = localStorage.getItem('uipc_current_user');
+            if (userStr) {
+                try {
+                    userData = JSON.parse(userStr);
+                } catch(e) {}
+            }
+
+            // 2. Si no hay sesión local, consultar el servidor para obtener el usuario activo por defecto o invitado
+            if (!userData) {
+                try {
+                    const res = await fetch('/api/admin/users');
+                    const data = await res.json();
+                    if (data.success && Array.isArray(data.users) && data.users.length > 0) {
+                        userData = data.users[1]; // Tomar por defecto al usuario operativo principal
+                    }
+                } catch(e) {}
+            }
+
+            // Fallback general por si todo falla
+            if (!userData) {
+                userData = {
+                    ur: 'DGDy8NEM',
+                    usuario: 'daniel.gonzalez',
+                    nombre: 'Daniel Fernando González Pacheco',
+                    correo: 'daniel.gonzalez@nube.sep.gob.mx',
+                    cargo: 'Coordinador Operativo Unidad Interna de Protección Civil',
+                    suplente: 'Eduardo Sánchez Salas',
+                    ubicacion: 'sector 2-4',
+                    extension: '62015'
+                };
+            }
+
+            // Inyectar datos en el DOM
+            document.getElementById('userUr').innerText = userData.ur || 'DGDy8NEM';
+            document.getElementById('userId').innerText = userData.usuario || userData.username || 'invitado';
+            document.getElementById('userName').innerText = userData.nombre || 'Usuario General';
+            document.getElementById('userName').title = userData.nombre || 'Usuario General';
+            document.getElementById('userEmail').innerText = userData.correo || 'correo@sep.gob.mx';
+            document.getElementById('userCargo').innerText = userData.cargo || 'Operativo UIPC';
+            document.getElementById('userSuplente').innerText = userData.suplente || 'N/A';
+            document.getElementById('userUbicacion').innerText = userData.ubicacion || 'Oficina Central';
+            document.getElementById('userExtension').innerText = userData.extension || '62015';
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Directorio de la Estructura Operativa de la UIPC</title>
+    <link rel="icon" type="image/png" href="logo_UIPC.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { 
+            background: transparent;
+            font-family: 'Inter', sans-serif; 
+        }
+    </style>
+</head>
+<body class="h-auto flex flex-col text-slate-800 p-2 m-0 space-y-4">
+
+    <main class="max-w-7xl mx-auto w-full bg-white/95 backdrop-blur-md p-5 rounded-2xl shadow-xl border border-sky-200 flex flex-col space-y-3">
+        <div class="flex flex-col sm:flex-row justify-between items-center border-b border-slate-100 pb-3 gap-3">
+            <div class="flex items-center space-x-2.5">
+                <div class="w-9 h-9 bg-sky-100 rounded-xl flex items-center justify-center text-sky-700 shadow-sm border border-sky-200">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                </div>
+                <div>
+                    <h2 class="text-sm font-extrabold text-sky-950">Directorio de la Estructura Operativa de la UIPC</h2>
+                    <p class="text-[11px] text-slate-500">Consulta de unidades responsables, enlaces, cargos y extensiones</p>
+                </div>
+            </div>
+            <div class="w-full sm:w-72">
+                <input type="text" id="searchInput" oninput="filterDirectory()" placeholder="Buscar por nombre, cargo o UR..." class="w-full p-2.5 rounded-xl text-xs border border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-sky-500 transition-all font-medium">
+            </div>
+        </div>
+
+        <div class="overflow-y-auto max-h-[320px] border border-slate-200 rounded-xl relative bg-white">
+            <table class="w-full text-left text-xs border-collapse">
+                <thead>
+                    <tr class="bg-sky-900 text-white uppercase sticky top-0 z-20 shadow-sm border-b border-sky-800 text-[11px]">
+                        <th class="p-3 bg-sky-900 text-white">UR / NOMBRE</th>
+                        <th class="p-3 bg-sky-900 text-white">CARGO / SUPLENTE</th>
+                        <th class="p-3 bg-sky-900 text-white">UBICACIÓN / EXT.</th>
+                        <th class="p-3 bg-sky-900 text-white text-center">ACCIÓN</th>
+                    </tr>
+                </thead>
+                <tbody id="directoryTableBody" class="divide-y divide-slate-100 text-xs">
+                    <tr><td colspan="4" class="p-6 text-center text-slate-400">Cargando directorio...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <!-- Modal Consultar Operador -->
+    <div id="detailModal" class="fixed inset-0 bg-slate-900 bg-opacity-60 hidden flex items-center justify-center p-4 z-50">
+        <div class="bg-white w-full max-w-md p-6 rounded-2xl shadow-2xl space-y-4 border border-sky-100">
+            <div class="flex justify-between items-center border-b pb-3">
+                <h3 class="text-base font-extrabold text-sky-950 flex items-center">
+                    <svg class="w-5 h-5 mr-2 text-sky-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                    Detalles del Operador UIPC
+                </h3>
+                <button onclick="closeDetailModal()" class="text-slate-400 hover:text-slate-700 text-2xl font-bold cursor-pointer">&times;</button>
+            </div>
+            <div id="detailContent" class="space-y-3 text-xs">
+                <!-- Se llena dinámicamente -->
+            </div>
+            <div class="flex justify-end pt-2 border-t">
+                <button onclick="closeDetailModal()" class="bg-sky-900 hover:bg-sky-800 text-white px-6 py-2 rounded-xl text-xs font-bold shadow cursor-pointer">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let globalUsers = [];
+
+        window.addEventListener('DOMContentLoaded', () => {
+            loadDirectory();
+        });
+
+        async function loadDirectory() {
+            const tbody = document.getElementById('directoryTableBody');
+            if (!tbody) return;
+            try {
+                const res = await fetch('/api/admin/users');
+                const data = await res.json();
+                if (data.success && Array.isArray(data.users)) {
+                    globalUsers = data.users.reverse();
+                    renderDirectory(globalUsers);
+                } else {
+                    tbody.innerHTML = `<tr><td colspan="4" class="p-6 text-center text-slate-400">No hay registros en el directorio.</td></tr>`;
+                }
+            } catch (e) {
+                tbody.innerHTML = `<tr><td colspan="4" class="p-6 text-center text-slate-400">Error al conectar con el servidor.</td></tr>`;
+            }
+        }
+
+        function renderDirectory(users) {
+            const tbody = document.getElementById('directoryTableBody');
+            if (!tbody) return;
+            if (users.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" class="p-6 text-center text-slate-400">No se encontraron coincidencias.</td></tr>`;
+                return;
+            }
+            tbody.innerHTML = '';
+            
+            // EL CAMBIO ESTÁ AQUÍ: Evaluamos el índice real del usuario dentro del arreglo global.
+            users.forEach((u) => {
+                const globalIndex = globalUsers.indexOf(u);
+                
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-sky-50/50 transition-colors border-b border-slate-100";
+                tr.innerHTML = `
+                    <td class="p-3">
+                        <strong class="text-slate-900 text-xs block">${u.nombre || 'N/A'}</strong>
+                        <span class="text-[10px] text-sky-800 font-bold uppercase">${u.ur || 'N/A'}</span>
+                    </td>
+                    <td class="p-3">
+                        <div class="font-semibold text-slate-800">${u.cargo || 'Enlace de Protección Civil'}</div>
+                        <div class="text-[10px] text-slate-500">Suplente: ${u.suplente || 'N/A'}</div>
+                    </td>
+                    <td class="p-3">
+                        <div class="font-mono text-slate-700">${u.ubicacion || 'Oficina Central'}</div>
+                        <div class="text-[10px] text-slate-500 font-semibold">Ext: ${u.extension || '62015'}</div>
+                    </td>
+                    <td class="p-3 text-center">
+                        <button onclick="consultUser(${globalIndex})" class="bg-sky-100 hover:bg-sky-200 text-sky-900 px-3.5 py-1.5 rounded-lg text-[11px] font-bold cursor-pointer transition-all shadow-xs">Consultar</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function filterDirectory() {
+            const query = document.getElementById('searchInput').value.toLowerCase().trim();
+            const filtered = globalUsers.filter(u => 
+                (u.nombre && u.nombre.toLowerCase().includes(query)) ||
+                (u.cargo && u.cargo.toLowerCase().includes(query)) ||
+                (u.ur && u.ur.toLowerCase().includes(query)) ||
+                (u.ubicacion && u.ubicacion.toLowerCase().includes(query))
+            );
+            renderDirectory(filtered);
+        }
+
+        function consultUser(index) {
+            const u = globalUsers[index];
+            if (!u) return;
+            const container = document.getElementById('detailContent');
+            container.innerHTML = `
+                <div class="bg-sky-50 p-3.5 rounded-xl border border-sky-100 space-y-2">
+                    <div><span class="block text-[10px] text-sky-800 uppercase font-bold">Nombre Completo:</span><span class="font-extrabold text-sky-950 text-sm">${u.nombre}</span></div>
+                    <div><span class="block text-[10px] text-sky-800 uppercase font-bold">Unidad Responsable (UR):</span><span class="font-bold text-sky-900">${u.ur || 'N/A'}</span></div>
+                </div>
+                <div class="bg-sky-50 p-3.5 rounded-xl border border-sky-100 space-y-2">
+                    <div><span class="block text-[10px] text-sky-800 uppercase font-bold">Cargo Operativo:</span><span class="font-semibold text-slate-800">${u.cargo || 'N/A'}</span></div>
+                    <div><span class="block text-[10px] text-sky-800 uppercase font-bold">Suplente Asignado:</span><span class="font-semibold text-slate-800">${u.suplente || 'N/A'}</span></div>
+                </div>
+                <div class="bg-sky-50 p-3.5 rounded-xl border border-sky-100 grid grid-cols-2 gap-2">
+                    <div><span class="block text-[10px] text-sky-800 uppercase font-bold">Ubicación:</span><span class="font-mono font-bold text-slate-800">${u.ubicacion || 'N/A'}</span></div>
+                    <div><span class="block text-[10px] text-sky-800 uppercase font-bold">Extensión:</span><span class="font-mono font-bold text-slate-800">${u.extension || 'N/A'}</span></div>
+                </div>
+                <div class="bg-sky-50 p-3.5 rounded-xl border border-sky-100">
+                    <span class="block text-[10px] text-sky-800 uppercase font-bold">Correo Electrónico:</span><span class="font-medium text-sky-700">${u.correo || 'N/A'}</span>
+                </div>
+            `;
+            document.getElementById('detailModal').classList.remove('hidden');
+        }
+
+        function closeDetailModal() {
+            document.getElementById('detailModal').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>

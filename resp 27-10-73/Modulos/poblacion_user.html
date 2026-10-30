@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Captura y Conteo de Población - UIPC</title>
+    <link rel="icon" type="image/png" href="logo_UIPC.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: transparent;
+        }
+        
+        @media print {
+            html, body, main {
+                height: auto !important;
+                max-height: none !important;
+                overflow: visible !important;
+                display: block !important;
+            }
+            .no-print { display: none !important; }
+            .print-container { 
+                background: white !important; 
+                color: black !important; 
+                border: none !important; 
+                box-shadow: none !important; 
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+            #tableContainer {
+                overflow: visible !important;
+                max-height: none !important;
+                height: auto !important;
+                border: none !important;
+                display: block !important;
+            }
+            thead, thead tr { position: static !important; }
+            table { width: 100% !important; border-collapse: collapse !important; page-break-inside: auto !important; }
+            tr { page-break-inside: avoid !important; break-inside: avoid !important; }
+            th { background-color: #77af9c !important; color: white !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            td, th { border: 1px solid #cbd5e1 !important; padding: 8px !important; }
+        }
+    </style>
+</head>
+<body class="p-4 sm:p-6 text-slate-800">
+
+    <main class="max-w-7xl mx-auto space-y-6">
+        
+        <!-- Contenedor Superior en Blanco con Detalles en Verde y Azul -->
+        <div class="bg-white text-slate-800 p-6 rounded-2xl shadow-xl border-2 border-[#77af9c] space-y-4 no-print">
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-200 pb-3">
+                <div class="flex items-center space-x-3.5">
+                    <div class="w-11 h-11 bg-slate-50 rounded-full flex items-center justify-center p-1 border-2 border-[#77af9c] shadow-sm overflow-hidden flex-shrink-0">
+                        <img src="logo_UIPC.png" alt="Logo UIPC" class="w-full h-full object-contain" onerror="this.src='https://placehold.co/44x44/1e3a8a/ffffff?text=UIPC'">
+                    </div>
+                    <div>
+                        <h1 class="text-base sm:text-lg font-black tracking-tight text-slate-900">Captura de Conteo de Población por Pisos</h1>
+                        <p class="text-xs text-slate-600">Seleccione su rol/UR, registre la población y especifique el área.</p>
+                    </div>
+                </div>
+                
+                <!-- Contenedor Derecho: Fecha de Operación (Sin Botón Cerrar) -->
+                <div class="flex items-center gap-3">
+                    <div class="bg-[#f4f6f5] border border-[#9baec8] px-3.5 py-1.5 rounded-xl text-right">
+                        <span class="block text-[10px] text-slate-500 font-bold uppercase tracking-wider">Fecha de Operación</span>
+                        <span id="labelFechaHoy" class="text-xs font-mono font-black text-slate-800">Cargando...</span>
+                    </div>
+                </div>
+            </div>
+
+            <form onsubmit="handleSavePopulation(event)" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4 items-end">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Datos de la UR a capturar *</label>
+                    <select id="pobUrSelect" required class="w-full p-2.5 bg-white border border-slate-300 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#77af9c] cursor-pointer font-mono">
+                        <option value="">Seleccione opción...</option>
+                        
+                        <option value="AEFCM">AEFCM</option>
+                        <option value="CONAFE">CONAFE</option>
+                        <option value="CSI">CSI</option>
+                        <option value="DGAIR">DGAIR</option>
+                        <option value="DGBTED">DGBTED</option>
+                        <option value="DGDCYPEI">DGDCyPEI</option>
+                        <option value="DGDySNEM">DGDySNEM</option>
+                        <option value="DGEIIB">DGEIIB</option>
+                        <option value="DGESUI">DGESUI</option>
+                        <option value="DGESUM">DGESUM</option>
+                        <option value="DGETAYCM">DGETAYCM</option>
+                        <option value="DGETI">DGETI</option>
+                        <option value="DGFCDD">DGFCDD</option>
+                        <option value="DGGEyET">DGGEyET</option>
+                        <option value="DGME">DGME</option>
+                        <option value="DGPPyEE">DGPPyEE</option>
+                        <option value="DGPyRF">DGPyRF</option>
+                        <option value="DGRHO">DGRHO</option>
+                        <option value="DGSANEF">DGSANEF</option>
+                        <option value="DGTIC">DGTIC</option>
+                        <option value="DGUTyP">DGUTyP</option>
+                        <option value="DTA (SEMS)">DTA (SEMS)</option>
+                        <option value="SEB">SEB</option>
+                        <option value="SES">SES</option>
+                        <option value="SEMS">SEMS</option>
+                        <option value="TecNM">TecNM</option>
+                        <option value="MEJOREDU">MEJOREDU</option>
+                        <option value="UnADM">UnADM</option>
+                        <option value="UNEM">UNEM</option>
+                        <option value="USICAMM">USICAMM</option>
+                        <option value="UAF">UAF</option>
+                        <option value="DGACCSIP">DGACCSIP</option>
+                        <option value="ÁREA DEL SECRETARIO">ÁREA DEL SECRETARIO</option>
+                        <option value="SNTE SECC 11">SNTE SECC 11</option>
+                        <option value="ÁREA EJECUTIVA">ÁREA EJECUTIVA</option>
+                        <option value="SALAS DE CAPACITACIÓN">SALAS DE CAPACITACIÓN</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Usuario *</label>
+                    <input type="text" id="pobNombre" readonly class="w-full p-2.5 bg-slate-100 border border-slate-300 rounded-xl text-xs font-semibold text-slate-700 focus:outline-none cursor-not-allowed">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Nivel / Piso *</label>
+                    <select id="pobNivel" required class="w-full p-2.5 bg-white border border-slate-300 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#77af9c] cursor-pointer">
+                        <option value="">Seleccione Nivel</option>
+                        <option value="0">Nivel 0 (Planta Baja / Sótano)</option>
+                        <option value="1">Nivel 1</option>
+                        <option value="2">Nivel 2</option>
+                        <option value="3">Nivel 3</option>
+                        <option value="4">Nivel 4</option>
+                        <option value="5">Nivel 5</option>
+                        <option value="6">Nivel 6</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Total Población *</label>
+                    <input type="number" id="pobCantidad" min="1" required placeholder="Ej. 45" class="w-full p-2.5 bg-white border border-slate-300 rounded-xl text-xs font-extrabold text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#77af9c] font-mono">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Observaciones *</label>
+                    <input type="text" id="pobObservaciones" required placeholder="Ej. Dirección X, Guardias..." class="w-full p-2.5 bg-white border border-slate-300 rounded-xl text-xs font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#77af9c]">
+                </div>
+                <div>
+                    <button type="submit" id="pobSubmitBtn" style="background-color: #77af9c;" class="w-full hover:bg-[#5e9381] text-white font-black py-2.5 rounded-xl text-xs shadow-md transition-all cursor-pointer uppercase tracking-wider">
+                        Guardar Conteo
+                    </button>
+                </div>
+            </form>
+            <div id="pobFormAlert" class="hidden p-2 rounded-xl text-xs font-bold text-center mt-3"></div>
+        </div>
+
+        <!-- Contenedor Inferior en Blanco con Detalles en Verde y Azul -->
+        <div id="pobContainerPrint" class="print-container bg-white text-slate-800 p-6 rounded-2xl shadow-xl border-2 border-[#77af9c] space-y-4">
+            
+            <div class="hidden print:block text-center pb-3 border-b-2 border-slate-200 mb-4">
+                <h2 id="printTitleHeader" class="text-lg font-black text-slate-900 uppercase">CONCENTRADO GENERAL DE POBLACIÓN - UIPC</h2>
+                <p class="text-xs text-slate-600">Secretaría de Educación Pública · Centro SEP Universidad 1200</p>
+                <p id="printSubTitleDate" class="text-[10px] text-slate-500 font-bold mt-1"></p>
+            </div>
+
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b border-slate-200 pb-3">
+                <h2 class="text-sm font-extrabold text-slate-900 uppercase tracking-wide">Consolidado General de Población por Pisos</h2>
+                <div class="flex items-center space-x-2 no-print flex-wrap gap-2">
+                    <select id="filterNivel" onchange="loadPopulationData()" class="p-2 bg-slate-50 border border-slate-300 rounded-lg text-xs font-bold text-slate-800 focus:outline-none cursor-pointer">
+                        <option value="todos">Todos los Pisos</option>
+                        <option value="0">Nivel 0</option>
+                        <option value="1">Nivel 1</option>
+                        <option value="2">Nivel 2</option>
+                        <option value="3">Nivel 3</option>
+                        <option value="4">Nivel 4</option>
+                        <option value="5">Nivel 5</option>
+                        <option value="6">Nivel 6</option>
+                    </select>
+
+                    <button id="btnCorteOficial" onclick="ejecutarCorteOficial()" style="background-color: #9baec8;" class="hidden hover:bg-[#889cb7] text-white font-black py-2 px-4 rounded-lg text-xs transition-all shadow-md cursor-pointer items-center space-x-1 border border-slate-300">
+                        <span>🔒 Corte Final (16:00 hrs)</span>
+                    </button>
+
+                    <button onclick="window.print()" style="background-color: #77af9c;" class="hover:bg-[#5e9381] text-white font-black py-2 px-4 rounded-lg text-xs transition-all shadow-sm cursor-pointer flex items-center space-x-1">
+                        <span>Imprimir / Guardar PDF</span>
+                    </button>
+                </div>
+            </div>
+
+            <div id="tableContainer" class="overflow-y-auto max-h-[300px] border border-slate-300 rounded-xl bg-white text-slate-800 shadow-inner">
+                <table class="w-full text-left text-xs border-collapse">
+                    <thead>
+                        <tr class="text-white uppercase sticky top-0 z-20 shadow-sm border-b border-slate-300 text-[11px]" style="background-color: #77af9c;">
+                            <th class="p-3">Unidad Responsable </th>
+                            <th class="p-3">Usuario</th>
+                            <th class="p-3">NIVEL / PISO</th>
+                            <th class="p-3 text-center">CANTIDAD</th>
+                            <th class="p-3">OBSERVACIONES</th>
+                            <th id="thAcciones" class="p-3 text-center no-print hidden">ACCIONES</th>
+                        </tr>
+                    </thead>
+                    <tbody id="pobTableBody" class="divide-y divide-slate-100 text-xs">
+                        <tr><td id="tdCargando" colspan="5" class="p-6 text-center text-slate-400">Cargando conteo de población...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="text-slate-800 p-4 rounded-xl shadow-md border border-slate-300 flex justify-between items-center bg-[#f4f6f5]">
+                <span class="text-xs font-black uppercase tracking-wider text-slate-700">Gran Total de Población:</span>
+                <span id="grandTotalDisplay" class="text-2xl font-black text-slate-900 bg-white px-6 py-2 rounded-xl border border-[#77af9c] shadow-inner font-mono">
+                    0
+                </span>
+            </div>
+
+        </div>
+
+    </main>
+
+    <script>
+        let currentUser = null;
+        let globalRecordsCache = [];
+
+        function getFormattedDate() {
+            const now = new Date();
+            const day = String(now.getDate()).padStart(2, '0');
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const year = now.getFullYear();
+            return `${day}-${month}-${year}`;
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const userStr = sessionStorage.getItem('uipc_current_user') || 
+                            localStorage.getItem('uipc_current_user') ||
+                            sessionStorage.getItem('current_user') || 
+                            localStorage.getItem('current_user');
+            
+            if (userStr) {
+                try { currentUser = JSON.parse(userStr); } catch(e) {}
+            }
+
+            if (!currentUser && window.parent && window.parent !== window) {
+                try {
+                    const parentUserStr = window.parent.sessionStorage.getItem('uipc_current_user') || window.parent.localStorage.getItem('uipc_current_user');
+                    if (parentUserStr) {
+                        currentUser = JSON.parse(parentUserStr);
+                    }
+                } catch(e) {}
+            }
+
+            if (!currentUser || (!currentUser.ur && !currentUser.usuario)) {
+                currentUser = { 
+                    usuario: 'dgdysnem.operativo', 
+                    nombre: 'Daniel Gonzalez Pacheco', 
+                    ur: 'DGDySNEM' 
+                };
+            }
+            
+            document.getElementById('pobNombre').value = currentUser.nombre || currentUser.usuario || 'Daniel Gonzalez Pacheco';
+            
+            const urSelect = document.getElementById('pobUrSelect');
+            const userUr = (currentUser.ur || currentUser.unidad || '').toString().toUpperCase();
+            if (userUr) {
+                for (let option of urSelect.options) {
+                    if (userUr.includes(option.value.toUpperCase())) {
+                        urSelect.value = option.value;
+                        break;
+                    }
+                }
+            }
+            
+            const labelFecha = document.getElementById('labelFechaHoy');
+            if(labelFecha) {
+                labelFecha.innerText = getFormattedDate();
+            }
+
+            verificarPermisoCorte();
+            loadPopulationData();
+            setInterval(loadPopulationData, 5000);
+        });
+
+        function verificarPermisoCorte() {
+            const now = new Date();
+            const currentHour = now.getHours();
+            const currentMinute = now.getMinutes();
+
+            const esCoordinador = currentUser && (currentUser.usuario === 'coordinador.uipc' || currentUser.rol === 'coordinador');
+            const horaValida = (currentHour > 16) || (currentHour === 16 && currentMinute >= 0);
+
+            if (esCoordinador && horaValida) {
+                const btnCorte = document.getElementById('btnCorteOficial');
+                if (btnCorte) btnCorte.classList.remove('hidden');
+            }
+        }
+
+        function ejecutarCorteOficial() {
+            const fechaHoy = getFormattedDate();
+            document.getElementById('printTitleHeader').innerText = "CONCENTRADO OFICIAL DE CIERRE - CORTE DE LAS 16:00 HRS";
+            document.getElementById('printSubTitleDate').innerText = `Fecha de Emisión y Cierre: ${fechaHoy} a las 16:00 hrs.`;
+            window.print();
+        }
+
+        async function eliminarRegistro(id) {
+            if(!confirm('¿Estás seguro de que deseas eliminar este registro del consolidado?')) return;
+            
+            try {
+                const res = await fetch('/api/poblacion/delete', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id: id, adminUser: currentUser.usuario })
+                });
+                const data = await res.json();
+                
+                if(data.success) {
+                    loadPopulationData();
+                } else {
+                    alert('Error: ' + data.message);
+                }
+            } catch (e) {
+                alert('Error de conexión con el servidor al intentar eliminar.');
+            }
+        }
+
+        async function loadPopulationData() {
+            const tbody = document.getElementById('pobTableBody');
+            const totalDisplay = document.getElementById('grandTotalDisplay');
+            const filterVal = document.getElementById('filterNivel').value;
+            const hoyStr = getFormattedDate();
+            
+            const esCoordinador = currentUser && (currentUser.usuario === 'coordinador.uipc' || currentUser.rol === 'coordinador');
+            const thAcciones = document.getElementById('thAcciones');
+            const colCount = esCoordinador ? 6 : 5;
+
+            if (esCoordinador) {
+                thAcciones.classList.remove('hidden');
+            } else {
+                thAcciones.classList.add('hidden');
+            }
+
+            try {
+                const res = await fetch('/api/poblacion');
+                const data = await res.json();
+
+                if (data.success && Array.isArray(data.records)) {
+                    globalRecordsCache = data.records; 
+                    let records = data.records.filter(r => !r.fecha || r.fecha === hoyStr);
+
+                    if (filterVal !== 'todos') {
+                        records = records.filter(r => String(r.nivel) === String(filterVal));
+                    }
+
+                    if (records.length === 0) {
+                        tbody.innerHTML = `<tr><td colspan="${colCount}" class="p-6 text-center text-slate-400 italic">No hay registros de población para hoy con el filtro seleccionado.</td></tr>`;
+                        totalDisplay.innerText = '0';
+                        return;
+                    }
+
+                    tbody.innerHTML = '';
+                    let grandTotal = 0;
+
+                    records.forEach(r => {
+                        grandTotal += Number(r.cantidad || 0);
+                        const tr = document.createElement('tr');
+                        tr.className = "hover:bg-slate-50 transition-colors border-b border-slate-100";
+                        
+                        let htmlContent = `
+                            <td class="p-3 font-mono font-bold" style="color: #77af9c;">${r.ur || 'N/A'}</td>
+                            <td class="p-3 font-semibold text-slate-800">${r.nombre || 'N/A'}</td>
+                            <td class="p-3 font-bold text-slate-700">Nivel ${r.nivel}</td>
+                            <td class="p-3 font-black font-mono text-center" style="color: #77af9c;">${r.cantidad}</td>
+                            <td class="p-3 text-slate-600 font-medium italic">${r.observaciones || ''}</td>
+                        `;
+                        
+                        if (esCoordinador) {
+                            htmlContent += `
+                                <td class="p-3 text-center no-print">
+                                    <button onclick="eliminarRegistro('${r.id}')" class="text-xs bg-red-100 hover:bg-red-200 text-red-700 font-bold py-1 px-2 rounded transition-colors shadow-sm cursor-pointer border border-red-300">✕ Borrar</button>
+                                </td>
+                            `;
+                        }
+                        
+                        tr.innerHTML = htmlContent;
+                        tbody.appendChild(tr);
+                    });
+
+                    totalDisplay.innerText = grandTotal;
+                }
+            } catch (e) {
+                tbody.innerHTML = `<tr><td colspan="${colCount}" class="p-6 text-center text-red-500">Error al sincronizar con el servidor.</td></tr>`;
+            }
+        }
+
+        async function handleSavePopulation(event) {
+            event.preventDefault();
+            const alertBox = document.getElementById('pobFormAlert');
+            const btn = document.getElementById('pobSubmitBtn');
+
+            const hoyStr = getFormattedDate();
+            const urSelectEl = document.getElementById('pobUrSelect');
+            const urActual = urSelectEl.value.toString().trim().toUpperCase();
+            const nivelSeleccionado = document.getElementById('pobNivel').value.toString().trim();
+
+            if (!urActual) {
+                alert("Por favor seleccione una Unidad Responsable o Rol.");
+                urSelectEl.focus();
+                return;
+            }
+
+            if (!nivelSeleccionado) {
+                alert("Por favor seleccione un Nivel / Piso válido.");
+                return;
+            }
+
+            // 1. OBTENER REGISTROS FRESCOS PARA VERIFICAR SI YA EXISTE EL MISMO PISO Y UR/ROL
+            let recordsParaValidar = globalRecordsCache;
+            try {
+                const checkRes = await fetch('/api/poblacion');
+                const checkData = await checkRes.json();
+                if (checkData.success && Array.isArray(checkData.records)) {
+                    recordsParaValidar = checkData.records;
+                }
+            } catch (e) {
+                console.error("Usando caché para validar duplicados...", e);
+            }
+
+            // 2. BUSCAR SI YA EXISTE UN REGISTRO PARA LA MISMA UR/ROL EN EL MISMO NIVEL HOY
+            const duplicado = recordsParaValidar.find(r => {
+                const urReg = (r.ur || '').toString().trim().toUpperCase();
+                const nivelReg = (r.nivel !== undefined ? r.nivel : '').toString().trim();
+                const coincideUr = (urReg === urActual);
+                const coincideNivel = (nivelReg === nivelSeleccionado);
+                const fechaReg = r.fecha ? r.fecha.toString() : hoyStr;
+                const coincideFecha = (fechaReg === hoyStr);
+
+                return coincideUr && coincideNivel && coincideFecha;
+            });
+
+            // 3. SI EXISTE, PREGUNTAR SI DESEA REEMPLAZARLO AUTOMÁTICAMENTE
+            if (duplicado) {
+                const nombreCapturistaPrevio = duplicado.nombre || 'Otro usuario';
+                const cantidadPrevia = duplicado.cantidad || 0;
+                
+                const confirmarReemplazo = confirm(
+                    `⚠️ ¡ATENCIÓN: REGISTRO PREVIO ENCONTRADO!\n\n` +
+                    `Ya existe información registrada para "${urActual}" en el NIVEL ${nivelSeleccionado} el día de hoy.\n` +
+                    `• Capturado previamente por: ${nombreCapturistaPrevio}\n` +
+                    `• Población previamente reportada: ${cantidadPrevia} personas\n\n` +
+                    `¿Desea REEMPLAZAR este registro anterior con la nueva información?`
+                );
+
+                if (!confirmarReemplazo) {
+                    return; // Detiene el proceso si el usuario cancela
+                }
+
+                // ELIMINAR EL REGISTRO ANTERIOR DEL SERVIDOR ANTES DE GUARDAR EL NUEVO
+                if (duplicado.id) {
+                    try {
+                        await fetch('/api/poblacion/delete', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ id: duplicado.id, adminUser: currentUser.usuario })
+                        });
+                    } catch (e) {
+                        console.error("Error al eliminar el registro anterior para reemplazar", e);
+                    }
+                }
+            }
+
+            const payload = {
+                usuario: currentUser.usuario || 'dgdysnem.operativo',
+                nombre: document.getElementById('pobNombre').value || 'Daniel Gonzalez Pacheco',
+                ur: urActual, 
+                nivel: nivelSeleccionado,
+                cantidad: parseInt(document.getElementById('pobCantidad').value) || 0,
+                observaciones: document.getElementById('pobObservaciones').value.trim(),
+                fecha: hoyStr
+            };
+
+            btn.disabled = true; btn.innerText = duplicado ? "Reemplazando..." : "Guardando...";
+            alertBox.classList.remove('hidden');
+            alertBox.className = "p-2 rounded-xl text-xs font-bold bg-blue-100 text-blue-900 text-center";
+            alertBox.innerText = duplicado ? "Reemplazando registro anterior..." : "Guardando registro...";
+
+            try {
+                const res = await fetch('/api/poblacion/save', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const result = await res.json();
+
+                if (result.success) {
+                    alertBox.className = "p-2 rounded-xl text-xs font-bold bg-emerald-100 text-emerald-800 text-center mt-3";
+                    alertBox.innerText = duplicado ? "✓ Registro reemplazado correctamente." : "✓ Conteo guardado correctamente.";
+                    
+                    document.getElementById('pobCantidad').value = '';
+                    document.getElementById('pobObservaciones').value = '';
+                    document.getElementById('pobNivel').value = '';
+                    document.getElementById('pobNivel').focus();
+                    
+                    loadPopulationData();
+                } else {
+                    alertBox.className = "p-2 rounded-xl text-xs font-bold bg-red-100 text-red-700 text-center mt-3";
+                    alertBox.innerText = "✕ Error al guardar el conteo.";
+                }
+            } catch (e) {
+                alertBox.className = "p-2 rounded-xl text-xs font-bold bg-red-100 text-red-700 text-center mt-3";
+                alertBox.innerText = "✕ Error de conexión con el servidor.";
+            } finally {
+                btn.disabled = false; btn.innerText = "Guardar Conteo";
+                setTimeout(() => alertBox.classList.add('hidden'), 4000);
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,42 @@
+[
+{
+"usuario": "ivan.vela",
+"password": "123",
+"nombre": "Ivan Vela",
+"ur": "DGAIR",
+"cargo": "Enlace de Protección Civil",
+"suplente": "Guillermo Palomo",
+"ubicacion": "sector 0-18",
+"extension": "62015"
+},
+{
+"usuario": "maria.lopez",
+"password": "mypassword",
+"nombre": "María López Rodríguez",
+"ur": "Recursos Humanos",
+"cargo": "Jefe de Brigada Evacuación",
+"suplente": "Carlos Slim",
+"ubicacion": "Planta Baja, Ala Sur",
+"extension": "12345"
+},
+{
+"usuario": "pedro.paramo",
+"password": "seguridad2026",
+"nombre": "Pedro Páramo",
+"ur": "Dirección General",
+"cargo": "Jefe de Piso",
+"suplente": "Juan Rulfo",
+"ubicacion": "Piso 3, Oficina 12",
+"extension": "5555"
+},
+{
+"usuario": "daniel.gonzalez",
+"password": "26101973",
+"nombre": "Daniel. Gonzalez Pacheco",
+"ur": "DGDySNEM",
+"cargo": "Coordinador Operativo Unidad Interna de Protección Civil",
+"suplente": "Eduardo Sánchez Salas",
+"ubicacion": "sector 2-4",
+"extension": "62015"
+}
+]

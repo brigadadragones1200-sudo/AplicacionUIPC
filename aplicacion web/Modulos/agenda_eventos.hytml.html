@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agenda de Eventos - Centro SEP</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>body { font-family: 'Inter', sans-serif; background-color: #f1f5f9; }</style>
+</head>
+<body class="p-6">
+
+    <div class="max-w-5xl mx-auto">
+        <!-- Encabezado -->
+        <div class="flex items-center justify-between bg-blue-900 text-white p-5 rounded-2xl shadow-lg mb-6">
+            <div>
+                <h1 class="text-2xl font-black tracking-tight">Reporte de Eventos Diarios</h1>
+                <p class="text-sm text-blue-200 font-medium">Centro SEP Universidad 1200 - Los eventos se limpian cada medianoche</p>
+            </div>
+            <button onclick="cargarEventos()" class="bg-amber-500 hover:bg-amber-400 text-blue-950 font-bold py-2 px-4 rounded-xl shadow transition-transform active:scale-95 flex items-center gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                Actualizar Lista
+            </button>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Columna Izquierda: Formulario (Solo visible para Admin) -->
+            <div id="panelAdministrador" class="hidden lg:col-span-1 bg-white p-6 rounded-2xl shadow-md border border-slate-200 h-fit">
+                <h2 class="text-lg font-bold text-slate-800 mb-4 border-b pb-2">➕ Registrar Nuevo Evento</h2>
+                <form id="formEvento" onsubmit="guardarEvento(event)" class="space-y-3">
+                    
+                    <div>
+                        <label class="text-xs font-bold text-slate-600 uppercase">Lugar / Sala</label>
+                        <input type="text" id="lugar" required placeholder="Ej. Explanada Principal, Nivel 3" class="w-full mt-1 p-2 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-600 outline-none">
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="text-xs font-bold text-slate-600 uppercase">Fecha Evento</label>
+                            <input type="text" id="fecha" required placeholder="Ej. 11 al 12 de Nov" class="w-full mt-1 p-2 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-600 outline-none">
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-slate-600 uppercase">Horario</label>
+                            <input type="text" id="horario" required placeholder="12:30 a 13:00" class="w-full mt-1 p-2 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-600 outline-none">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="text-xs font-bold text-slate-600 uppercase">Tema del Evento</label>
+                        <textarea id="tema" required rows="3" placeholder="Ej. Reunión de Scouting para organizar..." class="w-full mt-1 p-2 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-600 outline-none"></textarea>
+                    </div>
+
+                    <div>
+                        <label class="text-xs font-bold text-slate-600 uppercase">Coordinador</label>
+                        <input type="text" id="coordina" required placeholder="Mtro. Eder González Durán" class="w-full mt-1 p-2 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-600 outline-none">
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-3">
+                        <div class="col-span-1">
+                            <label class="text-xs font-bold text-slate-600 uppercase">Aforo</label>
+                            <input type="number" id="asistentes" required placeholder="15" class="w-full mt-1 p-2 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-600 outline-none">
+                        </div>
+                        <div class="col-span-2">
+                            <label class="text-xs font-bold text-slate-600 uppercase">Contacto</label>
+                            <input type="text" id="contacto" required placeholder="CP. Filiberto López" class="w-full mt-1 p-2 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-600 outline-none">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="w-full mt-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl shadow-md transition-all active:scale-95">
+                        Publicar Evento
+                    </button>
+                </form>
+            </div>
+
+            <!-- Columna Derecha: Lista de Eventos (Visible para todos) -->
+            <div id="contenedorGrid" class="lg:col-span-2 space-y-4">
+                <!-- Aquí se inyectan las tarjetas de los eventos por JavaScript -->
+                <div id="listaVacia" class="text-center py-10 text-slate-400 font-medium hidden">
+                    No hay eventos registrados para el día de hoy.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 1. Verificar si el usuario es Administrador para mostrarle el formulario
+        document.addEventListener('DOMContentLoaded', () => {
+            const usuarioActual = JSON.parse(sessionStorage.getItem('uipc_current_user') || '{}');
+            if(usuarioActual.usuario === 'coordinador.uipc' || usuarioActual.usuario === 'jefe.dragon') {
+                document.getElementById('panelAdministrador').classList.remove('hidden');
+            } else {
+                // Si es usuario normal, la lista de eventos toma todo el ancho de la pantalla
+                document.getElementById('contenedorGrid').classList.replace('lg:col-span-2', 'lg:col-span-3');
+            }
+            cargarEventos();
+        });
+
+        // 2. Función para guardar un evento nuevo
+        async function guardarEvento(e) {
+            e.preventDefault();
+            
+            const nuevoEvento = {
+                lugar: document.getElementById('lugar').value,
+                fecha: document.getElementById('fecha').value,
+                horario: document.getElementById('horario').value,
+                tema: document.getElementById('tema').value,
+                coordina: document.getElementById('coordina').value,
+                asistentes: document.getElementById('asistentes').value,
+                contacto: document.getElementById('contacto').value
+            };
+
+            const response = await fetch('/api/eventos', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(nuevoEvento)
+            });
+
+            if(response.ok) {
+                document.getElementById('formEvento').reset();
+                cargarEventos(); // Recarga la lista instantáneamente
+            } else {
+                alert("Error al guardar el evento.");
+            }
+        }
+
+        // 3. Función para descargar y dibujar las tarjetas de los eventos
+        async function cargarEventos() {
+            const contenedor = document.getElementById('contenedorGrid');
+            const mensajeVacio = document.getElementById('listaVacia');
+            
+            // Limpiamos tarjetas anteriores manteniendo el mensaje de vacío
+            contenedor.innerHTML = ''; 
+            contenedor.appendChild(mensajeVacio);
+
+            const response = await fetch('/api/eventos');
+            const data = await response.json();
+
+            if(data.eventos && data.eventos.length > 0) {
+                mensajeVacio.classList.add('hidden');
+                data.eventos.reverse().forEach(evento => {
+                    const tarjeta = document.createElement('div');
+                    tarjeta.className = 'bg-white p-5 rounded-2xl shadow-sm border border-slate-200 hover:shadow-md transition-shadow border-l-4 border-l-blue-600';
+                    tarjeta.innerHTML = `
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="font-black text-lg text-slate-800">${evento.lugar}</h3>
+                            <span class="bg-blue-100 text-blue-800 text-xs font-bold px-2.5 py-1 rounded-lg">${evento.horario}</span>
+                        </div>
+                        <p class="text-sm font-semibold text-slate-500 mb-3">📅 Fecha programada: <span class="text-slate-700">${evento.fecha}</span></p>
+                        <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 mb-3 text-sm text-slate-700 text-justify">
+                            <span class="font-bold text-blue-900 uppercase text-xs">Tema del Evento:</span><br>
+                            ${evento.tema}
+                        </div>
+                        <div class="grid grid-cols-2 gap-2 text-xs font-medium text-slate-600 mt-3 pt-3 border-t border-slate-100">
+                            <div><span class="font-bold">Coordina:</span> <br>${evento.coordina}</div>
+                            <div><span class="font-bold">Contacto:</span> <br>${evento.contacto}</div>
+                            <div class="col-span-2 mt-1"><span class="font-bold">Aforo Esperado:</span> <span class

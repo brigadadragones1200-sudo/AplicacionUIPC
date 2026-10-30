@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Formato RED - Código Rojo UIPC</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background-image: url('fdo2uipc.jpeg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      font-family: 'Inter', sans-serif;
+      color: #0f172a;
+    }
+    
+    .container-screen {
+      background-color: #ffffff;
+    }
+    
+    .radio-falsa:checked + span { background-color: #fef08a !important; border-color: #eab308 !important; font-weight: 800; color: #854d0e; box-shadow: 0 4px 6px -1px rgba(234, 179, 8, 0.2); }
+    .radio-real:checked + span { background-color: #fca5a5 !important; border-color: #dc2626 !important; font-weight: 800; color: #7f1d1d; box-shadow: 0 4px 6px -1px rgba(220, 38, 38, 0.2); }
+
+    @media print {
+      @page {
+        size: letter portrait;
+        margin: 5mm;
+      }
+      body {
+        background: white !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      header, .no-print {
+        display: none !important;
+      }
+      .container-screen {
+        box-shadow: none !important;
+        border: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+      }
+      
+      * { font-size: 9.5px !important; line-height: 1.15 !important; }
+      h1 { font-size: 12px !important; margin-bottom: 2px !important; }
+      h2 { font-size: 10px !important; margin-bottom: 2px !important; padding-bottom: 1px !important; border-bottom: 1px solid #000 !important; }
+      p { font-size: 9px !important; }
+      
+      input, select, textarea {
+        border: 1px solid #000 !important;
+        background: transparent !important;
+        padding: 2px !important;
+        height: auto !important;
+      }
+      textarea { height: 35px !important; }
+      
+      .custom-border-box { border: 1px solid #000 !important; padding: 2px !important; }
+      
+      .p-6, .p-5, .p-4, .p-3, .p-2 { padding: 3px !important; }
+      .gap-6, .gap-4, .gap-3, .gap-2 { gap: 3px !important; }
+      .space-y-6 > :not([hidden]) ~ :not([hidden]) { margin-top: 4px !important; }
+      .space-y-4 > :not([hidden]) ~ :not([hidden]) { margin-top: 3px !important; }
+      .mb-4, .mb-3, .mb-2, .mb-1 { margin-bottom: 2px !important; }
+      .mt-6, .mt-4, .mt-2 { margin-top: 3px !important; }
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between">
+
+    <header class="bg-white/95 backdrop-blur-sm border-b border-slate-300 shadow-sm py-3 px-6 flex flex-col md:flex-row justify-between items-center sticky top-0 z-30 no-print gap-3">
+        <div class="flex items-center space-x-4 w-full md:w-auto">
+            <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center overflow-hidden shadow-sm border border-slate-300 p-1 shrink-0">
+                <img src="logo_UIPC.png" alt="Logo UIPC" class="w-full h-full object-contain" crossorigin="anonymous" onerror="this.src='https://placehold.co/40x40/7f1d1d/ffffff?text=UIPC'">
+            </div>
+            <div>
+                <span class="text-sm md:text-base font-black text-red-900 uppercase">Formato RED - Código Rojo</span>
+                <p class="text-xs text-slate-600 font-medium">Brigada de Prevención y Combate de Incendios</p>
+            </div>
+        </div>
+        <div class="flex items-center gap-3 w-full md:w-auto justify-end">
+            <a href="dashboard_master.html" class="text-sm bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold py-2 px-4 rounded-xl transition-all shadow-sm">
+                &larr; <span class="hidden sm:inline">Volver al Dashboard</span><span class="inline sm:hidden">Volver</span>
+            </a>
+            <button onclick="window.close()" class="px-4 py-2 bg-slate-800 hover:bg-slate-900 text-white rounded-xl text-sm font-bold shadow-sm transition-all flex items-center gap-1.5 cursor-pointer shrink-0">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                <span>Cerrar</span>
+            </button>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-5xl w-full mx-auto p-2 md:p-6 my-2 md:my-4">
+        <div id="printArea" class="bg-white p-6 md:p-8 rounded-2xl shadow-2xl border border-slate-300 space-y-6 container-screen relative">
+            
+            <div class="text-center border-b-2 border-slate-300 pb-4 flex flex-col items-center justify-center relative">
+                <div class="absolute left-0 top-0 w-16 h-16 bg-white rounded-full flex items-center justify-center overflow-hidden shadow-md border border-slate-300 p-1 hidden sm:flex">
+                    <img src="logo_UIPC.png" alt="Logo UIPC" class="w-full h-full object-contain" crossorigin="anonymous">
+                </div>
+                
+                <h1 class="text-lg md:text-2xl font-extrabold text-red-900 tracking-tight sm:ml-20">Reporte de Emergencia y Diagnóstico (Formato RED)</h1>
+                <p class="text-xs md:text-sm text-slate-700 font-bold sm:ml-20 mt-1">Unidad Interna de Protección Civil - Avenida Universidad N°1200</p>
+                <p class="text-sm md:text-base text-red-700 font-black sm:ml-20 uppercase tracking-widest mt-1 bg-red-50 inline-block px-4 py-1 rounded-full border border-red-200">Atención de Código Rojo</p>
+            </div>
+
+            <form id="redForm" class="space-y-6" onsubmit="prepararImpresion(event)">
+                
+                <!-- 1. Datos Generales -->
+                <div>
+                    <h2 class="text-sm md:text-base font-extrabold text-red-900 border-b-2 border-slate-200 pb-1 uppercase tracking-wider mb-3">1. Datos Generales del Reporte</h2>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                        <div>
+                            <label class="block font-bold text-slate-800 text-xs md:text-sm mb-1">Fecha</label>
+                            <input type="date" id="fechaInput" name="fecha" class="w-full rounded-lg border border-slate-300 p-2 text-sm font-medium focus:ring-2 focus:ring-red-500 outline-none bg-slate-50" onchange="generarFolioAutomatico()">
+                        </div>
+                        <div>
+                            <label class="block font-bold text-slate-800 text-xs md:text-sm mb-1">Hora de Activación</label>
+                            <input type="time" name="hora" class="w-full rounded-lg border border-slate-300 p-2 text-sm font-medium focus:ring-2 focus:ring-red-500 outline-none bg-slate-50">
+                        </div>
+                        <div>
+                            <label class="block font-bold text-slate-800 text-xs md:text-sm mb-1">Día</label>
+                            <input type="text" id="diaInput" name="dia" class="w-full rounded-lg border border-slate-300 p-2 text-sm font-medium focus:ring-2 focus:ring-red-500 outline-none bg-slate-50" placeholder="Ej. Lunes">
+                        </div>
+                        <div>
+                            <label class="block font-bold text-slate-800 text-xs md:text-sm mb-1">Folio RED (Auto)</label>
+                            <input type="text" id="folioInput" name="folio" class="w-full rounded-lg border-2 border-red-200 bg-red-50 font-extrabold text-red-900 text-center p-2 text-sm outline-none" readonly>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. Clasificación del Evento -->
+                <div class="custom-border-box p-4 md:p-5 rounded-xl bg-slate-50 border border-slate-200 shadow-sm">
+                    <h2 class="text-sm md:text-base font-extrabold text-red-900 border-b-2 border-slate-200 pb-1 uppercase tracking-wider mb-4">2. Clasificación del Evento (Código Rojo)</h2>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-center">
+                        <label class="block cursor-pointer">
+                            <input type="radio" name="clasificacion_evento" value="Falsa Alarma" class="sr-only radio-falsa" required>
+                            <span class="block border-2 border-slate-300 p-4 rounded-xl bg-white text-slate-600 uppercase tracking-wide text-xs md:text-sm font-bold transition-all hover:bg-slate-100">
+                                Falsa Alarma <br><span class="text-xs font-medium normal-case mt-1 block opacity-80">(Activación accidental, simulacro o sensor defectuoso)</span>
+                            </span>
+                        </label>
+                        <label class="block cursor-pointer">
+                            <input type="radio" name="clasificacion_evento" value="Evento Real" class="sr-only radio-real">
+                            <span class="block border-2 border-slate-300 p-4 rounded-xl bg-white text-slate-600 uppercase tracking-wide text-xs md:text-sm font-bold transition-all hover:bg-slate-100">
+                                Código Real <br><span class="text-xs font-medium normal-case mt-1 block opacity-80">(Conato o fuego activo confirmado)</span>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 3. Ubicación y Brigadistas -->
+                <div>
+                    <h2 class="text-sm md:text-base font-extrabold text-red-900 border-b-2 border-slate-200 pb-1 uppercase tracking-wider mb-3">3. Ubicación y Notificación</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="md:col-span-2">
+                            <label class="block font-bold text-slate-800 text-xs md:text-sm mb-1">Ubicación Exacta (Piso, Área o Sector)</label>
+                            <input type="text" name="ubicacion_exacta" class="w-full rounded-lg border border-slate-300 p-2.5 text-sm font-medium focus:ring-2 focus:ring-red-500 outline-none bg-slate-50" required>
+                        </div>
+                        <div>
+                            <label class="block font-bold text-slate-800 text-xs md:text-sm mb-1">Medio de Reporte</label>
+                            <select name="medio_reporte" class="w-full rounded-lg border border-slate-300 p-2.5 text-sm font-medium focus:ring-2 focus:ring-red-500 outline-none bg-slate-50">
+                                <option value="">Seleccione...</option>
+                                <option>Activación de Sensor</option>
+                                <option>Alarma Manual</option>
+                                <option>Radio (Frecuencia UIPC)</option>
+                                <option>Reporte Verbal</option>
+                            </select>
+                        </div>
+                        <div class="md:col-span-3">
+                            <label class="block font-bold text-slate-800 text-xs md:text-sm mb-1">Brigadista(s) de Primera Respuesta (Nombre e Indicativo)</label>
+                            <input type="text" name="brigadistas_respuesta" class="w-full rounded-lg border border-slate-300 p-2.5 text-sm font-medium focus:ring-2 focus:ring-red-500 outline-none bg-slate-50" required>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. Equipamiento -->
+                <div class="custom-border-box p-4 rounded-xl bg-slate-50 border border-slate-200">
+                    <h2 class="text-sm md:text-base font-extrabold text-red-900 border-b-2 border-slate-200 pb-1 uppercase tracking-wider mb-3">4. Equipamiento de Respuesta Crítica Utilizado</h2>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 text-xs md:text-sm text-slate-700 font-medium">
+                        <label class="p-2.5 bg-white border border-slate-300 rounded-lg flex items-center space-x-2 hover:bg-slate-100 cursor-pointer transition-colors shadow-sm"><input type="checkbox" name="equipamiento" value="Extintor PQS" class="w-4 h-4 text-red-600 focus:ring-red-500"> <span>Extintor PQS</span></label>
+                        <label class="p-2.5 bg-white border border-slate-300 rounded-lg flex items-center space-x-2 hover:bg-slate-100 cursor-pointer transition-colors shadow-sm"><input type="checkbox" name="equipamiento" value="Extintor CO2" class="w-4 h-4 text-red-600 focus:ring-red-500"> <span>Extintor CO2</span></label>
+                        <label class="p-2.5 bg-white border border-slate-300 rounded-lg flex items-center space-x-2 hover:bg-slate-100 cursor-pointer transition-colors shadow-sm"><input type="checkbox" name="equipamiento" value="Extintor HFC-236" class="w-4 h-4 text-red-600 focus:ring-red-500"> <span>Extintor HFC-236 (Gases)</span></label>
+                        <label class="p-2.5 bg-white border border-slate-300 rounded-lg flex items-center space-x-2 hover:bg-slate-100 cursor-pointer transition-colors shadow-sm"><input type="checkbox" name="equipamiento" value="Equipo de Protección Personal" class="w-4 h-4 text-red-600 focus:ring-red-500"> <span>Equipo de Prot. Personal</span></label>
+                    </div>
+                </div>
+
+                <!-- 5. Tácticas y Maniobras -->
+                <div class="custom-border-box p-4 rounded-xl bg-slate-50 border border-slate-200">
+                    <h2 class="text-sm md:text-base font-extrabold text-red-900 border-b-2 border-slate-200 pb-1 uppercase tracking-wider mb-3">5. Maniobras Operativas Aplicadas</h2>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 text-xs md:text-sm text-slate-700 font-medium">
+                        <label class="p-2.5 bg-white border border-slate-300 rounded-lg flex items-center space-x-2 hover:bg-slate-100 cursor-pointer transition-colors shadow-sm"><input type="checkbox" name="maniobras" value="Evacuación Parcial" class="w-4 h-4 text-red-600 focus:ring-red-500"> <span>Evacuación Parcial</span></label>
+                        <label class="p-2.5 bg-white border border-slate-300 rounded-lg flex items-center space-x-2 hover:bg-slate-100 cursor-pointer transition-colors shadow-sm"><input type="checkbox" name="maniobras" value="Evacuación Total" class="w-4 h-4 text-red-600 focus:ring-red-500"> <span>Evacuación Total</span></label>
+                        <label class="p-2.5 bg-white border border-slate-300 rounded-lg flex items-center space-x-2 hover:bg-slate-100 cursor-pointer transition-colors shadow-sm"><input type="checkbox" name="maniobras" value="Apertura de Hidrante" class="w-4 h-4 text-red-600 focus:ring-red-500"> <span>Apertura de Red de Hidrantes</span></label>
+                        <label class="p-2.5 bg-white border border-slate-300 rounded-lg flex items-center space-x-2 hover:bg-slate-100 cursor-pointer transition-colors shadow-sm md:col-span-2 border-red-200 bg-red-50/30"><input type="checkbox" name="maniobras" value="Despliegue Dona Doble" class="w-4 h-4 text-red-600 focus:ring-red-500"> <span class="font-extrabold text-red-900">Despliegue de manguera (técnica dona doble)</span></label>
+                        <label class="p-2.5 bg-white border border-slate-300 rounded-lg flex items-center space-x-2 hover:bg-slate-100 cursor-pointer transition-colors shadow-sm"><input type="checkbox" name="maniobras" value="Corte de Energía" class="w-4 h-4 text-red-600 focus:ring-red-500"> <span>Corte de Energía Eléctrica</span></label>
+                    </div>
+                </div>
+
+                <!-- 6. Diagnóstico Final -->
+                <div>
+                    <h2 class="text-sm md:text-base font-extrabold text-red-900 border-b-2 border-slate-200 pb-1 uppercase tracking-wider mb-2">6. Diagnóstico y Observaciones de la Emergencia</h2>
+                    <label class="block font-bold text-slate-600 text-xs md:text-sm mb-2">Describa claramente la causa de la alarma, material involucrado (si aplica) y acciones correctivas finales:</label>
+                    <textarea name="observaciones_red" rows="4" class="w-full rounded-xl border border-slate-300 p-3 text-sm font-medium focus:ring-2 focus:ring-red-500 outline-none bg-slate-50 resize-none shadow-sm" required></textarea>
+                </div>
+
+                <!-- 7. Firmas / Rúbricas -->
+                <div class="custom-border-box p-4 rounded-xl bg-slate-50 border border-slate-200 mt-6">
+                    <h2 class="text-sm md:text-base font-extrabold text-red-900 border-b-2 border-slate-200 pb-1 uppercase tracking-wider mb-4 text-center">7. Validación Operativa del Código Rojo</h2>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-8 pt-8 md:pt-12 text-center">
+                        <div class="flex flex-col items-center">
+                            <div class="w-10/12 border-b-2 border-slate-400 pb-6 mb-2"></div>
+                            <span class="font-bold text-slate-800 text-xs md:text-sm">Firma Brigadista / Jefe de Brigada</span>
+                        </div>
+                        <div class="flex flex-col items-center">
+                            <div class="w-10/12 border-b-2 border-slate-400 pb-6 mb-2"></div>
+                            <span class="font-bold text-slate-800 text-xs md:text-sm">Firma Jefe de Piso / Enlace PC</span>
+                        </div>
+                        <div class="flex flex-col items-center">
+                            <div class="w-10/12 border-b-2 border-slate-400 pb-6 mb-2"></div>
+                            <span class="font-bold text-slate-800 text-xs md:text-sm">Coordinador Operativo UIPC</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="statusAlert" class="hidden p-4 rounded-xl text-sm font-bold text-center mt-4 shadow-md"></div>
+
+                <!-- Botones de Acción -->
+                <div class="flex flex-col sm:flex-row justify-center space-y-3 sm:space-y-0 sm:space-x-4 pt-6 border-t border-slate-300 mt-6 no-print">
+                    
+                    <!-- 1. Imprimir Manual (Por si requieres papel físico) -->
+                    <button type="submit" id="btnImprimir" class="bg-red-700 hover:bg-red-800 text-white font-black py-3 px-6 rounded-xl shadow-lg text-sm transition-all cursor-pointer flex items-center justify-center transform hover:scale-105">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
+                        Imprimir Formato RED (PDF)
+                    </button>
+                    
+                    <!-- 2. Limpiar Reporte -->
+                    <button type="reset" onclick="setTimeout(inicializarFormulario, 100)" class="bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold py-3 px-6 rounded-xl text-sm transition-colors cursor-pointer justify-center flex items-center">
+                        Limpiar Reporte
+                    </button>
+                    
+                    <!-- 3. Guardar en Servidor Automático (Sin ventanas de Windows) -->
+                    <button type="button" id="btnGuardar" onclick="guardarEnServidorAutomatico()" class="bg-green-700 hover:bg-green-800 text-white font-bold py-3 px-6 rounded-xl text-sm transition-all cursor-pointer justify-center flex items-center gap-2 transform hover:scale-105 shadow-lg">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path></svg>
+                        Guardar en Servidor (Automático)
+                    </button>
+
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <footer class="w-full py-3 px-6 bg-slate-900 text-slate-300 text-center text-xs no-print mt-auto font-medium">
+        Dirección General de Diagnóstico y Seguimiento de la NEM · Unidad Interna de Protección Civil Universidad 1200
+    </footer>
+
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            inicializarFormulario();
+        });
+
+        function inicializarFormulario() {
+            const now = new Date();
+            const optionsFecha = { timeZone: 'America/Mexico_City', year: 'numeric', month: '2-digit', day: '2-digit' };
+            const optionsHora = { timeZone: 'America/Mexico_City', hour: '2-digit', minute: '2-digit', hour12: false };
+            
+            const partesFecha = new Intl.DateTimeFormat('es-MX', optionsFecha).formatToParts(now);
+            const dia = partesFecha.find(p => p.type === 'day').value;
+            const mes = partesFecha.find(p => p.type === 'month').value;
+            const anio = partesFecha.find(p => p.type === 'year').value;
+            
+            const fechaStr = `${anio}-${mes}-${dia}`;
+            const fechaInput = document.getElementById('fechaInput');
+            if (!fechaInput.value) fechaInput.value = fechaStr;
+
+            const diasSemana = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+            const diaSemanaIndex = new Date(now.toLocaleString('en-US', { timeZone: 'America/Mexico_City' })).getDay();
+            document.getElementById('diaInput').value = diasSemana[diaSemanaIndex];
+
+            const horaStr = new Intl.DateTimeFormat('es-MX', optionsHora).format(now);
+            const horaInput = document.querySelector('[name="hora"]');
+            if (!horaInput.value) horaInput.value = horaStr;
+
+            generarFolioAutomatico();
+        }
+
+        function generarFolioAutomatico() {
+            const fechaVal = document.getElementById('fechaInput').value;
+            if (!fechaVal) return;
+            
+            const partes = fechaVal.split('-');
+            const anio = partes[0];
+            const mes = partes[1];
+            const dia = partes[2];
+            
+            const claveConsecutivo = `uipc_consecutivo_red_${dia}_${mes}_${anio}`;
+            let consecutivo = parseInt(localStorage.getItem(claveConsecutivo) || '0') + 1;
+            
+            const consecutivoStr = String(consecutivo).padStart(3, '0');
+            const folioFinal = `RED-${dia}-${mes}-${consecutivoStr}`;
+            document.getElementById('folioInput').value = folioFinal;
+        }
+
+        function prepararImpresion(event) {
+            event.preventDefault();
+            window.print();
+        }
+
+        // FUNCIÓN CLAVE: Guarda DIRECTAMENTE en el servidor de forma 100% automática sin ventanas de Windows
+        async function guardarEnServidorAutomatico() {
+            const form = document.getElementById('redForm');
+            if (!form.reportValidity()) {
+                form.reportValidity();
+                return;
+            }
+
+            const btn = document.getElementById('btnGuardar');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<span class="animate-pulse">Guardando en Servidor...</span>';
+            btn.disabled = true;
+
+            const alertBox = document.getElementById('statusAlert');
+            alertBox.classList.remove('hidden');
+            alertBox.className = "p-4 rounded-xl text-sm font-bold bg-blue-100 text-blue-900 text-center mt-4 border-2 border-blue-300 shadow-md";
+            alertBox.innerHTML = "Procesando documento y guardando en la ruta del servidor en segundo plano...";
+
+            // Congelamos los valores escritos en el formulario
+            document.querySelectorAll('input, select, textarea').forEach(el => {
+                if (el.type === 'checkbox' || el.type === 'radio') {
+                    if (el.checked) el.setAttribute('checked', 'checked');
+                    else el.removeAttribute('checked');
+                } else if (el.tagName === 'TEXTAREA') {
+                    el.textContent = el.value;
+                } else if (el.tagName === 'SELECT') {
+                    Array.from(el.options).forEach(opt => {
+                        if (opt.selected) opt.setAttribute('selected', 'selected');
+                        else opt.removeAttribute('selected');
+                    });
+                } else {
+                    el.setAttribute('value', el.value);
+                }
+            });
+
+            const htmlClone = document.documentElement.cloneNode(true);
+            htmlClone.querySelectorAll('.no-print').forEach(el => el.remove());
+
+            const folio = document.getElementById('folioInput').value || 'RED_SinFolio';
+            const nombreArchivo = `${folio}.html`; // Archivo formateado para guardarse limpio en el servidor
+
+            const htmlContent = '<!DOCTYPE html>\n' + htmlClone.outerHTML;
+            const blob = new Blob([htmlContent], { type: 'text/html' });
+            const formData = new FormData();
+            formData.append('file', blob, nombreArchivo);
+
+            try {
+                const response = await fetch('/api/upload/red', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (response.ok) {
+                    const fechaVal = document.getElementById('fechaInput').value;
+                    const partes = fechaVal.split('-');
+                    const claveConsecutivo = `uipc_consecutivo_red_${partes[2]}_${partes[1]}_${partes[0]}`;
+                    let actual = parseInt(localStorage.getItem(claveConsecutivo) || '0');
+                    localStorage.setItem(claveConsecutivo, actual + 1);
+
+                    alertBox.className = "p-4 rounded-xl text-sm font-bold bg-green-100 text-green-900 text-center mt-4 border-2 border-green-300 shadow-md";
+                    alertBox.innerHTML = `¡Guardado exitoso! El reporte <b>${nombreArchivo}</b> se guardó automáticamente en la carpeta del servidor y ya está disponible en el dashboard.`;
+
+                    setTimeout(() => {
+                        document.getElementById('redForm').reset();
+                        inicializarFormulario();
+                        alertBox.classList.add('hidden');
+                    }, 3500);
+                } else {
+                    throw new Error('Error al guardar en el servidor');
+                }
+            } catch (err) {
+                alertBox.className = "p-4 rounded-xl text-sm font-bold bg-red-100 text-red-900 text-center mt-4 border-2 border-red-300 shadow-md";
+                alertBox.innerHTML = "Error al conectar con el servidor para guardar el archivo.";
+            } finally {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
+        }
+    </script>
+</body>
+</html>

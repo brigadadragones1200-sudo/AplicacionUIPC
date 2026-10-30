@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Botonera Institucional UIPC</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* ==========================================
+           ESTILOS GENERALES DEL BODY
+           ========================================== */
+        body {
+            background: transparent;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            background-color: rgba(254, 243, 199, 0.95); /* Equivalente a bg-amber-100/95 */
+            backdrop-filter: blur(12px);
+            padding: 6px 10px;
+            border-bottom: 1px solid #fde047; /* border-amber-300 */
+            box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06); /* shadow-inner */
+        }
+
+        /* Contenedor principal de la botonera */
+        .botonera-nav {
+            max-width: 80rem;
+            margin-left: auto;
+            margin-right: auto;
+            width: 100%;
+            display: grid;
+            grid-template-columns: repeat(1, minmax(0, 1fr));
+            gap: 0.5rem;
+        }
+
+        @media (min-width: 640px) {
+            .botonera-nav {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .botonera-nav {
+                grid-template-columns: repeat(5, minmax(0, 1fr));
+            }
+        }
+
+        /* ==========================================
+           ESTILOS BASE Y ALTURA MÁXIMA DE LOS BOTONES (≤ 75px)
+           ========================================== */
+        .btn-base {
+            padding: 0.45rem 0.75rem;
+            height: 100%;
+            max-height: 75px;         /* Límite estricto de altura máxima */
+            border-radius: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .btn-base:hover {
+            transform: scale(1.02);
+        }
+
+        /* ==========================================
+           EFECTO DE BRILLO / RESPLANDOR DESLIZANTE
+           ========================================== */
+        @keyframes shine {
+            0% {
+                transform: translateX(-100%) rotate(45deg);
+            }
+            100% {
+                transform: translateX(200%) rotate(45deg);
+            }
+        }
+
+        .btn-eventos-brillo {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-eventos-brillo::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 50%;
+            height: 200%;
+            background: linear-gradient(
+                to right,
+                rgba(255, 255, 255, 0) 0%,
+                rgba(255, 255, 255, 0.4) 50%,
+                rgba(255, 255, 255, 0) 100%
+            );
+            transform: rotate(45deg);
+            animation: shine 2.5s infinite;
+        }
+
+        /* ==========================================
+           ESTILOS INDIVIDUALES PARA CADA BOTÓN
+           ========================================== */
+
+        /* 1. Botón: Eventos HOY (Llamativo, texto blanco, borde naranja y brillo dinámico) */
+        .btn-eventos {
+            background: linear-gradient(to right, #1e293b, #0f172a); 
+            color: #ffffff;                                            
+            box-shadow: 0 0 15px rgba(249, 115, 22, 0.5);              
+            border: 2px solid #f97316;                                 
+        }
+        .btn-eventos:hover {
+            background: linear-gradient(to right, #0f172a, #020617);
+            border-color: #fb923c;
+        }
+
+        /* 2. Botón: Ver Concentrado */
+        .btn-concentrado {
+            background: linear-gradient(to right, #115e59, #0f766e);
+            color: #ffffff;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(20, 184, 166, 0.4);
+        }
+        .btn-concentrado:hover {
+            background: linear-gradient(to right, #0f766e, #0d9488);
+        }
+
+        /* 3. Botón: Código de Colores */
+        .btn-colores {
+            background: linear-gradient(to right, #4338ca, #4f46e5);
+            color: #ffffff;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(129, 140, 248, 0.4);
+        }
+        .btn-colores:hover {
+            background: linear-gradient(to right, #4f46e5, #6366f1);
+        }
+
+        /* 4. Botón: Reglamento y Formato Salas */
+        .btn-salas {
+            background: linear-gradient(to right, #047857, #059669);
+            color: #ffffff;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(52, 211, 153, 0.4);
+        }
+        .btn-salas:hover {
+            background: linear-gradient(to right, #059669, #10b981);
+        }
+
+        /* 5. Botón: Calendario Actividades */
+        .btn-calendario {
+            background: linear-gradient(to right, #c2410c, #4f46e5);
+            color: #ffffff;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(251, 146, 60, 0.4);
+        }
+        .btn-calendario:hover {
+            background: linear-gradient(to right, #ea580c, #6366f1);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Botonera Superior -->
+    <nav class="botonera-nav">
+
+        <!-- Botón 0: Eventos HOY con efecto de brillo deslizante -->
+        <a href="agenda_eventos.html" target="_blank" rel="noopener noreferrer" class="btn-base btn-eventos btn-eventos-brillo">
+            <svg class="w-5 h-5 text-amber-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
+            <span class="font-black text-xs sm:text-sm tracking-wide text-center drop-shadow">Eventos HOY</span>
+        </a>
+
+        <!-- Botón 1: Ver Concentrado -->
+        <a href="/Modulos/poblacion_user.html" target="_top" class="btn-base btn-concentrado">
+            <svg class="w-5 h-5 text-teal-200 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+            <span class="font-extrabold text-xs sm:text-sm tracking-wide text-center">Ver Concentrado</span>
+        </a>
+
+        <!-- Botón 2: Código de Colores -->
+        <a href="/Modulos/codigo_colores.html" target="_blank" rel="noopener noreferrer" class="btn-base btn-colores">
+            <svg class="w-5 h-5 text-indigo-200 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"></path></svg>
+            <span class="font-extrabold text-xs sm:text-sm tracking-wide text-center">Código de Colores</span>
+        </a>
+
+        <!-- Botón 3: Reglamento y Formato Salas -->
+        <a href="/api/file?path=/uploads/Salas.rar" download="Salas.rar" class="btn-base btn-salas">
+            <svg class="w-5 h-5 text-emerald-200 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+            <span class="font-extrabold text-xs sm:text-sm tracking-wide text-center">Reglamento y Formato Salas</span>
+        </a>
+
+        <!-- Botón 4: Calendario -->
+        <a href="/Modulos/calendario_actividades.html" target="_blank" rel="noopener noreferrer" class="btn-base btn-calendario">
+            <svg class="w-5 h-5 text-indigo-200 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"></path></svg>
+            <span class="font-extrabold text-xs sm:text-sm tracking-wide text-center">Calendario Actividades</span>
+        </a>
+
+    </nav>
+
+    <script>
+        function triggerParentModal(modalId) {
+            if (window.parent && window.parent !== window) {
+                if (modalId === 'calendarModal' && typeof window.parent.openCalendarModal === 'function') {
+                    window.parent.openCalendarModal();
+                } else {
+                    const target = window.parent.document.getElementById(modalId);
+                    if (target) target.classList.remove('hidden');
+                }
+            }
+        }
+    </script>
+</body>
+</html>

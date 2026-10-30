@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agenda de Eventos - Centro SEP</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f1f5f9; 
+            background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+        .espiral-libreta {
+            position: absolute;
+            left: -12px;
+            top: 0;
+            bottom: 0;
+            width: 24px;
+            background-image: radial-gradient(circle at 12px 20px, #0f172a 4px, transparent 5px);
+            background-size: 24px 40px;
+            background-repeat: repeat-y;
+        }
+    </style>
+</head>
+<body class="p-6">
+
+    <div class="max-w-4xl mx-auto">
+        <!-- Encabezado de la Agenda -->
+        <div class="bg-gradient-to-r from-[#1A457B] to-[#26619C] text-white p-6 rounded-3xl shadow-xl mb-8 border border-[#1A457B] flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-4">
+                <div class="w-16 h-16 bg-white/10 rounded-2xl flex items-center justify-center backdrop-blur-sm border border-white/20">
+                    <svg class="w-8 h-8 text-amber-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                </div>
+                <div>
+                    <h1 class="text-3xl font-black tracking-tight drop-shadow-md">Agenda de Eventos</h1>
+                    <p class="text-sm text-blue-100 font-medium mt-1 opacity-90">Centro SEP Universidad 1200</p>
+                </div>
+            </div>
+            
+            <div class="flex flex-col items-end gap-2">
+                <!-- Botón de Cerrar Ventana -->
+                <button onclick="cerrarVentana()" class="bg-rose-600 hover:bg-rose-500 text-white font-black text-xs py-2 px-4 rounded-xl shadow transition-all cursor-pointer flex items-center gap-1.5 border border-rose-400">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    Cerrar
+                </button>
+
+                <div class="text-right">
+                    <p class="text-xs text-blue-200 font-bold uppercase tracking-widest mb-1">Día de Operación</p>
+                    <div id="fechaHoy" class="bg-black/20 px-4 py-2 rounded-xl text-sm font-bold border border-white/10">
+                        Cargando...
+                    </div>
+                </div>
+                <button onclick="cargarAgenda()" class="bg-amber-400 hover:bg-amber-300 text-slate-900 font-black text-xs py-2 px-4 rounded-xl shadow transition-all cursor-pointer">
+                    Actualizar Muro
+                </button>
+            </div>
+        </div>
+
+        <!-- Muro de Eventos -->
+        <div id="contenedorAgenda" class="space-y-6 relative ml-0 sm:ml-3">
+            <div class="absolute left-6 top-0 bottom-0 w-1 bg-blue-200 rounded-full hidden sm:block"></div>
+
+            <div id="mensajeVacio" class="text-center py-16 bg-white/80 backdrop-blur-sm rounded-3xl border border-slate-200 shadow-sm hidden">
+                <svg class="w-16 h-16 mx-auto text-slate-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                <p class="text-lg font-bold text-slate-500">Agenda libre por el momento</p>
+                <p class="text-sm text-slate-400 mt-1">No hay eventos registrados para el día de hoy.</p>
+            </div>
+            
+            
+            <div class="tarjeta-evento relative ml-0 sm:ml-12 bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden mb-6">
+                <div class="absolute -left-[54px] top-6 w-5 h-5 bg-amber-400 rounded-full border-4 border-[#f1f5f9] shadow-md hidden sm:block z-10"></div>
+                <div class="absolute top-0 bottom-0 left-0 w-3 bg-amber-400"></div>
+                <div class="espiral-libreta"></div>
+
+                <div class="pl-8 p-6 sm:p-8">
+                    <div class="flex justify-between items-start border-b border-slate-100 pb-3 mb-4">
+                        <div class="text-slate-400 font-bold text-xs uppercase tracking-widest flex items-center gap-1">
+                            🕒 Publicado por: Extractor Automático
+                        </div>
+                        <div class="bg-amber-400 bg-opacity-20 text-slate-800 text-xs font-black px-3 py-1 rounded-full border border-slate-200 uppercase">
+                            Evento 10
+                        </div>
+                    </div>
+                    <div class="leading-relaxed">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+                            <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                                <span class="block font-black text-[#1A457B] uppercase text-[11px] mb-1">📍 Sede / Ubicación</span>
+                                <span class="text-slate-800 font-semibold">Sala</span>
+                            </div>
+                            <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                                <span class="block font-black text-[#1A457B] uppercase text-[11px] mb-1">📅 Fecha</span>
+                                <span class="text-slate-800 font-semibold">12 de octubre de 2026</span>
+                            </div>
+                            <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                                <span class="block font-black text-[#1A457B] uppercase text-[11px] mb-1">⏰ Horario</span>
+                                <span class="text-slate-800 font-semibold">10:00 a 14:00 horas</span>
+                            </div>
+                            <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                                <span class="block font-black text-[#1A457B] uppercase text-[11px] mb-1">👥 Asistentes</span>
+                                <span class="text-slate-800 font-semibold">25</span>
+                            </div>
+                            <div class="sm:col-span-2 bg-slate-50 p-3 rounded-xl border border-slate-100">
+                                <span class="block font-black text-[#1A457B] uppercase text-[11px] mb-1">📌 Tema del Evento</span>
+                                <span class="text-slate-800 font-semibold">Resistencia al cambio</span>
+                            </div>
+                            <div class="sm:col-span-2 bg-slate-50 p-3 rounded-xl border border-slate-100">
+                                <span class="block font-black text-[#1A457B] uppercase text-[11px] mb-1">🏢 UR (Unidad Responsable)</span>
+                                <span class="text-slate-800 font-semibold">DGRHYO</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="tarjeta-evento relative ml-0 sm:ml-12 bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden mb-6">
+                <div class="absolute -left-[54px] top-6 w-5 h-5 bg-emerald-500 rounded-full border-4 border-[#f1f5f9] shadow-md hidden sm:block z-10"></div>
+                <div class="absolute top-0 bottom-0 left-0 w-3 bg-emerald-500"></div>
+                <div class="espiral-libreta"></div>
+
+                <div class="pl-8 p-6 sm:p-8">
+                    <div class="flex justify-between items-start border-b border-slate-100 pb-3 mb-4">
+                        <div class="text-slate-400 font-bold text-xs uppercase tracking-widest flex items-center gap-1">
+                            🕒 Publicado por: Extractor Automático
+                        </div>
+                        <div class="bg-emerald-500 bg-opacity-20 text-slate-800 text-xs font-black px-3 py-1 rounded-full border border-slate-200 uppercase">
+                            Evento 9
+                        </div>
+                    </div>
+                    <div class="leading-relaxed">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+                            <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                                <span class="block font-black text-[#1A457B] uppercase text-[11px] mb-1">📍 Sede / Ubicación</span>
+                                <span class="text-slate-800 font-semibold">Sala</span>
+                            </div>
+                            <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                                <span class="block font-black text-[#1A457B] uppercase text-[11px] mb-1">📅 Fecha</span>
+                                <span class="text-slate-800 font-semibold">12 de octubre de 2026</span>
+                            </div>
+                            <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                                <span class="block font-black text-[#1A457B] uppercase text-[11px] mb-1">⏰ Horario</span>
+                                <span class="text-slate-800 font-semibold">15:00 a 19:00   hrs</span>
+                            </div>
+                            <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                                <span class="block font-black text-[#1A457B] uppercase text-[11px] mb-1">👥 Asistentes</span>
+                                <span class="text-slate-800 font-semibold">25</span>
+                            </div>
+                            <div class="sm:col-span-2 bg-slate-50 p-3 rounded-xl border border-slate-100">
+                                <span class="block font-black text-[#1A457B] uppercase text-[11px] mb-1">📌 Tema del Evento</span>
+                                <span class="text-slate-800 font-semibold">Desarrollo Organizacional</span>
+                            </div>
+                            <div class="sm:col-span-2 bg-slate-50 p-3 rounded-xl border border-slate-100">
+                                <span class="block font-black text-[#1A457B] uppercase text-[11px] mb-1">🏢 UR (Unidad Responsable)</span>
+                                <span class="text-slate-800 font-semibold">DGRHYO</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="tarjeta-evento relative ml-0 sm:ml-12 bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden mb-6">
+                <div class="absolute -left-[54px] top-6 w-5 h-5 bg-rose-500 rounded-full border-4 border-[#f1f5f9] shadow-md hidden sm:block z-10"></div>
+                <div class="absolute top-0 bottom-0 left-0 w-3 bg-rose-500"></div>
+                <div class="espiral-libreta"></div>
+
+                <div class="pl-8 p-6 sm:p-8">
+                    <div class="flex justify-between items-start border-b border-slate-100 pb-3 mb-4">
+                        <div class="text-slate-400 font-bold text-xs uppercase tracking-widest flex items-center gap-1">
+                            🕒 Publicado por: Extractor Automático
+                        </div>
+                        <div class="bg-rose-500 bg-opacity-20 text-slate-800 text-xs font-black px-3 py-1 rounded-full border border-slate-200 uppercase">
+                            Evento 8
+                        </div>
+                    </div>
+                    <div class="leading-relaxed">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+                            <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                                <span class="block font-black text-[#1A457B] uppercase text-[11px] mb-1">📍 Sede / Ubicación</span>
+                                <span class="text-slate-800 font-semibold">Sala</span>
+                            </div>
+                            <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                                <span class="block font-black text-[#1A457B] uppercase text-[11px] mb-1">📅 Fecha</span>
+                                <span class="text-slate-800 font-semibold">12 de octubre de 2026</span>
+                            </div>
+                            <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                                <span class="block font-black text-[#1A457B] uppercase text-[11px] mb-1">⏰ Horario</span>
+                                <span class="text-slate-800 font-semibold">10:00 a 14:00 horas</span>
+                            </div>
+                            <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                                <span class="block font-black text-[#1A457B] uppercase text-[11px] mb-1">👥 Asistentes</span>
+                                <span class="text-slate-800 font-semibold">25</span>
+                            </div>
+                            <div class="sm:col-span-2 bg-slate-50 p-3 rounded-xl border border-slate-100">
+                                <span class="block font-black text-[#1A457B] uppercase text-[11px] mb-1">📌 Tema del Evento</span>
+                                <span class="text-slate-800 font-semibold">Hostigamiento y Acoso Laboral</span>
+                            </div>
+                            <div class="sm:col-span-2 bg-slate-50 p-3 rounded-xl border border-slate-100">
+                                <span class="block font-black text-[#1A457B] uppercase text-[11px] mb-1">🏢 UR (Unidad Responsable)</span>
+                                <span class="text-slate-800 font-semibold">DGRHYO</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="tarjeta-evento relative ml-0 sm:ml-12 bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden mb-6">
+                <div class="absolute -left-[54px] top-6 w-5 h-5 bg-indigo-500 rounded-full border-4 border-[#f1f5f9] shadow-md hidden sm:block z-10"></div>
+                <div class="absolute top-0 bottom-0 left-0 w-3 bg-indigo-500"></div>
+                <div class="espiral-libreta"></div>
+
+                <div class="pl-8 p-6 sm:p-8">
+                    <div class="flex justify-between items-start border-b border-slate-100 pb-3 mb-4">
+                        <div class="text-slate-400 font-bold text-xs uppercase tracking-widest flex items-center gap-1">
+                            🕒 Publicado por: Extractor Automático
+                        </div>
+                        <div class="bg-indigo-500 bg-opacity-20 text-slate-800 text-xs font-black px-3 py-1 rounded-full border border-slate-200 uppercase">
+                            Evento 7
+                        </div>
+                    </div>
+                    <div class="leading-relaxed">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+                            <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                                <span class="block font-black text-[#1A457B] uppercase text-[11px] mb-1">📍 Sede / Ubicación</span>
+                                <span class="text-slate-800 font-semibold">Sala</span>
+                            </div>
+                            <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                                <span class="block font-black text-[#1A457B] uppercase text-[11px] mb-1">📅 Fecha</span>
+                                <span class="text-slate-800 font-semibold">12 de octubre de 2026</span>
+                            </div>
+                            <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                                <span class="block font-black text-[#1A457B] uppercase text-[11px] mb-1">⏰ Horario</span>
+                                <span class="text-slate-800 font-semibold">10:00 a 13:00 horas</span>
+                            </div>
+                            <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                                <span class="block font-black text-[#1A457B] uppercase text-[11px] mb-1">👥 Asistentes</span>
+                                <span class="text-slate-800 font-semibold">60</span>
+                            </div>
+                            <div class="sm:col-span-2 bg-slate-50 p-3 rounded-xl border border-slate-100">
+                                <span class="block font-black text-[#1A457B] uppercase text-[11px] mb-1">📌 Tema del Evento</span>
+                                <span class="text-slate-800 font-semibold">#MaratonesPorLaLectura</span>
+                            </div>
+                            <div class="sm:col-span-2 bg-slate-50 p-3 rounded-xl border border-slate-100">
+                                <span class="block font-black text-[#1A457B] uppercase text-[11px] mb-1">🏢 UR (Unidad Responsable)</span>
+                                <span class="text-slate-800 font-semibold">No especificada</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="tarjeta-evento relative ml-0 sm:ml-12 bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden mb-6">
+                <div class="absolute -left-[54px] top-6 w-5 h-5 bg-amber-400 rounded-full border-4 border-[#f1f5f9] shadow-md hidden sm:block z-10"></div>
+                <div class="absolute top-0 bottom-0 left-0 w-3 bg-amber-400"></div>
+                <div class="espiral-libreta"></div>
+
+                <div class="pl-8 p-6 sm:p-8">
+                    <div class="flex justify-between items-start border-b border-slate-100 pb-3 mb-4">
+                        <div class="text-slate-400 font-bold text-xs uppercase tracking-widest flex items-center gap-1">
+                            🕒 Publicado por: Extractor Automático
+                        </div>
+                        <div class="bg-amber-400 bg-opacity-20 text-slate-800 text-xs font-black px-3 py-1 rounded-full border border-slate-200 uppercase">
+                            Evento 6
+                        </div>
+                    </div>
+                    <div class="leading-relaxed">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+                            <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                                <span class="block font-black text-[#1A457B] uppercase text-[11px] mb-1">📍 Sede / Ubicación</span>
+                                <span class="text-slate-800 font-semibold">Área</span>
+                            </div>
+                            <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                                <span class="block font-black text-[#1A457B] uppercase text-[11px] mb-1">📅 Fecha</span>
+                                <span class="text-slate-800 font-semibold">1 de octubre de 2026</span>
+                            </div>
+                            <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                                <span class="block font-black text-[#1A457B] uppercase text-[11px] mb-1">⏰ Horario</span>
+                                <span class="text-slate-800 font-semibold">9:00 a 10:00 horas</span>
+                            </div>
+                            <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                                <span class="block font-black text-[#1A457B] uppercase text-[11px] mb-1">👥 Asistentes</span>
+                                <span class="text-slate-800 font-semibold">20</span>
+                            </div>
+                            <div class="sm:col-span-2 bg-slate-50 p-3 rounded-xl border border-slate-100">
+                                <span class="block font-black text-[#1A457B] uppercase text-[11px] mb-1">📌 Tema del Evento</span>
+                                <span class="text-slate-800 font-semibold">Programa de activación física personal que labora en centro SEP</span>
+                            </div>
+                            <div class="sm:col-span-2 bg-slate-50 p-3 rounded-xl border border-slate-100">
+                                <span class="block font-black text-[#1A457B] uppercase text-[11px] mb-1">🏢 UR (Unidad Responsable)</span>
+                                <span class="text-slate-800 font-semibold">DGETI</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="tarjeta-evento relative ml-0 sm:ml-12 bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden mb-6">
+                <div class="absolute -left-[54px] top-6 w-5 h-5 bg-emerald-500 rounded-full border-4 border-[#f1f5f9] shadow-md hidden sm:block z-10"></div>
+                <div class="absolute top-0 bottom-0 left-0 w-3 bg-emerald-500"></div>
+                <div class="espiral-libreta"></div>
+
+                <div class="pl-8 p-6 sm:p-8">
+                    <div class="flex justify-between items-start border-b border-slate-100 pb-3 mb-4">
+                        <div class="text-slate-400 font-bold text-xs uppercase tracking-widest flex items-center gap-1">
+                            🕒 Publicado por: Extractor Automático
+                        </div>
+                        <div class="bg-emerald-500 bg-opacity-20 text-slate-800 text-xs font-black px-3 py-1 rounded-full border border-slate-200 uppercase">
+                            Evento 5
+                        </div>
+                    </div>
+                    <div class="leading-relaxed">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+                            <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                                <span class="block font-black text-[#1A457B] uppercase text-[11px] mb-1">📍 Sede / Ubicación</span>
+                                <span class="text-slate-800 font-semibold">Ala Norte</span>
+                            </div>
+                            <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                                <span class="block font-black text-[#1A457B] uppercase text-[11px] mb-1">📅 Fecha</span>
+                                <span class="text-slate-800 font-semibold">Octubre de 2026</span>
+                            </div>
+                            <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                                <span class="block font-black text-[#1A457B] uppercase text-[11px] mb-1">⏰ Horario</span>
+                                <span class="text-slate-800 font-semibold">8:00 a 15:00 horas</span>
+                            </div>
+                            <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                                <span class="block font-black text-[#1A457B] uppercase text-[11px] mb-1">👥 Asistentes</span>
+                                <span class="text-slate-800 font-semibold">60393</span>
+                            </div>
+                            <div class="sm:col-span-2 bg-slate-50 p-3 rounded-xl border border-slate-100">
+                                <span class="block font-black text-[#1A457B] uppercase text-[11px] mb-1">📌 Tema del Evento</span>
+                                <span class="text-slate-800 font-semibold">Stand de Óptica Lozano,</span>
+                            </div>
+                            <div class="sm:col-span-2 bg-slate-50 p-3 rounded-xl border border-slate-100">
+                                <span class="block font-black text-[#1A457B] uppercase text-[11px] mb-1">🏢 UR (Unidad Responsable)</span>
+                                <span class="text-slate-800 font-semibold">DGRHYO</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="tarjeta-evento relative ml-0 sm:ml-12 bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden mb-6">
+                <div class="absolute -left-[54px] top-6 w-5 h-5 bg-rose-500 rounded-full border-4 border-[#f1f5f9] shadow-md hidden sm:block z-10"></div>
+                <div class="absolute top-0 bottom-0 left-0 w-3 bg-rose-500"></div>
+                <div class="espiral-libreta"></div>
+
+                <div class="pl-8 p-6 sm:p-8">
+                    <div class="flex justify-between items-start border-b border-slate-100 pb-3 mb-4">
+                        <div class="text-slate-400 font-bold text-xs uppercase tracking-widest flex items-center gap-1">
+                            🕒 Publicado por: Extractor Automático
+                        </div>
+                        <div class="bg-rose-500 bg-opacity-20 text-slate-800 text-xs font-black px-3 py-1 rounded-full border border-slate-200 uppercase">
+                            Evento 4
+                        </div>
+                    </div>
+                    <div class="leading-relaxed">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+                            <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                                <span class="block font-black text-[#1A457B] uppercase text-[11px] mb-1">📍 Sede / Ubicación</span>
+                                <span class="text-slate-800 font-semibold">Acceso</span>
+                            </div>
+                            <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                                <span class="block font-black text-[#1A457B] uppercase text-[11px] mb-1">📅 Fecha</span>
+                                <span class="text-slate-800 font-semibold">11 de marzo</span>
+                            </div>
+                            <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                                <span class="block font-black text-[#1A457B] uppercase text-[11px] mb-1">⏰ Horario</span>
+                                <span class="text-slate-800 font-semibold">9:00 a 15:00 horas</span>
+                            </div>
+                            <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                                <span class="block font-black text-[#1A457B] uppercase text-[11px] mb-1">👥 Asistentes</span>
+                                <span class="text-slate-800 font-semibold">100</span>
+                            </div>
+                            <div class="sm:col-span-2 bg-slate-50 p-3 rounded-xl border border-slate-100">
+                                <span class="block font-black text-[#1A457B] uppercase text-[11px] mb-1">📌 Tema del Evento</span>
+                                <span class="text-slate-800 font-semibold">BANORTE “Asesoría en materia de seguros y diversos servicios bancarios y financieros". Ejecutivos BANORTE DANIELA NAVARRO GONZALEZ; LAURA ISABEL SANCHEZ GONZALEZ; LESLY DANIELA LOPEZ RANGEL; MIGUEL ANGEL RUIZ OREGON; MANUEL ARTURO GARCIA PEREZ; MYRIAM MEJIA MERINO y CESAR ULISES LOPEZ VILLEGAS</span>
+                            </div>
+                            <div class="sm:col-span-2 bg-slate-50 p-3 rounded-xl border border-slate-100">
+                                <span class="block font-black text-[#1A457B] uppercase text-[11px] mb-1">🏢 UR (Unidad Responsable)</span>
+                                <span class="text-slate-800 font-semibold">DGRHYO</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="tarjeta-evento relative ml-0 sm:ml-12 bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden mb-6">
+                <div class="absolute -left-[54px] top-6 w-5 h-5 bg-indigo-500 rounded-full border-4 border-[#f1f5f9] shadow-md hidden sm:block z-10"></div>
+                <div class="absolute top-0 bottom-0 left-0 w-3 bg-indigo-500"></div>
+                <div class="espiral-libreta"></div>
+
+                <div class="pl-8 p-6 sm:p-8">
+                    <div class="flex justify-between items-start border-b border-slate-100 pb-3 mb-4">
+                        <div class="text-slate-400 font-bold text-xs uppercase tracking-widest flex items-center gap-1">
+                            🕒 Publicado por: Extractor Automático
+                        </div>
+                        <div class="bg-indigo-500 bg-opacity-20 text-slate-800 text-xs font-black px-3 py-1 rounded-full border border-slate-200 uppercase">
+                            Evento 3
+                        </div>
+                    </div>
+                    <div class="leading-relaxed">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+                            <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                                <span class="block font-black text-[#1A457B] uppercase text-[11px] mb-1">📍 Sede / Ubicación</span>
+                                <span class="text-slate-800 font-semibold">Acceso</span>
+                            </div>
+                            <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                                <span class="block font-black text-[#1A457B] uppercase text-[11px] mb-1">📅 Fecha</span>
+                                <span class="text-slate-800 font-semibold">31 de julio de 2026</span>
+                            </div>
+                            <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                                <span class="block font-black text-[#1A457B] uppercase text-[11px] mb-1">⏰ Horario</span>
+                                <span class="text-slate-800 font-semibold">9:00 a 16:00 horas</span>
+                            </div>
+                            <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                                <span class="block font-black text-[#1A457B] uppercase text-[11px] mb-1">👥 Asistentes</span>
+                                <span class="text-slate-800 font-semibold">50</span>
+                            </div>
+                            <div class="sm:col-span-2 bg-slate-50 p-3 rounded-xl border border-slate-100">
+                                <span class="block font-black text-[#1A457B] uppercase text-[11px] mb-1">📌 Tema del Evento</span>
+                                <span class="text-slate-800 font-semibold">“asesoría en materia de seguros y diversos servicios METLIFE".</span>
+                            </div>
+                            <div class="sm:col-span-2 bg-slate-50 p-3 rounded-xl border border-slate-100">
+                                <span class="block font-black text-[#1A457B] uppercase text-[11px] mb-1">🏢 UR (Unidad Responsable)</span>
+                                <span class="text-slate-800 font-semibold">DGRHYO</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="tarjeta-evento relative ml-0 sm:ml-12 bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden mb-6">
+                <div class="absolute -left-[54px] top-6 w-5 h-5 bg-amber-400 rounded-full border-4 border-[#f1f5f9] shadow-md hidden sm:block z-10"></div>
+                <div class="absolute top-0 bottom-0 left-0 w-3 bg-amber-400"></div>
+                <div class="espiral-libreta"></div>
+
+                <div class="pl-8 p-6 sm:p-8">
+                    <div class="flex justify-between items-start border-b border-slate-100 pb-3 mb-4">
+                        <div class="text-slate-400 font-bold text-xs uppercase tracking-widest flex items-center gap-1">
+                            🕒 Publicado por: Extractor Automático
+                        </div>
+                        <div class="bg-amber-400 bg-opacity-20 text-slate-800 text-xs font-black px-3 py-1 rounded-full border border-slate-200 uppercase">
+                            Evento 2
+                        </div>
+                    </div>
+                    <div class="leading-relaxed">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+                            <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                                <span class="block font-black text-[#1A457B] uppercase text-[11px] mb-1">📍 Sede / Ubicación</span>
+                                <span class="text-slate-800 font-semibold">Ala Sur</span>
+                            </div>
+                            <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                                <span class="block font-black text-[#1A457B] uppercase text-[11px] mb-1">📅 Fecha</span>
+                                <span class="text-slate-800 font-semibold">3 de junio de 2026</span>
+                            </div>
+                            <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                                <span class="block font-black text-[#1A457B] uppercase text-[11px] mb-1">⏰ Horario</span>
+                                <span class="text-slate-800 font-semibold">9:30 a 14:30 Horas</span>
+                            </div>
+                            <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                                <span class="block font-black text-[#1A457B] uppercase text-[11px] mb-1">👥 Asistentes</span>
+                                <span class="text-slate-800 font-semibold">30</span>
+                            </div>
+                            <div class="sm:col-span-2 bg-slate-50 p-3 rounded-xl border border-slate-100">
+                                <span class="block font-black text-[#1A457B] uppercase text-[11px] mb-1">📌 Tema del Evento</span>
+                                <span class="text-slate-800 font-semibold">Recolección y entrega de mensajería y paquetería</span>
+                            </div>
+                            <div class="sm:col-span-2 bg-slate-50 p-3 rounded-xl border border-slate-100">
+                                <span class="block font-black text-[#1A457B] uppercase text-[11px] mb-1">🏢 UR (Unidad Responsable)</span>
+                                <span class="text-slate-800 font-semibold">No especificada</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="tarjeta-evento relative ml-0 sm:ml-12 bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden mb-6">
+                <div class="absolute -left-[54px] top-6 w-5 h-5 bg-emerald-500 rounded-full border-4 border-[#f1f5f9] shadow-md hidden sm:block z-10"></div>
+                <div class="absolute top-0 bottom-0 left-0 w-3 bg-emerald-500"></div>
+                <div class="espiral-libreta"></div>
+
+                <div class="pl-8 p-6 sm:p-8">
+                    <div class="flex justify-between items-start border-b border-slate-100 pb-3 mb-4">
+                        <div class="text-slate-400 font-bold text-xs uppercase tracking-widest flex items-center gap-1">
+                            🕒 Publicado por: Extractor Automático
+                        </div>
+                        <div class="bg-emerald-500 bg-opacity-20 text-slate-800 text-xs font-black px-3 py-1 rounded-full border border-slate-200 uppercase">
+                            Evento 1
+                        </div>
+                    </div>
+                    <div class="leading-relaxed">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+                            <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                                <span class="block font-black text-[#1A457B] uppercase text-[11px] mb-1">📍 Sede / Ubicación</span>
+                                <span class="text-slate-800 font-semibold">Bodega</span>
+                            </div>
+                            <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                                <span class="block font-black text-[#1A457B] uppercase text-[11px] mb-1">📅 Fecha</span>
+                                <span class="text-slate-800 font-semibold">3 de febrero de 2026</span>
+                            </div>
+                            <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                                <span class="block font-black text-[#1A457B] uppercase text-[11px] mb-1">⏰ Horario</span>
+                                <span class="text-slate-800 font-semibold">9:00 a las 18:00 horas</span>
+                            </div>
+                            <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                                <span class="block font-black text-[#1A457B] uppercase text-[11px] mb-1">👥 Asistentes</span>
+                                <span class="text-slate-800 font-semibold">20</span>
+                            </div>
+                            <div class="sm:col-span-2 bg-slate-50 p-3 rounded-xl border border-slate-100">
+                                <span class="block font-black text-[#1A457B] uppercase text-[11px] mb-1">📌 Tema del Evento</span>
+                                <span class="text-slate-800 font-semibold">Recepción de equipos de cómputo tipo escritorio, y distribución de estos, vestuario para el personal sindicalizado de la SEP, se apoyará con un guardia de seguridad para custodia de equipos.</span>
+                            </div>
+                            <div class="sm:col-span-2 bg-slate-50 p-3 rounded-xl border border-slate-100">
+                                <span class="block font-black text-[#1A457B] uppercase text-[11px] mb-1">🏢 UR (Unidad Responsable)</span>
+                                <span class="text-slate-800 font-semibold">DGRHYO</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const opciones = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone: 'America/Mexico_City' };
+            const fechaStr = new Date().toLocaleDateString('es-MX', opciones);
+            document.getElementById('fechaHoy').innerText = fechaStr.charAt(0).toUpperCase() + fechaStr.slice(1);
+        });
+
+        function cerrarVentana() {
+            try {
+                window.close();
+                setTimeout(() => {
+                    if (!window.closed) {
+                        window.location.href = 'adminMaster.html'; 
+                    }
+                }, 300);
+            } catch (e) {
+                console.error("No se pudo cerrar la ventana automáticamente", e);
+            }
+        }
+    </script>
+</body>
+</html>

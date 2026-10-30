@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo Formato RED - UIPC</title>
+    <link rel="icon" type="image/png" href="logo_UIPC.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        body { background: transparent; font-family: 'Inter', sans-serif; }
+        
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(239, 68, 68, 0.6); border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(239, 68, 68, 0.9); }
+    </style>
+</head>
+<body class="min-h-[auto] flex flex-col justify-center text-slate-800 p-2 m-0">
+
+    <main class="max-w-7xl mx-auto w-full">
+        <div class="bg-gradient-to-r from-red-950 via-orange-900 to-neutral-900 text-white px-5 py-2.5 rounded-2xl shadow-lg border border-orange-500/50 flex flex-col sm:flex-row items-center justify-between relative overflow-hidden gap-4">
+            
+            <div class="absolute right-0 bottom-0 top-0 w-64 opacity-10 pointer-events-none flex items-center justify-end pr-6">
+                <svg class="w-full h-full" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M17.5,11.53c-1.39-1.92-2.73-3.23-2.73-5.28c0-1.5,1.06-2.9,2.56-3.25c-2.31-2.12-6.04-1.87-8.02,0.67 c-0.89,1.14-1.31,2.56-1.31,4.01c0,1.26,0.3,2.46,0.85,3.53C6.7,13.56,5,15.65,5,18c0,3.87,3.13,7,7,7s7-3.13,7-7 C19,15.65,17.5,11.53,17.5,11.53z M12,23c-2.76,0-5-2.24-5-5c0-1.89,1.04-3.56,2.61-4.43c-0.27,0.73-0.42,1.52-0.42,2.34 c0,2.15,1.23,4.01,3.01,4.86c-0.07-0.78-0.08-1.57-0.04-2.36c0.05-1.15,0.42-2.23,1.02-3.15c1.47,1.86,2.82,3.32,2.82,5.74 C17,20.76,14.76,23,12,23z"/>
+                </svg>
+            </div>
+
+            <div class="flex items-center space-x-4 relative z-10 w-full sm:flex-1">
+                <div class="w-10 h-10 bg-white rounded-xl flex items-center justify-center overflow-hidden shadow-sm p-1 border-2 border-red-500 flex-shrink-0">
+                    <img src="logo_UIPC.png" alt="Logo UIPC" class="w-full h-full object-contain" crossorigin="anonymous" onerror="this.src='https://placehold.co/40x40/7f1d1d/ffffff?text=UIPC'">
+                </div>
+                <div>
+                    <div class="flex items-center space-x-2">
+                        <h2 class="text-xs sm:text-sm font-black text-orange-200 tracking-tight">Atención de Código Rojo</h2>
+                        <span class="px-2 py-0.5 bg-red-600 text-white rounded-full text-[9px] font-extrabold uppercase tracking-wider shadow-sm animate-pulse">FORMATO RED</span>
+                    </div>
+                    <p class="text-[10px] sm:text-[11px] text-orange-100/80 leading-tight mt-0.5 font-medium">
+                        Reporte de Emergencia y Diagnóstico (Incendio / Falsa Alarma).
+                    </p>
+                </div>
+            </div>
+
+            <div class="relative z-10 w-full sm:w-[450px] flex flex-col gap-1.5 flex-shrink-0">
+                
+                <div id="lista-red" class="w-full h-[40px] bg-black/40 border border-red-500/40 rounded-lg p-1 overflow-y-auto custom-scrollbar flex flex-col gap-1 backdrop-blur-sm shadow-inner">
+                    <span class="text-[9px] text-orange-200/60 text-center block mt-1.5 font-semibold">Buscando reportes RED...</span>
+                </div>
+
+                <a href="formato_RED.html" target="_blank" rel="noopener noreferrer" class="w-full bg-gradient-to-r from-red-600 to-red-800 hover:from-red-500 hover:to-red-700 text-white font-black py-1.5 px-4 rounded-lg text-[10px] shadow-lg transition-all flex items-center justify-center space-x-1.5 cursor-pointer border border-red-400">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                    <span class="tracking-wide uppercase font-black">Capturar Nuevo Formato RED</span>
+                </a>
+            </div>
+
+        </div>
+
+    </main>
+
+    <script>
+        async function cargarListadoRED() {
+            const listaContenedor = document.getElementById('lista-red');
+            try {
+                // LLAMADA AL NUEVO ENDPOINT DEL SERVIDOR
+                const response = await fetch('/api/list/red');
+                const data = await response.json();
+
+                if (data.success && data.files) {
+                    if (data.files.length > 0) {
+                        listaContenedor.innerHTML = '';
+                        data.files.reverse().forEach(file => {
+                            const link = document.createElement('a');
+                            // ENDPOINT PARA DESCARGAR O ABRIR EL ARCHIVO
+                            link.href = '/api/file/red?name=' + encodeURIComponent(file.filename);
+                            link.target = '_blank';
+                            link.className = 'text-[9px] font-bold text-orange-100 hover:text-white hover:bg-red-800/80 px-2 py-1 rounded w-full transition-colors flex items-center justify-between border border-transparent hover:border-red-500/50 group';
+                            link.innerHTML = `
+                                <div class="flex items-center gap-1.5 truncate">
+                                    <svg class="w-3 h-3 text-red-400 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd"></path></svg> 
+                                    <span class="truncate">${file.filename}</span>
+                                </div>
+                                <span class="text-[8px] bg-red-950/60 px-1.5 py-0.5 rounded text-orange-200 border border-red-700/50 group-hover:bg-red-600 group-hover:text-white">Abrir PDF</span>
+                            `;
+                            
+                            listaContenedor.appendChild(link);
+                        });
+                    } else {
+                        listaContenedor.innerHTML = '<span class="text-[9px] text-orange-200/60 text-center block mt-1.5 font-semibold">No hay formatos RED guardados.</span>';
+                    }
+                }
+            } catch (error) {
+                listaContenedor.innerHTML = '<span class="text-[9px] text-red-400 text-center block mt-1.5 font-semibold">Error de conexión.</span>';
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            cargarListadoRED();
+            setInterval(cargarListadoRED, 15000);
+        });
+    </script>
+</body>
+</html>

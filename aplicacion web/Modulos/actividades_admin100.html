@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <script>
+        (function() {
+            try {
+                const userStr = sessionStorage.getItem('uipc_current_user');
+                if (!userStr) {
+                    window.location.replace('loginuipc.html');
+                    return;
+                }
+                const userObj = JSON.parse(userStr);
+                if (!userObj.usuario || (userObj.usuario !== 'coordinador.uipc' && userObj.usuario !== 'myriam.rojas')) {
+                    alert('Acceso restringido. Este panel es exclusivo para el Coordinador y Myriam Rojas.');
+                    window.location.replace('dashboard_master.html');
+                }
+            } catch(e) {
+                window.location.replace('loginuipc.html');
+            }
+        })();
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Actividades UIPC - Panel Administrador</title>
+    <link rel="icon" type="image/png" href="logo_UIPC.png">
+    
+    <!-- ======================================================= -->
+    <!-- ESTILOS CENTRALIZADOS Y VARIABLES EDITABLES             -->
+    <!-- ======================================================= -->
+    <style>
+        :root {
+            --color-fondo-pagina: #f4f6f5;
+            --color-fondo-tarjeta: #ffffff;
+            --color-borde-principal: #9baec8;
+            --color-acento: #77af9c;
+            --color-acento-hover: #5e9381;
+            --color-secundario: #9baec8;
+            --color-secundario-hover: #7f95b5;
+            --color-input-bg: #f8fafc;
+            --color-input-borde: #cbd5e1;
+            --color-input-texto: #1e293b;
+            --fuente-principal: 'Inter', sans-serif;
+        }
+
+        body { 
+            background-color: var(--color-fondo-pagina);
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            font-family: var(--fuente-principal); 
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #334155;
+            margin: 0;
+            padding: 0.75rem; 
+        }
+
+        @media (min-width: 640px) {
+            body { padding: 1rem; }
+        }
+
+        .pagina-layout {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem; 
+        }
+
+        .contenedor-principal {
+            max-width: 80rem;
+            width: 100%;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+            align-items: start;
+        }
+
+        @media (min-width: 1024px) {
+            .contenedor-principal {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        .header-modulo {
+            background-color: #77af9c;
+            backdrop-filter: blur(4px);
+            color: white;
+            padding: 0.75rem 1rem; 
+            border-radius: 1rem;
+            box-shadow: 0 10px 15px -3px rgba(119, 175, 156, 0.3);
+            border: 2px solid #5e9381;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.25rem; 
+        }
+
+        @media (min-width: 640px) {
+            .header-modulo {
+                padding: 1rem 1.25rem;
+                flex-direction: row;
+            }
+        }
+
+        .header-logo-container {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .header-logo-box {
+            width: 4rem;
+            height: 4rem;
+            background-color: white;
+            border-radius: 9999px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            padding: 0.25rem;
+            border: 2px solid #9baec8;
+            flex-shrink: 0;
+        }
+
+        .header-logo-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .header-titulo h1 {
+            font-size: 1rem;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: -0.025em;
+            margin: 0;
+        }
+
+        @media (min-width: 640px) {
+            .header-titulo h1 { font-size: 1.125rem; }
+        }
+
+        .header-titulo p {
+            font-size: 0.75rem;
+            color: #e2e8f0;
+            margin: 0;
+        }
+
+        .badge-activo {
+            padding: 0.25rem 0.75rem;
+            background-color: rgba(255, 255, 255, 0.2);
+            border: 1px solid #ffffff;
+            color: #ffffff;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+        }
+
+        .punto-animado {
+            width: 0.5rem;
+            height: 0.5rem;
+            background-color: #ffffff;
+            border-radius: 9999px;
+            margin-right: 0.375rem;
+            animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
+        }
+
+        @keyframes ping {
+            75%, 100% { transform: scale(2); opacity: 0; }
+        }
+
+        .tarjeta-modulo {
+            background-color: var(--color-fondo-tarjeta);
+            backdrop-filter: blur(4px);
+            border: 2px solid var(--color-borde-principal);
+            border-radius: 1rem;
+            box-shadow: 0 10px 25px -5px rgba(155, 174, 200, 0.2);
+            color: #334155;
+            padding: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .seccion-titulo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border-bottom: 2px solid #77af9c;
+            padding-bottom: 0.5rem;
+            margin: 0;
+        }
+
+        .seccion-titulo span {
+            color: #77af9c;
+            font-weight: 700;
+            font-size: 1.125rem;
+        }
+
+        .seccion-titulo h2 {
+            font-size: 0.875rem;
+            font-weight: 800;
+            color: #334155;
+            margin: 0;
+        }
+
+        @media (min-width: 640px) {
+            .seccion-titulo h2 { font-size: 1rem; }
+        }
+
+        .formulario-grupo {
+            display: flex;
+            flex-direction: column;
+            gap: 0.875rem;
+        }
+
+        .campo-bloque {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .campo-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #475569;
+        }
+
+        .input-estilo {
+            width: 100%;
+            padding: 0.625rem 0.75rem;
+            border-radius: 0.75rem;
+            font-size: 0.75rem;
+            background-color: var(--color-input-bg);
+            border: 1px solid var(--color-input-borde);
+            color: var(--color-input-texto);
+            font-weight: 600;
+            outline: none;
+            transition: all 0.2s ease-in-out;
+            box-sizing: border-box;
+        }
+
+        .input-estilo:focus {
+            border-color: #77af9c;
+            box-shadow: 0 0 0 2px rgba(119, 175, 156, 0.25);
+        }
+
+        .grid-dos-columnas {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0.75rem;
+        }
+
+        @media (min-width: 640px) {
+            .grid-dos-columnas {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        .checkbox-curso-box {
+            background-color: rgba(119, 175, 156, 0.1);
+            padding: 0.75rem;
+            border-radius: 0.75rem;
+            border: 1px solid #77af9c;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .checkbox-curso-box input {
+            width: 1rem;
+            height: 1rem;
+            accent-color: #77af9c;
+            border-radius: 0.25rem;
+            cursor: pointer;
+        }
+
+        .checkbox-curso-info label {
+            font-size: 0.875rem;
+            font-weight: 900;
+            color: #2e5346;
+            cursor: pointer;
+            display: block;
+        }
+
+        .checkbox-curso-info p {
+            font-size: 0.75rem;
+            color: #475569;
+            margin: 0;
+        }
+
+        .contenedor-botones {
+            display: flex;
+            gap: 0.5rem;
+            padding-top: 0.25rem;
+        }
+
+        .btn-principal {
+            width: 100%;
+            background-color: var(--color-acento);
+            color: white;
+            font-weight: 800;
+            padding: 0.75rem;
+            border-radius: 0.75rem;
+            font-size: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgba(119, 175, 156, 0.3);
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-principal:hover {
+            background-color: var(--color-acento-hover);
+        }
+
+        .btn-cancelar {
+            width: 33.333%;
+            background-color: #94a3b8;
+            color: white;
+            font-weight: 700;
+            padding: 0.75rem;
+            border-radius: 0.75rem;
+            font-size: 0.75rem;
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-cancelar:hover {
+            background-color: #64748b;
+        }
+
+        .alerta-formulario {
+            padding: 0.5rem;
+            border-radius: 0.75rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .tabla-header-contenedor {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #77af9c;
+            padding-bottom: 0.5rem;
+        }
+
+        .contador-badge {
+            font-size: 0.625rem;
+            background-color: #9baec8;

@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Historial y Subida de Documentos - UIPC</title>
+    <link rel="icon" type="image/png" href="../images/logo_UIPC.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { 
+            background: transparent;
+            font-family: 'Inter', sans-serif; 
+        }
+    </style>
+</head>
+<body class="h-auto flex flex-col text-slate-800 p-2 m-0 space-y-4">
+
+    <!-- SECCIÓN 1: HISTORIAL DE DOCUMENTOS SUBIDOS -->
+    <main class="max-w-7xl mx-auto w-full bg-white/95 backdrop-blur-md p-5 rounded-2xl shadow-xl border-2 border-[#77af9c] flex flex-col space-y-3">
+        <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+            <div class="flex items-center space-x-2.5">
+                <div class="w-9 h-9 rounded-xl flex items-center justify-center text-white shadow-sm border border-[#77af9c]" style="background-color: #77af9c;">
+                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                </div>
+                <div>
+                    <h2 class="text-sm font-extrabold text-slate-900">Historial de Documentos (Vista Segura)</h2>
+                    <p class="text-[11px] text-slate-500">Sus documentos están cifrados y protegidos. Nadie más puede acceder a ellos.</p>
+                </div>
+            </div>
+            <span class="px-3 py-1 bg-[#f4f6f5] text-slate-700 rounded-full text-[10px] font-bold border border-[#9baec8] flex items-center">
+                <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                Conexión Privada
+            </span>
+        </div>
+
+        <div class="overflow-y-auto max-h-[220px] border border-slate-200 rounded-xl relative bg-white">
+            <table class="w-full text-left text-xs border-collapse">
+                <thead>
+                    <tr id="tableHeaderRow" class="text-white uppercase sticky top-0 z-20 shadow-sm border-b border-[#5e9381] text-[11px]" style="background-color: #77af9c;">
+                        <th class="p-3 text-white" style="background-color: #77af9c;">NOMBRE DEL ARCHIVO</th>
+                        <th class="p-3 text-white" style="background-color: #77af9c;">FECHA Y HORA</th>
+                        <th class="p-3 text-white" style="background-color: #77af9c;">COMENTARIOS</th>
+                        <th class="p-3 text-white text-center" style="background-color: #77af9c;">AVISO</th>
+                    </tr>
+                </thead>
+                <tbody id="userFilesTableBody" class="divide-y divide-slate-100 text-xs">
+                    <tr><td colspan="5" class="p-6 text-center text-slate-400">Autenticando y cargando documentos...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <!-- SECCIÓN 2: ACCIONES DE GESTIÓN DOCUMENTAL (SUBIDA) -->
+    <section class="max-w-7xl mx-auto w-full bg-white/95 backdrop-blur-md p-5 rounded-2xl shadow-xl border-2 border-[#77af9c] flex flex-col space-y-4">
+        <div class="flex items-center space-x-2.5 border-b border-slate-100 pb-3">
+            <div class="w-9 h-9 rounded-xl flex items-center justify-center text-white shadow-sm border border-[#77af9c]" style="background-color: #77af9c;">
+                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+            </div>
+            <div>
+                <h2 class="text-sm font-extrabold text-slate-900">Acciones de Gestión Documental</h2>
+                <p class="text-[11px] text-slate-500">Adjunte archivos en formato PDF y añada observaciones para el repositorio UIPC</p>
+            </div>
+        </div>
+
+        <!-- Aviso de Privacidad e Integridad de Datos -->
+        <div class="p-3 bg-amber-50 border border-amber-200 rounded-xl flex items-center space-x-2 text-amber-800 text-[11px] font-medium">
+            <svg class="w-4 h-4 shrink-0 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+            </svg>
+            <span><strong>Protección de Datos:</strong> Procure que los formatos PDF o listados institucionales no expongan números de teléfonos personales innecesarios.</span>
+        </div>
+
+        <form onsubmit="handleUploadDocument(event)" class="space-y-3">
+            <div class="flex flex-col sm:flex-row items-center gap-3">
+                <label style="background-color: #77af9c;" class="w-full sm:w-auto flex items-center justify-center px-5 py-3 hover:bg-[#5e9381] text-white rounded-xl text-xs font-extrabold shadow-md cursor-pointer transition-all">
+                    <svg class="w-4 h-4 mr-2 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                    Seleccionar archivo PDF
+                    <input type="file" id="pdfFileInput" accept=".pdf" required onchange="updateFileNameDisplay(this)" class="hidden">
+                </label>
+                <span id="fileNameDisplay" class="text-xs text-slate-500 font-medium italic">Ningún archivo seleccionado</span>
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">COMENTARIOS U OBSERVACIONES ADICIONALES (OPCIONAL):</label>
+                <textarea id="fileComentarios" rows="3" placeholder="Escribe aquí tus comentarios..." class="w-full p-3 rounded-xl text-xs border border-slate-300 bg-slate-50 focus:bg-white resize-none font-medium outline-none focus:ring-2 focus:ring-[#77af9c]"></textarea>
+            </div>
+
+            <div id="uploadAlert" class="hidden p-2 rounded-xl text-xs font-semibold text-center"></div>
+
+            <button type="submit" id="uploadSubmitBtn" style="background-color: #77af9c;" class="w-full hover:bg-[#5e9381] text-white font-black py-3.5 rounded-xl text-xs shadow-lg transition-all cursor-pointer uppercase tracking-wider">
+                Subir Archivo al Servidor Protegido
+            </button>
+        </form>
+    </section>
+
+    <!-- Modal Mensajes -->
+    <div id="msgModal" class="fixed inset-0 bg-slate-900 bg-opacity-60 hidden flex items-center justify-center p-4 z-50">
+        <div class="bg-white w-full max-w-md p-6 rounded-2xl shadow-2xl space-y-4 border border-slate-200">
+            <h3 id="msgTitle" class="text-base font-bold text-slate-900 border-b pb-2">Aviso</h3>
+            <p id="msgBody" class="text-sm text-slate-700 whitespace-pre-line leading-relaxed bg-slate-50 p-4 rounded-xl border border-slate-100 font-medium"></p>
+            <div class="flex justify-end space-x-2 pt-2">
+                <button id="msgCancelBtn" onclick="closeMsgModal()" class="hidden bg-slate-200 hover:bg-slate-300 text-slate-700 px-4 py-2 rounded-xl text-xs font-semibold cursor-pointer">Cancelar</button>
+                <button id="msgConfirmBtn" onclick="closeMsgModal()" style="background-color: #77af9c;" class="hover:bg-[#5e9381] text-white px-6 py-2 rounded-xl text-xs font-semibold shadow cursor-pointer">Aceptar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentUser = null;
+        let pendingAction = null;
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const userStr = localStorage.getItem('uipc_current_user') || sessionStorage.getItem('uipc_current_user');
+            if (userStr) {
+                try { currentUser = JSON.parse(userStr); } catch(e) {}
+            }
+            if (!currentUser) {
+                currentUser = { usuario: 'invitado', nombre: 'Usuario General' };
+            }
+            loadUserFiles();
+            setInterval(loadUserFiles, 5000);
+        });
+
+        function updateFileNameDisplay(input) {
+            const display = document.getElementById('fileNameDisplay');
+            if (input.files && input.files.length > 0) {
+                display.innerText = input.files[0].name;
+                display.className = "text-xs font-bold";
+                display.style.color = "#77af9c";
+            } else {
+                display.innerText = "Ningún archivo seleccionado";
+                display.className = "text-xs text-slate-500 font-medium italic";
+            }
+        }
+
+        async function loadUserFiles() {
+            const tbody = document.getElementById('userFilesTableBody');
+            const headerRow = document.getElementById('tableHeaderRow');
+            if (!tbody) return;
+
+            const isAdmin = currentUser && (
+                (currentUser.usuario && currentUser.usuario.toLowerCase().trim() === 'coordinador.uipc') ||
+                (currentUser.nombre && currentUser.nombre.toLowerCase().includes('coordinador'))
+            );
+
+            if (isAdmin && headerRow) {
+                if (!document.getElementById('thAccion')) {
+                    const th = document.createElement('th');
+                    th.id = 'thAccion';
+                    th.className = "p-3 text-white text-center";
+                    th.style.backgroundColor = "#77af9c";
+                    th.innerText = "ACCIÓN";
+                    headerRow.appendChild(th);
+                }
+            } else {
+                const existingTh = document.getElementById('thAccion');
+                if (existingTh) existingTh.remove();
+            }
+
+            try {
+                const res = await fetch(`/api/admin/files?userId=${currentUser ? currentUser.usuario : 'general'}`);
+                const data = await res.json();
+                
+                if (data.success && Array.isArray(data.files)) {
+                    let docs = data.files.filter(f => 
+                        !(f.filename && (f.filename.toLowerCase().includes('min') || f.filename.toLowerCase().includes('minuta')))
+                    );
+
+                    if (!isAdmin) {
+                        const cleanUser = String(currentUser.usuario || '').toLowerCase().trim();
+                        const cleanName = String(currentUser.nombre || '').toLowerCase().trim();
+
+                        docs = docs.filter(f => {
+                            const fUser = String(f.usuario || '').toLowerCase().trim();
+                            const fPath = String(f.path || '').toLowerCase();
+                            
+                            return (
+                                fUser === cleanUser || 
+                                fUser === cleanName ||
+                                (cleanUser && fPath.includes(`/${cleanUser}/`))
+                            );
+                        });
+                    }
+
+                    const userFiles = docs.reverse();
+                    const colspanVal = isAdmin ? '5' : '4';
+
+                    if (userFiles.length === 0) {
+                        tbody.innerHTML = `<tr><td colspan="${colspanVal}" class="p-6 text-center text-slate-400 italic">No hay documentos registrados en su cuenta.</td></tr>`;
+                        return;
+                    }
+
+                    const viewedKey = `uipc_viewed_docs_${currentUser ? currentUser.usuario : 'general'}`;
+                    let viewedIds = JSON.parse(localStorage.getItem(viewedKey) || '[]');
+                    tbody.innerHTML = '';
+
+                    userFiles.forEach(f => {
+                        const isViewed = viewedIds.includes(f.filename);
+                        const badgeHtml = isViewed 
+                            ? `<span class="px-2.5 py-0.5 bg-slate-100 text-slate-600 rounded-full text-[9px] font-bold border border-slate-200 whitespace-nowrap">VISTO</span>`
+                            : `<span class="px-2.5 py-0.5 bg-gradient-to-r from-amber-500 to-red-600 text-white rounded-full text-[9px] font-extrabold shadow-sm animate-pulse whitespace-nowrap">NUEVO</span>`;
+
+                        const secureUrl = `/api/file?path=${encodeURIComponent(f.path)}&userId=${currentUser ? currentUser.usuario : 'general'}`;
+
+                        const tr = document.createElement('tr');
+                        tr.className = "hover:bg-slate-50 transition-colors border-b border-slate-100";
+                        
+                        let actionTdHtml = '';
+                        if (isAdmin) {
+                            actionTdHtml = `
+                                <td class="p-3 text-center space-x-1">
+                                    <a href="${secureUrl}" target="_blank" onclick="markDocViewed('${f.filename}')" style="background-color: #f4f6f5; color: #2e5346;" class="hover:bg-[#9baec8] hover:text-white px-3 py-1 rounded-lg text-[11px] font-bold cursor-pointer inline-block border border-[#9baec8]">Visualizar</a>
+                                    <button onclick="deleteDocument('${f.filename}')" class="bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 px-2.5 py-1 rounded-lg text-[11px] font-bold cursor-pointer">Eliminar</button>
+                                </td>
+                            `;
+                        }
+
+                        tr.innerHTML = `
+                            <td class="p-3 font-bold font-mono" style="color: #77af9c;">${f.filename}</td>
+                            <td class="p-3 text-[11px] text-slate-500">${f.fecha}</td>
+                            <td class="p-3 text-slate-700">${f.comentarios || 'Sin observaciones'}</td>
+                            <td class="p-3 text-center">${badgeHtml}</td>
+                            ${actionTdHtml}
+                        `;
+                        tbody.appendChild(tr);
+                    });
+                }
+            } catch (e) {
+                const colspanVal = isAdmin ? '5' : '4';
+                tbody.innerHTML = `<tr><td colspan="${colspanVal}" class="p-6 text-center text-slate-400">Error de conexión segura.</td></tr>`;
+            }
+        }
+
+        function markDocViewed(filename) {
+            const viewedKey = `uipc_viewed_docs_${currentUser ? currentUser.usuario : 'general'}`;
+            let viewedIds = JSON.parse(localStorage.getItem(viewedKey) || '[]');
+            if (!viewedIds.includes(filename)) {
+                viewedIds.push(filename);
+                localStorage.setItem(viewedKey, JSON.stringify(viewedIds));
+                loadUserFiles();
+            }
+        }
+
+        async function handleUploadDocument(event) {
+            event.preventDefault();
+            const fileInput = document.getElementById('pdfFileInput');
+            const comentarios = document.getElementById('fileComentarios').value.trim();
+            const btn = document.getElementById('uploadSubmitBtn');
+            const alertBox = document.getElementById('uploadAlert');
+
+            if (!fileInput.files || fileInput.files.length === 0) return;
+
+            const file = fileInput.files[0];
+            const formData = new FormData();
+            formData.append('pdfFile', file);
+            formData.append('usuario', currentUser ? currentUser.usuario : 'general');
+            formData.append('comentarios', comentarios || 'Documento institucional');
+
+            btn.disabled = true; btn.innerText = "Subiendo archivo...";
+            alertBox.classList.remove('hidden');
+            alertBox.className = "p-2 rounded-xl text-xs font-semibold bg-blue-100 text-blue-800";
+            alertBox.innerText = "Subiendo archivo por canal seguro...";
+
+            try {
+                const userIdQuery = currentUser && currentUser.usuario ? currentUser.usuario : 'general';
+                const res = await fetch(`/api/upload?userId=${encodeURIComponent(userIdQuery)}`, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const result = await res.json();
+                
+                if (result.success) {
+                    alertBox.className = "p-2 rounded-xl text-xs font-semibold bg-emerald-100 text-emerald-800";
+                    alertBox.innerText = "✓ Archivo subido y cifrado con éxito.";
+                    document.getElementById('pdfFileInput').value = '';
+                    document.getElementById('fileComentarios').value = '';
+                    document.getElementById('fileNameDisplay').innerText = "Ningún archivo seleccionado";
+                    document.getElementById('fileNameDisplay').className = "text-xs text-slate-500 font-medium italic";
+                    loadUserFiles();
+                } else {
+                    alertBox.className = "p-2 rounded-xl text-xs font-semibold bg-red-100 text-red-700";
+                    alertBox.innerText = "✕ Error al subir archivo.";
+                }
+            } catch (e) {
+                alertBox.className = "p-2 rounded-xl text-xs font-semibold bg-red-100 text-red-700";
+                alertBox.innerText = "✕ Error de conexión segura.";
+            } finally {
+                btn.disabled = false; btn.innerText = "Subir Archivo al Servidor Protegido";
+                setTimeout(() => alertBox.classList.add('hidden'), 4000);
+            }
+        }
+
+        async function deleteDocument(filename) {
+            showModal("Confirmación", `¿Está seguro de eliminar el archivo '${filename}' del servidor?`, async () => {
+                try {
+                    const res = await fetch('/api/delete-file', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ filename: filename, userId: currentUser ? currentUser.usuario : 'general' })
+                    });
+                    
+                    const data = await res.json();
+                    
+                    if (data.success) {
+                        loadUserFiles();
+                        showModal("Éxito", "Archivo eliminado correctamente.");
+                    } else {
+                        showModal("Aviso de Seguridad", "No tienes permisos para borrar este documento.");
+                    }
+                } catch (e) {}
+            }, true);
+        }
+
+        function showModal(title, body, callback = null, showCancel = false) {
+            document.getElementById('msgTitle').innerText = title;
+            document.getElementById('msgBody').innerText = body;
+            const confirmBtn = document.getElementById('msgConfirmBtn');
+            const cancelBtn = document.getElementById('msgCancelBtn');
+            if (cancelBtn) {
+                if (showCancel) {
+                    cancelBtn.classList.remove('hidden');
+                    confirmBtn.innerText = "Sí, Continuar";
+                } else {
+                    cancelBtn.classList.add('hidden');
+                    confirmBtn.innerText = "Aceptar";
+                }
+            }
+            pendingAction = callback;
+            document.getElementById('msgModal').classList.remove('hidden');
+        }
+
+        function closeMsgModal() {
+            document.getElementById('msgModal').classList.add('hidden');
+            if (pendingAction) {
+                pendingAction();
+                pendingAction = null;
+            }
+        }
+    </script>
+</body>
+</html>
