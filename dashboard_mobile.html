@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <script>
+        (function() {
+            try {
+                const currentUser = sessionStorage.getItem('uipc_current_user');
+                if (!currentUser) {
+                    window.location.replace('loginuipc.html');
+                }
+            } catch(e) {
+                window.location.replace('loginuipc.html');
+            }
+        })();
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Dashboard UIPC - Móvil</title>
+    <link rel="icon" type="image/png" href="images/logo_UIPC.png">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #fff7ef;
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            overflow-x: hidden;
+            width: 100vw;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: transparent;
+        }
+
+        /* Estilos de módulos adaptados a pantalla completa móvil */
+        .encabezado-mobile {
+            width: 100%;
+            height: 64px;
+            background-color: #EFDDB1;
+            overflow: hidden;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        .content-wrapper-mobile {
+            width: 100%;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-top: 68px;
+        }
+
+        .card-module {
+            width: 100%;
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        .botonera {
+            height: auto;
+            min-height: 80px;
+            background-color: #E2D1CC;
+        }
+
+        .avisos {
+            height: auto;
+            min-height: 80px;
+            background-color: #e2dece;
+        }
+
+        .perfil {
+            min-height: 380px;
+            background-color: rgba(214, 206, 161, 0.45);
+        }
+
+        .poblacion {
+            min-height: 650px;
+            background-color: #e2dece;
+        }
+
+        .actividades {
+            min-height: 520px;
+            background-color: #e2dece;
+        }
+
+        .minutas {
+            min-height: 520px;
+            background-color: #FFFFFF;
+            border: 2px solid #e2dece;
+        }
+
+        .frap {
+            background-color: #e2dece;
+            min-height: 480px;
+        }
+        
+        .formato-red {
+            background-color: #e2dece;
+            min-height: 140px;
+        }
+
+        .documentos {
+            background-color: #f7efda;
+            min-height: 600px;
+        }
+
+        .conexiones {
+            background-color: #f7efda;
+            min-height: 600px;
+        }
+
+        .directorio {
+            background-color: #f7efda;
+            min-height: 500px;
+        }
+    </style>
+</head>
+<body class="pb-8">
+
+    <!-- ENCABEZADO FIJO EN LA PARTE SUPERIOR -->
+    <div class="encabezado-mobile">
+        <iframe src="Modulos/encabezado.html" title="Encabezado"></iframe>
+    </div>
+
+    <!-- CONTENEDOR FLUIDO DE MÓDULOS -->
+    <div class="content-wrapper-mobile">
+
+        <div class="card-module botonera">
+            <iframe src="Modulos/botonera.html" title="Botonera"></iframe>
+        </div>
+
+        <div class="card-module avisos">
+            <iframe src="Modulos/avisos.html" title="Avisos"></iframe>
+        </div>
+
+        <div class="card-module perfil" id="perfilPanel">
+            <iframe src="Modulos/perfil.html" title="Perfil"></iframe>
+        </div>
+
+        <div class="card-module poblacion">
+            <iframe src="Modulos/poblacion_user.html" title="Población"></iframe>
+        </div>
+
+        <div class="card-module actividades" id="actividadesContainerFrame">
+            <iframe id="iframeActividades" src="Modulos/actividades.html" title="Actividades"></iframe>
+        </div>
+
+        <div class="card-module minutas" id="minutasPanel">
+            <iframe src="Modulos/minutas.html" title="Minutas"></iframe>
+        </div>
+
+        <div class="card-module frap">
+            <iframe src="Modulos/frapc.html" title="FRAP"></iframe>
+        </div>
+        
+        <div class="card-module formato-red">
+            <iframe src="Modulos/RED.html" title="Formato RED"></iframe>
+        </div>
+
+        <div class="card-module documentos">
+            <iframe src="Modulos/documentos.html" title="Documentos"></iframe>
+        </div>
+
+        <div class="card-module conexiones">
+            <iframe src="Modulos/conexiones.html" title="Conexiones"></iframe>
+        </div>
+
+        <div class="card-module directorio">
+            <iframe src="Modulos/directorio.html" title="Directorio"></iframe>
+        </div>
+
+    </div>
+
+    <!-- VENTANA FLOTANTE DE NUEVO EVENTO ADAPTADA A MÓVIL -->
+    <div id="modalNuevoEvento" class="fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white w-full max-w-sm rounded-2xl shadow-2xl border-2 border-[#77af9c] overflow-hidden p-6 text-center space-y-5">
+            <div class="w-14 h-14 bg-emerald-100 text-[#77af9c] rounded-xl mx-auto flex items-center justify-center font-black text-2xl border border-emerald-200 shadow-inner">
+                🔔
+            </div>
+            <div class="space-y-2">
+                <h3 class="text-base font-black text-slate-800 uppercase tracking-tight">¡Nuevo Evento o Curso!</h3>
+                <p id="modalEventoTexto" class="text-xs text-slate-600 font-medium px-2">Se ha publicado una nueva actividad en el sistema.</p>
+            </div>
+            <div class="flex flex-col gap-2.5 pt-1">
+                <!-- Botón Ir al Calendario -->
+                <button onclick="irAlCalendario()" style="background-color: #77af9c;" class="w-full hover:bg-[#5e9381] text-white font-black text-xs py-3 px-4 rounded-lg transition-all cursor-pointer border border-emerald-600 shadow">
+                    Ir al calendario
+                </button>
+                <!-- Botón Cerrar -->
+                <button onclick="cerrarModalEvento()" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs py-2.5 px-4 rounded-lg transition-all cursor-pointer border border-slate-300">
+                    Cerrar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let eventoPendienteId = null;
+
+        window.addEventListener('DOMContentLoaded', () => {
+            try {
+                const userStr = sessionStorage.getItem('uipc_current_user');
+                if (userStr) {
+                    const userObj = JSON.parse(userStr);
+                    const username = (userObj.usuario || '').toLowerCase();
+                    
+                    if (username === 'myriam.rojas') {
+                        const iframeAct = document.getElementById('iframeActividades');
+                        if (iframeAct) {
+                            iframeAct.src = 'Modulos/actividades_captura_curso.html';
+                        }
+                    }
+                }
+            } catch (e) {}
+
+            enviarHeartbeat();
+            setInterval(enviarHeartbeat, 10000); 
+
+            verificarNuevoEventoUsuario();
+        });
+
+        async function verificarNuevoEventoUsuario() {
+            try {
+                const response = await fetch('/api/actividades');
+                const data = await response.json();
+                const acts = Array.isArray(data) ? data : (data.activities || []);
+                
+                if (acts.length === 0) return;
+
+                acts.sort((a, b) => Number(b.id || 0) - Number(a.id || 0));
+                const masReciente = acts[0];
+
+                const ultimoVisto = localStorage.getItem('uipc_ultimo_evento_visto');
+
+                if (ultimoVisto !== String(masReciente.id)) {
+                    eventoPendienteId = masReciente.id;
+                    document.getElementById('modalEventoTexto').innerHTML = `<b>${masReciente.titulo}</b><br><span class="text-slate-400 text-[11px]">Fecha: ${masReciente.fecha} | Sede: ${masReciente.sede}</span>`;
+                    document.getElementById('modalNuevoEvento').classList.remove('hidden');
+                }
+            } catch (e) {
+                console.error("Error al comprobar nuevos eventos:", e);
+            }
+        }
+
+        function cerrarModalEvento() {
+            if (eventoPendienteId) {
+                localStorage.setItem('uipc_ultimo_evento_visto', eventoPendienteId);
+            }
+            document.getElementById('modalNuevoEvento').classList.add('hidden');
+        }
+
+        function irAlCalendario() {
+            if (eventoPendienteId) {
+                localStorage.setItem('uipc_ultimo_evento_visto', eventoPendienteId);
+            }
+            window.open('Modulos/calendario_actividades.html', '_blank');
+            document.getElementById('modalNuevoEvento').classList.add('hidden');
+        }
+
+        function enviarHeartbeat() {
+            try {
+                const userStr = sessionStorage.getItem('uipc_current_user');
+                if (userStr) {
+                    const userObj = JSON.parse(userStr);
+                    if (userObj && userObj.usuario) {
+                        fetch('/api/heartbeat', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ userId: userObj.usuario })
+                        }).catch(err => {});
+                    }
+                }
+            } catch (e) {}
+        }
+    </script>
+</body>
+</html>
