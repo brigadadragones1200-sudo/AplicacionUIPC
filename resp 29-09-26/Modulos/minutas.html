@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minutas Oficiales de Reuniones - UIPC</title>
+    <link rel="icon" type="image/png" href="../logo_UIPC.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { 
+            background: transparent;
+            font-family: 'Inter', sans-serif; 
+        }
+    </style>
+</head>
+<body class="p-2 m-0 text-slate-800 space-y-4">
+
+    <!-- SECCIÓN 1: HISTORIAL DE MINUTAS (VISIBLE PARA TODOS SIN EXCEPCIÓN) -->
+    <main class="max-w-7xl mx-auto w-full bg-white/95 backdrop-blur-md p-5 rounded-2xl shadow-xl border border-blue-200 flex flex-col space-y-3">
+        <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+            <div class="flex items-center space-x-2.5">
+                <div class="w-9 h-9 bg-blue-100 rounded-xl flex items-center justify-center text-blue-700 shadow-sm border border-blue-200">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path></svg>
+                </div>
+                <div>
+                    <h2 class="text-sm font-extrabold text-blue-950">Minutas Oficiales de Reuniones (Consulta General)</h2>
+                    <p class="text-[11px] text-slate-500">Historial completo de minutas de acuerdos disponible para todo el personal de la UIPC.</p>
+                </div>
+            </div>
+            <span class="px-3 py-1 bg-blue-50 text-blue-800 rounded-full text-[10px] font-bold border border-blue-200 flex items-center">
+                <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                Acceso Abierto Institucional
+            </span>
+        </div>
+
+        <div class="overflow-y-auto max-h-[260px] border border-slate-200 rounded-xl relative bg-white">
+            <table class="w-full text-left text-xs border-collapse">
+                <thead>
+                    <tr id="tableHeaderRow" class="bg-blue-900 text-white uppercase sticky top-0 z-20 shadow-sm border-b border-blue-800 text-[11px]">
+                        <th class="p-3 bg-blue-900 text-white">NOMBRE DE LA MINUTA</th>
+                        <th class="p-3 bg-blue-900 text-white">FECHA DE REGISTRO</th>
+                        <th class="p-3 bg-blue-900 text-white">OBSERVACIONES / AUTOR</th>
+                        <th class="p-3 bg-blue-900 text-white text-center">AVISO</th>
+                        <th class="p-3 bg-blue-900 text-white text-center">ACCIÓN</th>
+                    </tr>
+                </thead>
+                <tbody id="minutasTableBody" class="divide-y divide-slate-100 text-xs">
+                    <tr><td colspan="5" class="p-6 text-center text-slate-400">Cargando minutas oficiales...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <!-- SECCIÓN 2: CARGA DE MINUTA PDF (SOLO ADMIN Y COMUNICACIÓN) -->
+    <section id="uploadSection" class="max-w-7xl mx-auto w-full bg-white/95 backdrop-blur-md p-5 rounded-2xl shadow-xl border border-blue-200 flex flex-col space-y-4 hidden">
+        <div class="flex items-center space-x-2.5 border-b border-slate-100 pb-3">
+            <div class="w-9 h-9 bg-blue-100 rounded-xl flex items-center justify-center text-blue-700 shadow-sm border border-blue-200">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+            </div>
+            <div>
+                <h2 class="text-sm font-extrabold text-blue-950">Módulo de Carga: Subir Minuta en PDF</h2>
+                <p class="text-[11px] text-slate-500">Seleccione el archivo PDF generado en su equipo para guardarlo directamente en el servidor institucional.</p>
+            </div>
+        </div>
+
+        <form onsubmit="handleUploadMinuta(event)" class="space-y-3">
+            <div class="flex flex-col sm:flex-row items-center gap-3">
+                <label class="w-full sm:w-auto flex items-center justify-center px-5 py-3 bg-blue-700 hover:bg-blue-600 text-white rounded-xl text-xs font-extrabold shadow-md cursor-pointer transition-all">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                    Seleccionar minuta PDF
+                    <input type="file" id="pdfMinutaInput" accept=".pdf" required onchange="updateMinutaFileName(this)" class="hidden">
+                </label>
+                <span id="minutaFileNameDisplay" class="text-xs text-slate-500 font-medium italic">Ningún archivo seleccionado</span>
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">DESCRIPCIÓN O COMENTARIOS DE LA REUNIÓN (OPCIONAL):</label>
+                <textarea id="minutaComentarios" rows="2" placeholder="Ej. Minuta correspondiente a la sesión de trabajo..." class="w-full p-3 rounded-xl text-xs border border-slate-200 bg-slate-50 focus:bg-white resize-none font-medium"></textarea>
+            </div>
+
+            <div id="minutaUploadAlert" class="hidden p-2 rounded-xl text-xs font-semibold text-center"></div>
+
+            <button type="submit" id="minutaSubmitBtn" class="w-full bg-blue-900 hover:bg-blue-800 text-white font-black py-3.5 rounded-xl text-xs shadow-lg transition-all cursor-pointer uppercase tracking-wider">
+                Guardar Minuta en el Servidor
+            </button>
+        </form>
+    </section>
+
+    <!-- Modal Mensajes -->
+    <div id="msgModal" class="fixed inset-0 bg-slate-900 bg-opacity-60 hidden flex items-center justify-center p-4 z-50">
+        <div class="bg-white w-full max-w-md p-6 rounded-2xl shadow-2xl space-y-4 border border-slate-200">
+            <h3 id="msgTitle" class="text-base font-bold text-blue-900 border-b pb-2">Aviso</h3>
+            <p id="msgBody" class="text-sm text-slate-700 whitespace-pre-line leading-relaxed bg-slate-50 p-4 rounded-xl border border-slate-100 font-medium"></p>
+            <div class="flex justify-end space-x-2 pt-2">
+                <button id="msgCancelBtn" onclick="closeMsgModal()" class="hidden bg-slate-200 hover:bg-slate-300 text-slate-700 px-4 py-2 rounded-xl text-xs font-semibold cursor-pointer">Cancelar</button>
+                <button id="msgConfirmBtn" onclick="closeMsgModal()" class="bg-blue-900 hover:bg-blue-800 text-white px-6 py-2 rounded-xl text-xs font-semibold shadow cursor-pointer">Aceptar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentUser = null;
+        let pendingAction = null;
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const userStr = localStorage.getItem('uipc_current_user') || sessionStorage.getItem('uipc_current_user');
+            if (userStr) {
+                try { currentUser = JSON.parse(userStr); } catch(e) {}
+            }
+            if (!currentUser) {
+                currentUser = { usuario: 'invitado', nombre: 'Usuario General' };
+            }
+
+            // Mostrar el panel de carga solo para administrador o área de comunicación
+            const username = currentUser.usuario ? currentUser.usuario.toLowerCase().trim() : '';
+            const uploadSection = document.getElementById('uploadSection');
+            if (username === 'coordinador.uipc' || username === 'sujei.alonso' || username.includes('comunicacion')) {
+                uploadSection.classList.remove('hidden');
+            }
+
+            loadMinutas();
+            setInterval(loadMinutas, 5000);
+        });
+
+        function updateMinutaFileName(input) {
+            const display = document.getElementById('minutaFileNameDisplay');
+            if (input.files && input.files.length > 0) {
+                display.innerText = input.files[0].name;
+                display.className = "text-xs text-blue-900 font-bold";
+            } else {
+                display.innerText = "Ningún archivo seleccionado";
+                display.className = "text-xs text-slate-500 font-medium italic";
+            }
+        }
+
+        async function loadMinutas() {
+            const tbody = document.getElementById('minutasTableBody');
+            if (!tbody) return;
+
+            const isAdmin = currentUser && (
+                currentUser.usuario === 'coordinador.uipc' || 
+                (currentUser.nombre && currentUser.nombre.toLowerCase().includes('coordinador'))
+            );
+
+            try {
+                const res = await fetch('/api/admin/files');
+                const data = await res.json();
+                
+                if (data.success && Array.isArray(data.files)) {
+                    // Filtrar exclusivamente minutas para que aparezcan en esta sección
+                    const minutas = data.files.filter(f => 
+                        (f.filename && (f.filename.toLowerCase().includes('min') || f.filename.toLowerCase().includes('minuta'))) ||
+                        (f.path && f.path.toLowerCase().includes('minuta'))
+                    ).reverse();
+
+                    if (minutas.length === 0) {
+                        tbody.innerHTML = `<tr><td colspan="5" class="p-6 text-center text-slate-400 italic">No hay minutas oficiales registradas en el servidor.</td></tr>`;
+                        return;
+                    }
+
+                    const viewedKey = `uipc_viewed_minutas_${currentUser ? currentUser.usuario : 'general'}`;
+                    let viewedIds = JSON.parse(localStorage.getItem(viewedKey) || '[]');
+                    tbody.innerHTML = '';
+
+                    minutas.forEach(min => {
+                        const nombreArchivo = min.filename || 'Minuta sin nombre';
+                        const fecha = min.fecha || 'Fecha no registrada';
+                        const comentarios = min.comentarios || min.usuario || 'Minuta institucional';
+                        const isViewed = viewedIds.includes(nombreArchivo);
+
+                        const badgeHtml = isViewed 
+                            ? `<span class="px-2.5 py-0.5 bg-slate-100 text-slate-600 rounded-full text-[9px] font-bold border border-slate-200 whitespace-nowrap">VISTO</span>`
+                            : `<span class="px-2.5 py-0.5 bg-gradient-to-r from-amber-500 to-red-600 text-white rounded-full text-[9px] font-extrabold shadow-sm animate-pulse whitespace-nowrap">NUEVO</span>`;
+
+                        const secureUrl = min.path || `/uploads/minutas/${nombreArchivo}`;
+
+                        const tr = document.createElement('tr');
+                        tr.className = "hover:bg-slate-50 transition-colors border-b border-slate-100";
+
+                        let botonesAccion = `
+                            <a href="${secureUrl}" target="_blank" onclick="markMinutaViewed('${nombreArchivo}')" class="bg-blue-100 hover:bg-blue-200 text-blue-900 px-3 py-1 rounded-lg text-[11px] font-bold transition-all cursor-pointer inline-block">Visualizar</a>
+                        `;
+
+                        if (isAdmin) {
+                            botonesAccion += `
+                                <button onclick="deleteMinuta('${nombreArchivo}')" class="bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all ml-1.5 cursor-pointer">Eliminar</button>
+                            `;
+                        }
+
+                        tr.innerHTML = `
+                            <td class="p-3 font-bold text-slate-900 font-mono">${nombreArchivo}</td>
+                            <td class="p-3 text-[11px] text-slate-500">${fecha}</td>
+                            <td class="p-3 text-slate-700">${comentarios}</td>
+                            <td class="p-3 text-center">${badgeHtml}</td>
+                            <td class="p-3 text-center whitespace-nowrap">${botonesAccion}</td>
+                        `;
+                        tbody.appendChild(tr);
+                    });
+                }
+            } catch (e) {
+                tbody.innerHTML = `<tr><td colspan="5" class="p-6 text-center text-slate-400">Error al sincronizar con el servidor.</td></tr>`;
+            }
+        }
+
+        function markMinutaViewed(filename) {
+            const viewedKey = `uipc_viewed_minutas_${currentUser ? currentUser.usuario : 'general'}`;
+            let viewedIds = JSON.parse(localStorage.getItem(viewedKey) || '[]');
+            if (!viewedIds.includes(filename)) {
+                viewedIds.push(filename);
+                localStorage.setItem(viewedKey, JSON.stringify(viewedIds));
+                loadMinutas();
+            }
+        }
+
+        async function handleUploadMinuta(event) {
+            event.preventDefault();
+            const fileInput = document.getElementById('pdfMinutaInput');
+            const comentarios = document.getElementById('minutaComentarios').value.trim();
+            const btn = document.getElementById('minutaSubmitBtn');
+            const alertBox = document.getElementById('minutaUploadAlert');
+
+            if (!fileInput.files || fileInput.files.length === 0) return;
+
+            const file = fileInput.files[0];
+            const formData = new FormData();
+            formData.append('pdfFile', file);
+            formData.append('usuario', currentUser ? currentUser.nombre : 'Área de Comunicación');
+            formData.append('tipoCarpeta', 'Minutas');
+            formData.append('comentarios', comentarios || 'Minuta oficial de reunión');
+
+            btn.disabled = true; btn.innerText = "Subiendo minuta...";
+            alertBox.classList.remove('hidden');
+            alertBox.className = "p-2 rounded-xl text-xs font-semibold bg-blue-100 text-blue-800";
+            alertBox.innerText = "Subiendo archivo PDF a la ruta del servidor...";
+
+            try {
+                const res = await fetch('/api/upload', {
+                    method: 'POST',
+                    headers: { 'X-Target-Folder': 'Minutas' },
+                    body: formData
+                });
+                
+                const result = await res.json();
+                
+                if (result.success) {
+                    alertBox.className = "p-2 rounded-xl text-xs font-semibold bg-emerald-100 text-emerald-800";
+                    alertBox.innerText = "✓ Minuta cargada y guardada con éxito en el servidor.";
+                    document.getElementById('pdfMinutaInput').value = '';
+                    document.getElementById('minutaComentarios').value = '';
+                    document.getElementById('minutaFileNameDisplay').innerText = "Ningún archivo seleccionado";
+                    document.getElementById('minutaFileNameDisplay').className = "text-xs text-slate-500 font-medium italic";
+                    loadMinutas();
+                } else {
+                    alertBox.className = "p-2 rounded-xl text-xs font-semibold bg-red-100 text-red-700";
+                    alertBox.innerText = "✕ Error al subir la minuta.";
+                }
+            } catch (e) {
+                alertBox.className = "p-2 rounded-xl text-xs font-semibold bg-red-100 text-red-700";
+                alertBox.innerText = "✕ Error de conexión con el servidor.";
+            } finally {
+                btn.disabled = false; btn.innerText = "Guardar Minuta en el Servidor";
+                setTimeout(() => alertBox.classList.add('hidden'), 4000);
+            }
+        }
+
+        async function deleteMinuta(filename) {
+            showModal("Confirmación", `¿Está seguro de eliminar la minuta '${filename}' del servidor?`, async () => {
+                try {
+                    const res = await fetch('/api/delete-file', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ filename: filename, userId: currentUser ? currentUser.usuario : 'general' })
+                    });
+                    
+                    const data = await res.json();
+                    
+                    if (data.success) {
+                        loadMinutas();
+                        showModal("Éxito", "Minuta eliminada correctamente.");
+                    } else {
+                        showModal("Aviso", "No se pudo eliminar el archivo.");
+                    }
+                } catch (e) {}
+            }, true);
+        }
+
+        function showModal(title, body, callback = null, showCancel = false) {
+            document.getElementById('msgTitle').innerText = title;
+            document.getElementById('msgBody').innerText = body;
+            const confirmBtn = document.getElementById('msgConfirmBtn');
+            const cancelBtn = document.getElementById('msgCancelBtn');
+            if (cancelBtn) {
+                if (showCancel) {
+                    cancelBtn.classList.remove('hidden');
+                    confirmBtn.innerText = "Sí, Continuar";
+                } else {
+                    cancelBtn.classList.add('hidden');
+                    confirmBtn.innerText = "Aceptar";
+                }
+            }
+            pendingAction = callback;
+            document.getElementById('msgModal').classList.remove('hidden');
+        }
+
+        function closeMsgModal() {
+            document.getElementById('msgModal').classList.add('hidden');
+            if (pendingAction) {
+                pendingAction();
+                pendingAction = null;
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Usuarios UIPC - Panel Maestro</title>
+    <link rel="icon" type="image/png" href="logo_UIPC.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { 
+            background-image: url('fdo3uipc.jpeg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            font-family: 'Inter', sans-serif; 
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col text-slate-800 justify-between">
+
+    <header class="bg-white/95 backdrop-blur-sm shadow-sm border-b border-slate-200 sticky top-0 z-30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-full flex items-center justify-center p-1 border border-[#77af9c] overflow-hidden shadow-sm" style="background-color: #77af9c;">
+                        <img src="logo_UIPC.png" alt="Logo UIPC" class="w-full h-full object-contain filter brightness-200" onerror="this.src='https://placehold.co/40x40/77af9c/ffffff?text=UIPC'">
+                    </div>
+                    <div>
+                        <h1 class="text-sm sm:text-base font-black text-slate-900 tracking-tight">Gestión de Usuarios UIPC</h1>
+                        <p class="text-[10px] font-bold uppercase tracking-wider" style="color: #77af9c;">Unidad Interna de Protección Civil</p>
+                    </div>
+                </div>
+                
+                <div class="flex items-center space-x-3">
+                    <div class="hidden md:flex items-center space-x-2 text-sm pl-2 border-l border-slate-200">
+                        <span class="text-slate-900 font-bold text-xs" id="headerUserName">Administrador</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 w-full flex flex-col gap-6">
+        
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+            
+            <!-- Izquierda: Formulario de Alta / Edición de Usuario -->
+            <div class="lg:col-span-5 bg-white/95 backdrop-blur-md p-6 rounded-2xl shadow-xl border-2 border-[#77af9c] flex flex-col space-y-5">
+                <div class="flex items-center space-x-2.5 border-b border-slate-100 pb-3">
+                    <div class="w-8 h-8 rounded-lg flex items-center justify-center text-white font-black shadow-xs" style="background-color: #77af9c;">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path></svg>
+                    </div>
+                    <h2 id="formTitle" class="text-sm font-extrabold text-slate-900 uppercase tracking-wide">Dar de Alta Nuevo Usuario</h2>
+                </div>
+
+                <form id="userForm" onsubmit="handleSaveUser(event)" class="space-y-4">
+                    <input type="hidden" id="editOriginalId" value="">
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Usuario (ID) *</label>
+                            <input type="text" id="inputUsuario" required placeholder="ej. juan.perez" class="w-full p-2.5 rounded-xl text-xs bg-slate-50 border border-slate-300 font-mono focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#77af9c]">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Contraseña *</label>
+                            <input type="text" id="inputPassword" required placeholder="Contraseña" class="w-full p-2.5 rounded-xl text-xs bg-slate-50 border border-slate-300 font-mono focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#77af9c] font-bold" style="color: #5e9381;">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Nombre Completo *</label>
+                        <input type="text" id="inputNombre" required placeholder="Ej. Juan Pérez Gómez" class="w-full p-2.5 rounded-xl text-xs bg-slate-50 border border-slate-300 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#77af9c] font-semibold">
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Correo Electrónico *</label>
+                            <input type="email" id="inputCorreo" required placeholder="Ej. juan.perez@sep.gob.mx" class="w-full p-2.5 rounded-xl text-xs bg-slate-50 border border-slate-300 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#77af9c]">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Indicativo *</label>
+                            <input type="text" id="inputIndicativo" required placeholder="Ej. Base 1 / Alfa" class="w-full p-2.5 rounded-xl text-xs bg-slate-50 border border-slate-300 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#77af9c] font-mono font-bold text-amber-600">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">UR</label>
+                            <input type="text" id="inputUr" placeholder="Ej. DGAIR" class="w-full p-2.5 rounded-xl text-xs bg-slate-50 border border-slate-300 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#77af9c] font-bold uppercase">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Cargo</label>
+                            <input type="text" id="inputCargo" placeholder="Ej. Jefe de Piso" class="w-full p-2.5 rounded-xl text-xs bg-slate-50 border border-slate-300 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#77af9c]">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <div>
+                            <label class="block text-[11px] font-bold text-slate-700 mb-1">Suplente</label>
+                            <input type="text" id="inputSuplente" placeholder="Nombre" class="w-full p-2.5 rounded-xl text-xs bg-slate-50 border border-slate-300 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#77af9c]">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-bold text-slate-700 mb-1">Ubicación</label>
+                            <input type="text" id="inputUbicacion" placeholder="Sector" class="w-full p-2.5 rounded-xl text-xs bg-slate-50 border border-slate-300 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#77af9c]">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-bold text-slate-700 mb-1">Extensión</label>
+                            <input type="text" id="inputExtension" placeholder="62015" class="w-full p-2.5 rounded-xl text-xs bg-slate-50 border border-slate-300 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#77af9c] font-mono">
+                        </div>
+                    </div>
+
+                    <div id="formAlert" class="hidden p-2 rounded-xl text-xs font-semibold text-center"></div>
+
+                    <div class="flex flex-col gap-2 pt-2">
+                        <div class="flex space-x-2">
+                            <button type="button" id="cancelEditBtn" onclick="resetUserForm()" class="hidden w-1/3 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold py-3 rounded-xl text-xs transition-all cursor-pointer shadow-sm">
+                                Cancelar
+                            </button>
+                            <button type="submit" id="submitUserBtn" style="background-color: #77af9c;" class="w-full hover:bg-[#5e9381] text-white font-black py-3 rounded-xl text-xs shadow-md transition-all cursor-pointer">
+                                Registrar Usuario
+                            </button>
+                        </div>
+                        <button type="button" id="deleteUserBtn" onclick="deleteUserRecord()" class="hidden w-full bg-red-600 hover:bg-red-700 text-white font-black py-3 rounded-xl text-xs shadow-md transition-all cursor-pointer">
+                            Eliminar Usuario
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Derecha: Listado de Usuarios Registrados con Buscador -->
+            <div class="lg:col-span-7 bg-white/95 backdrop-blur-md p-6 rounded-2xl shadow-xl border-2 border-[#77af9c] flex flex-col space-y-4">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b border-slate-100 pb-3">
+                    <div class="flex items-center space-x-2.5">
+                        <div class="w-8 h-8 rounded-lg flex items-center justify-center text-white font-black shadow-xs" style="background-color: #77af9c;">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 43.542a19.007 19.007 0 01-8.5-2.033V18a2 2 0 012-2h13a2 2 0 012 2v23.509a19.007 19.007 0 01-8.5 2.033zm0-11a5 5 0 100-10 5 5 0 000 10z"></path></svg>
+                        </div>
+                        <h2 class="text-sm font-extrabold text-slate-900 uppercase tracking-wide">Usuarios Registrados</h2>
+                    </div>
+
+                    <div class="w-full sm:w-72 flex items-center space-x-1">
+                        <input type="text" id="searchUserInput" oninput="filterUserTable()" placeholder="Buscar usuario o nombre..." class="w-full p-2.5 rounded-xl text-xs border border-slate-300 bg-slate-50 font-medium outline-none focus:ring-2 focus:ring-[#77af9c]">
+                    </div>
+                </div>
+
+                <div class="overflow-y-auto max-h-[520px] border border-slate-200 rounded-xl relative bg-white">
+                    <table class="w-full text-left text-xs border-collapse">
+                        <thead>
+                            <tr class="text-white uppercase sticky top-0 z-20 shadow-sm border-b border-[#5e9381] text-[11px]" style="background-color: #77af9c;">
+                                <th class="p-3 text-white" style="background-color: #77af9c;">USUARIO</th>
+                                <th class="p-3 text-white" style="background-color: #77af9c;">NOMBRE / INDICATIVO</th>
+                                <th class="p-3 text-white" style="background-color: #77af9c;">CARGO</th>
+                                <th class="p-3 text-white text-center" style="background-color: #77af9c;">ACCIÓN</th>
+                            </tr>
+                        </thead>
+                        <tbody id="usersTableBody" class="divide-y divide-slate-100 text-xs">
+                            <tr><td colspan="4" class="p-6 text-center text-slate-400">Cargando usuarios...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <script>
+        let currentUser = null;
+        let globalUsersList = [];
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const userStr = localStorage.getItem('uipc_current_user');
+            if (userStr) {
+                try { currentUser = JSON.parse(userStr); } catch(e) {}
+            }
+            if (currentUser && currentUser.nombre) {
+                const el = document.getElementById('headerUserName');
+                if (el) el.innerText = currentUser.nombre;
+            }
+
+            loadUsersData();
+            setInterval(loadUsersData, 5000);
+        });
+
+        async function loadUsersData() {
+            const tbody = document.getElementById('usersTableBody');
+            if (!tbody) return;
+            try {
+                const res = await fetch('/api/admin/users');
+                const data = await res.json();
+                if (data.success && Array.isArray(data.users)) {
+                    globalUsersList = [...data.users].reverse();
+                    renderUsersTable(globalUsersList);
+                }
+            } catch (e) {
+                tbody.innerHTML = `<tr><td colspan="4" class="p-6 text-center text-red-400 font-semibold">Error al conectar con el servidor.</td></tr>`;
+            }
+        }
+
+        function renderUsersTable(users) {
+            const tbody = document.getElementById('usersTableBody');
+            if (!tbody) return;
+            if (users.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" class="p-6 text-center text-slate-400">No hay usuarios registrados.</td></tr>`;
+                return;
+            }
+            tbody.innerHTML = '';
+            users.forEach((u) => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-50 transition-colors border-b border-slate-100";
+                tr.innerHTML = `
+                    <td class="p-3 font-mono font-bold" style="color: #77af9c;">${u.usuario || 'N/A'}</td>
+                    <td class="p-3"><strong class="text-slate-900 block">${u.nombre || 'Sin nombre'}</strong><span class="text-[10px] text-amber-600 font-mono font-bold uppercase">Indicativo: ${u.indicativo || 'N/A'}</span></td>
+                    <td class="p-3 text-slate-700">${u.cargo || 'Enlace'}</td>
+                    <td class="p-3 text-center">
+                        <button onclick="editUser('${u.usuario}')" style="background-color: #f4f6f5; color: #2e5346;" class="hover:bg-[#9baec8] hover:text-white px-3 py-1 rounded-lg font-bold text-[11px] transition-all cursor-pointer shadow-xs border border-[#9baec8]">Editar</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function filterUserTable() {
+            const query = document.getElementById('searchUserInput').value.toLowerCase().trim();
+            const filtered = globalUsersList.filter(u => 
+                (u.usuario && u.usuario.toLowerCase().includes(query)) || 
+                (u.nombre && u.nombre.toLowerCase().includes(query)) || 
+                (u.cargo && u.cargo.toLowerCase().includes(query)) ||
+                (u.indicativo && u.indicativo.toLowerCase().includes(query))
+            );
+            renderUsersTable(filtered);
+        }
+
+        async function handleSaveUser(event) {
+            event.preventDefault();
+            const editOrigId = document.getElementById('editOriginalId').value;
+            const alertBox = document.getElementById('formAlert');
+            const submitBtn = document.getElementById('submitUserBtn');
+
+            const payload = {
+                usuario: document.getElementById('inputUsuario').value.trim(),
+                password: document.getElementById('inputPassword').value.trim(),
+                nombre: document.getElementById('inputNombre').value.trim(),
+                correo: document.getElementById('inputCorreo').value.trim(),
+                indicativo: document.getElementById('inputIndicativo').value.trim(),
+                ur: document.getElementById('inputUr').value.trim().toUpperCase(),
+                cargo: document.getElementById('inputCargo').value.trim(),
+                suplente: document.getElementById('inputSuplente').value.trim(),
+                ubicacion: document.getElementById('inputUbicacion').value.trim(),
+                extension: document.getElementById('inputExtension').value.trim() || '62015'
+            };
+
+            submitBtn.disabled = true;
+            submitBtn.innerText = editOrigId ? "Actualizando..." : "Registrando...";
+
+            try {
+                const res = await fetch('/api/admin/add-user', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const result = await res.json();
+                
+                alertBox.classList.remove('hidden');
+                if (result.success) {
+                    alertBox.className = "p-2 rounded-xl text-xs font-semibold bg-emerald-100 text-emerald-800 border border-emerald-200";
+                    alertBox.innerText = editOrigId ? "✓ Usuario actualizado con éxito." : "✓ Usuario registrado con éxito.";
+                    resetUserForm();
+                    loadUsersData();
+                } else {
+                    alertBox.className = "p-2 rounded-xl text-xs font-semibold bg-red-100 text-red-700 border border-red-200";
+                    alertBox.innerText = "✕ Error al guardar usuario.";
+                }
+            } catch (e) {
+                alertBox.classList.remove('hidden');
+                alertBox.className = "p-2 rounded-xl text-xs font-semibold bg-red-100 text-red-700 border border-red-200";
+                alertBox.innerText = "✕ Error de conexión con el servidor.";
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerText = editOrigId ? "Actualizar Usuario" : "Registrar Usuario";
+                setTimeout(() => alertBox.classList.add('hidden'), 4000);
+            }
+        }
+
+        function editUser(usuarioId) {
+            const user = globalUsersList.find(u => u.usuario === usuarioId);
+            if (!user) return;
+
+            document.getElementById('editOriginalId').value = user.usuario;
+            document.getElementById('inputUsuario').value = user.usuario || '';
+            document.getElementById('inputPassword').value = user.password || user.contrasena || '';
+            document.getElementById('inputNombre').value = user.nombre || '';
+            document.getElementById('inputCorreo').value = user.correo || '';
+            document.getElementById('inputIndicativo').value = user.indicativo || '';
+            document.getElementById('inputUr').value = user.ur || '';
+            document.getElementById('inputCargo').value = user.cargo || '';
+            document.getElementById('inputSuplente').value = user.suplente || '';
+            document.getElementById('inputUbicacion').value = user.ubicacion || '';
+            document.getElementById('inputExtension').value = user.extension || '';
+
+            document.getElementById('formTitle').innerText = "Editar Usuario Registrado";
+            document.getElementById('submitUserBtn').innerText = "Actualizar Usuario";
+            document.getElementById('cancelEditBtn').classList.remove('hidden');
+            document.getElementById('deleteUserBtn').classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        async function deleteUserRecord() {
+            const usuarioId = document.getElementById('editOriginalId').value;
+            if (!usuarioId) return;
+            if (confirm(`¿Está seguro de eliminar permanentemente al usuario "${usuarioId}"?`)) {
+                try {
+                    const res = await fetch('/api/admin/delete-user', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ usuario: usuarioId })
+                    });
+                    const result = await res.json();
+                    if (result.success) {
+                        resetUserForm();
+                        loadUsersData();
+                    } else {
+                        alert("No se pudo eliminar el usuario.");
+                    }
+                } catch(e) {
+                    alert("Error de conexión al eliminar.");
+                }
+            }
+        }
+
+        function resetUserForm() {
+            document.getElementById('editOriginalId').value = '';
+            document.getElementById('formTitle').innerText = "Dar de Alta Nuevo Usuario";
+            document.getElementById('submitUserBtn').innerText = "Registrar Usuario";
+            document.getElementById('cancelEditBtn').classList.add('hidden');
+            document.getElementById('deleteUserBtn').classList.add('hidden');
+            document.getElementById('userForm').reset();
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Botonera Institucional UIPC</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: transparent;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+        }
+    </style>
+</head>
+<body class="bg-amber-100/95 backdrop-blur-md p-2 sm:p-3 m-0 border-b border-amber-300 shadow-inner">
+
+    <!-- Botonera Superior -->
+    <nav class="max-w-7xl mx-auto w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+
+        <!-- Botón 1: Ver Concentrado -->
+        <a href="/Modulos/poblacion_user.html" target="_top" class="bg-gradient-to-r from-teal-800 to-teal-700 hover:from-teal-700 hover:to-teal-600 text-white p-3 rounded-xl shadow-md flex items-center justify-center space-x-2.5 transition-all transform hover:scale-[1.02] cursor-pointer border border-teal-500/40">
+            <svg class="w-5 h-5 text-teal-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+            <span class="font-extrabold text-xs sm:text-sm tracking-wide">Ver Concentrado</span>
+        </a>
+
+        <!-- Botón 2: Código de Colores -->
+        <a href="/Modulos/codigo_colores.html" target="_blank" rel="noopener noreferrer" class="bg-gradient-to-r from-indigo-700 to-indigo-600 hover:from-indigo-600 hover:to-indigo-500 text-white p-3 rounded-xl shadow-md flex items-center justify-center space-x-2.5 transition-all transform hover:scale-[1.02] cursor-pointer border border-indigo-400/40">
+            <svg class="w-5 h-5 text-indigo-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"></path></svg>
+            <span class="font-extrabold text-xs sm:text-sm tracking-wide">Código de Colores</span>
+        </a>
+
+        <!-- Botón 3: Reglamento y Formato Salas (ACTUALIZADO A DESCARGA DIRECTA Y SEGURA) -->
+        <a href="/api/file?path=/uploads/Salas.rar" download="Salas.rar" class="bg-gradient-to-r from-emerald-700 to-emerald-600 hover:from-emerald-600 hover:to-emerald-500 text-white p-3 rounded-xl shadow-md flex items-center justify-center space-x-2.5 transition-all transform hover:scale-[1.02] cursor-pointer border border-emerald-400/40">
+            <svg class="w-5 h-5 text-emerald-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+            <span class="font-extrabold text-xs sm:text-sm tracking-wide">Reglamento y Formato Salas</span>
+        </a>
+
+        <!-- Botón 4: Calendario -->
+        <a href="/Modulos/calendario_actividades.html" target="_blank" rel="noopener noreferrer" class="bg-gradient-to-r from-orange-700 to-indigo-600 hover:from-lemon-600 hover:to-yellow-500 text-white p-3 rounded-xl shadow-md flex items-center justify-center space-x-2.5 transition-all transform hover:scale-[1.02] cursor-pointer border border-orange-400/40">
+            <svg class="w-5 h-5 text-indigo-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"></path></svg>
+            <span class="font-extrabold text-xs sm:text-sm tracking-wide">Calendario Actividades</span>
+        </a>
+
+    </nav>
+
+    <script>
+        function triggerParentModal(modalId) {
+            if (window.parent && window.parent !== window) {
+                if (modalId === 'calendarModal' && typeof window.parent.openCalendarModal === 'function') {
+                    window.parent.openCalendarModal();
+                } else {
+                    const target = window.parent.document.getElementById(modalId);
+                    if (target) target.classList.remove('hidden');
+                }
+            }
+        }
+    </script>
+</body>
+</html>

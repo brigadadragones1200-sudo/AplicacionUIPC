@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo de Atención Prehospitalaria (FRAPC) - UIPC</title>
+    <link rel="icon" type="image/png" href="logo_UIPC.png">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        body { 
+            background: transparent !important;
+            font-family: 'Inter', sans-serif; 
+        }
+    </style>
+</head>
+<body class="min-h-[auto] flex flex-col justify-center text-slate-800 p-2 m-0 bg-transparent">
+
+    <main class="max-w-7xl mx-auto w-full">
+        
+        <!-- Contenedor Principal con Borde Institucional y Fondo Blanco Limpio -->
+        <div class="bg-white text-slate-800 px-6 py-4 rounded-2xl shadow-lg border-2 border-[#77af9c] flex flex-col sm:flex-row items-center justify-between relative overflow-hidden gap-4">
+            
+            <!-- Ilustración decorativa de fondo con tono rojo sutil -->
+            <div class="absolute right-0 bottom-0 top-0 w-64 opacity-5 pointer-events-none flex items-center justify-end pr-6">
+                <svg class="w-full h-full text-red-600" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/>
+                </svg>
+            </div>
+
+            <!-- Contenido Izquierdo: Icono Rojo, Título y Descripción -->
+            <div class="flex items-center space-x-4 relative z-10">
+                <div class="w-10 h-10 rounded-xl flex items-center justify-center overflow-hidden shadow-sm p-1 border-2 border-red-500 flex-shrink-0 bg-red-600">
+                    <img src="logo_UIPC.png" alt="Logo UIPC" class="w-full h-full object-contain filter brightness-200" crossorigin="anonymous" onerror="this.src='https://placehold.co/40x40/dc2626/ffffff?text=UIPC'">
+                </div>
+                <div>
+                    <div class="flex items-center space-x-2">
+                        <h2 class="text-xs sm:text-sm font-black text-slate-900 tracking-tight">Atención Prehospitalaria</h2>
+                        <span class="px-2 py-0.5 text-white rounded-full text-[9px] font-extrabold uppercase tracking-wider bg-red-600">FRAPC</span>
+                    </div>
+                    <p class="text-[11px] text-slate-500 leading-tight mt-0.5">
+                        Registro oficial de primer contacto, signos vitales y emergencias.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Botón Derecho 100% Rojo y Distintivo -->
+            <div class="relative z-10 w-full sm:w-auto flex-shrink-0">
+                <a href="formato_frapc.html" target="_blank" rel="noopener noreferrer" class="w-full sm:w-auto bg-red-600 hover:bg-red-700 text-white font-black py-2.5 px-6 rounded-xl text-xs shadow-md transition-all flex items-center justify-center space-x-2 cursor-pointer border border-red-500">
+                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                    <span class="tracking-wide uppercase font-black">Capturar FRAPC</span>
+                </a>
+            </div>
+
+        </div>
+
+    </main>
+
+</body>
+</html>

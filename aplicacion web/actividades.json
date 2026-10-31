@@ -1,0 +1,168 @@
+[
+  {
+    "id": "1787863131323",
+    "titulo": "Simulacro interno",
+    "fecha": "2026-09-18",
+    "hora": "12 hrs",
+    "mes": "Septiembre",
+    "descripcion": "simulacro 1200 centro sep"
+  },
+  {
+    "id": "1787863529414",
+    "titulo": "Concientización a personal",
+    "fecha": "2026-09-17",
+    "hora": "9:30",
+    "mes": "Septiembre",
+    "descripcion": "Concientización a personal de las diversas Unidades Administrativas."
+  },
+  {
+    "id": "1787863583493",
+    "titulo": "Reunión final Xoco",
+    "fecha": "2026-09-14",
+    "hora": "11:00 a 12:30",
+    "mes": "Septiembre",
+    "descripcion": "Reunión final preparativa (para afinar últimos detalles)."
+  },
+  {
+    "id": "1787863655602",
+    "titulo": "Simulacro de Campo Universidad",
+    "fecha": "2026-09-17",
+    "hora": "11",
+    "mes": "Septiembre",
+    "descripcion": "Simulacro de Campo con Enlaces y Suplentes de PC, Jefaturas de Piso y de Brigada y Brigadistas, con punto de reunión en Explanada Universidad,"
+  },
+  {
+    "id": "1787863700371",
+    "titulo": "Simulacro de Campo Xoco",
+    "fecha": "2026-09-17",
+    "hora": "12 hrs",
+    "mes": "Septiembre",
+    "descripcion": "Simulacro de Campo con Enlaces y Suplentes de PC, Jefaturas de Piso y de Brigada y Brigadistas, con punto de reunión en Explanada Xoco"
+  },
+  {
+    "id": "1787863763357",
+    "titulo": "Simulacro de Campo Mayorazgo",
+    "fecha": "2026-09-17",
+    "hora": "13 hrs",
+    "mes": "Septiembre",
+    "descripcion": "Simulacro de Campo con Enlaces y Suplentes de PC, Jefaturas de Piso y de Brigada y Brigadistas, con punto de reunión en Puerta Mayorazgo"
+  },
+  {
+    "id": "1787866600356",
+    "titulo": "Reunión Xoco",
+    "fecha": "2026-08-28",
+    "hora": "12 hrs",
+    "mes": "Agosto",
+    "descripcion": "Reunión en sala 8"
+  },
+  {
+    "titulo": "Reunión Xoco",
+    "fecha": "2026-09-01",
+    "hora": "12 hrs",
+    "sede": "Sala 8",
+    "descripcion": "Estimados y Estimadas Enlaces de Rama Xoco\nCon el gusto de saludarles y esperando se encuentren bien, les informo que la reunión de Gabinete de la Rama Xoco, se realizará en próximo martes 01 de septiembre el presente año, a las 12:00 hrs., en el Centro Operativo SEP, Sala 8, nivel 2. Es muy importante contar con su presencia y puntualidad.\nSe anexa orden del día. Favor de confirmar por este medio.\nCualquier duda o comentario al respecto estoy a tus órdenes",
+    "id": "1788274901337"
+  },
+  {
+    "titulo": "Reunion UIPC",
+    "fecha": "2026-09-10",
+    "hora": "11:00",
+    "sede": "sala 8",
+    "descripcion": "Reunión de la Unidad Interna de Protección Civil",
+    "id": "1788291304259"
+  },
+  {
+    "titulo": "Identificación de Riesgos",
+    "fecha": "2026-09-02",
+    "fechaFin": "2026-09-03",
+    "hora": "10 hrs",
+    "sede": "En linea",
+    "modalidad": "En línea",
+    "descripcion": "",
+    "esCapacitacion": true,
+    "id": "1788300382572"
+  },
+  {
+    "titulo": "Liderazgo para Brigadistas",
+    "fecha": "2026-09-08",
+    "fechaFin": "2026-09-08",
+    "hora": "10 a 15 hrs.",
+    "sede": "Sala 8",
+    "modalidad": "Presencial",
+    "descripcion": "Máximo 60 participantes",
+    "esCapacitacion": true,
+    "id": "1788301429350"
+  },
+  {
+    "titulo": "Reunión Universidad",
+    "fecha": "2026-09-07",
+    "fechaFin": "2026-09-07",
+    "hora": "11:00 Hrs",
+    "sede": "Sala 8",
+    "modalidad": "Presencial",
+    "descripcion": "Reunión preparativa para Explanada Universidad",
+    "esAdminCapacitacion": false,
+    "id": "1788302395222"
+  },
+  {
+    "titulo": "Análisis y evaluación del simulacro interno",
+    "fecha": "2026-09-18",
+    "fechaFin": "2026-09-18",
+    "hora": "13 Hrs",
+    "sede": "Sala 8",
+    "modalidad": "Presencial",
+    "descripcion": "Reunión de los Staff y estructura operativa de la UIPC para evaluar el ejercicio",
+    "esAdminCapacitacion": false,
+    "esCapacitacion": false,
+    "id": "1788303779208"
+  },
+  {
+    "titulo": "Reunión final Universidad",
+    "fecha": "2026-09-11",
+    "fechaFin": "2026-09-11",
+    "hora": "11:00 Hrs",
+    "sede": "Explanada Universidad",
+    "modalidad": "Presencial",
+    "descripcion": "Reunión para ajustar detalles operativos de la Explanada Universidad con los brigadistas",
+    "esAdminCapacitacion": false,
+    "esCapacitacion": false,
+    "id": "1788303934388"
+  },
+  {
+    "titulo": "Apoyo Psicológico de Primer contacto",
+    "fecha": "2026-09-22",
+    "fechaFin": "2026-09-23",
+    "hora": "10 hrs",
+    "sede": "Sala 8",
+    "modalidad": "Presencial",
+    "descripcion": "",
+    "esCapacitacion": true,
+    "esAdminCapacitacion": false,
+    "creadoPor": "myriam.rojas",
+    "id": "1788832808659"
+  },
+  {
+    "titulo": "VISITA AL CENAPRED",
+    "fecha": "2026-09-11",
+    "fechaFin": "2026-09-11",
+    "hora": "10:00 Hrs",
+    "sede": "CENAPRED",
+    "modalidad": "Presencial",
+    "descripcion": "Visita al CENAPRED Registro en el sector 3-E cunpo limitado",
+    "esAdminCapacitacion": false,
+    "esCapacitacion": false,
+    "id": "1788890493649"
+  },
+  {
+    "id": "1793291153646",
+    "titulo": "Simulacro interno",
+    "fecha": "2026-10-29",
+    "fechaFin": "2026-10-30",
+    "hora": "11:00 Hrs",
+    "sede": "Sala 8",
+    "modalidad": "Presencial",
+    "descripcion": "",
+    "esCapacitacion": true,
+    "creadoPor": "coordinador.uipc"
+  }
+]

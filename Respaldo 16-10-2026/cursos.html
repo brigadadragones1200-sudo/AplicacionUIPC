@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo de Registro de Cursos y Capacitaciones - UIPC</title>
+    <link rel="icon" type="image/png" href="logo_UIPC.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { 
+            background-image: url('fdo2uipc.jpeg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            font-family: 'Inter', sans-serif; 
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between text-slate-800 p-4 sm:p-6 space-y-6">
+
+    <!-- Header del Módulo -->
+    <header class="bg-blue-950/95 backdrop-blur-sm text-white p-4 sm:p-6 rounded-2xl shadow-xl border-2 border-orange-400/50 flex flex-col sm:flex-row justify-between items-center gap-4">
+        <div class="flex items-center space-x-3">
+            <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center overflow-hidden shadow-md p-1 border-2 border-orange-300">
+                <img src="logo_UIPC.png" alt="Logo UIPC" class="w-full h-full object-contain" onerror="this.src='https://placehold.co/48x48/1e3a8a/ffffff?text=UIPC'">
+            </div>
+            <div>
+                <h1 class="text-base sm:text-lg font-extrabold text-orange-100 tracking-tight">Módulo de Registro de Cursos y Capacitaciones</h1>
+                <p class="text-xs text-orange-200">Gestión especializada de capacitación institucional (Bandera Naranja / Verde Agua).</p>
+            </div>
+        </div>
+        <div class="flex items-center space-x-3 flex-wrap gap-2">
+            <span class="px-3 py-1 bg-orange-500/20 border border-orange-400 text-orange-300 rounded-full text-xs font-bold flex items-center shadow-xs">
+                <span class="w-2 h-2 bg-orange-400 rounded-full mr-1.5 animate-ping"></span> Módulo Activo
+            </span>
+            <button onclick="openCalendarModal()" class="bg-amber-500 hover:bg-amber-400 text-blue-950 font-extrabold px-4 py-2 rounded-xl text-xs shadow-md transition-all cursor-pointer flex items-center space-x-1.5">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                <span>Ver Calendario</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Contenido Principal -->
+    <main class="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+        
+        <!-- Formulario de Registro de Cursos -->
+        <div class="bg-blue-950/95 backdrop-blur-sm text-white p-6 rounded-2xl shadow-2xl border-2 border-orange-400/50 space-y-5">
+            <div class="flex items-center space-x-2 border-b border-blue-800 pb-3">
+                <span class="text-orange-300 font-bold text-lg">+</span>
+                <h2 class="text-sm sm:text-base font-extrabold text-orange-200">1. Registrar Nuevo Curso o Capacitación</h2>
+            </div>
+            
+            <form onsubmit="handleSaveTraining(event)" class="space-y-4">
+                <input type="hidden" id="editTrainingId" value="">
+                
+                <div>
+                    <label class="block text-xs font-semibold text-orange-200 mb-1">Título del Curso / Capacitación *</label>
+                    <input type="text" id="trainTitulo" required placeholder="Ej. Curso de Primeros Auxilios Avanzados" class="w-full p-3 rounded-xl text-xs bg-blue-900 border border-blue-700 text-white font-semibold focus:outline-none focus:ring-2 focus:ring-orange-400">
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-orange-200 mb-1">Fecha Inicio *</label>
+                        <input type="date" id="trainFecha" required class="w-full p-3 rounded-xl text-xs bg-blue-900 border border-blue-700 text-white font-mono font-semibold focus:outline-none focus:ring-2 focus:ring-orange-400">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-orange-200 mb-1">Fecha Fin (Opcional)</label>
+                        <input type="date" id="trainFechaFin" class="w-full p-3 rounded-xl text-xs bg-blue-900 border border-blue-700 text-white font-mono font-semibold focus:outline-none focus:ring-2 focus:ring-orange-400">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-orange-200 mb-1">Horario / Duración</label>
+                        <input type="text" id="trainHora" placeholder="Ej. 10:00 Hrs" onblur="formatHoraInput(this)" class="w-full p-3 rounded-xl text-xs bg-blue-900 border border-blue-700 text-white font-semibold focus:outline-none focus:ring-2 focus:ring-orange-400">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-orange-200 mb-1">Sede *</label>
+                        <input type="text" id="trainSede" required placeholder="Ej. Sala Audiovisual" class="w-full p-3 rounded-xl text-xs bg-blue-900 border border-blue-700 text-white font-semibold focus:outline-none focus:ring-2 focus:ring-orange-400">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-orange-200 mb-1">Modalidad *</label>
+                        <select id="trainModalidad" class="w-full p-3 rounded-xl text-xs bg-blue-900 border border-blue-700 text-white font-semibold focus:outline-none focus:ring-2 focus:ring-orange-400 cursor-pointer">
+                            <option value="Presencial">Presencial</option>
+                            <option value="En línea">En línea</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-orange-200 mb-1">Cupo / Asistentes Estimados</label>
+                        <input type="text" id="trainCupo" placeholder="Ej. 30 personas" class="w-full p-3 rounded-xl text-xs bg-blue-900 border border-blue-700 text-white font-semibold focus:outline-none focus:ring-2 focus:ring-orange-400">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-orange-200 mb-1">Descripción u Observaciones del Curso</label>
+                    <textarea id="trainDesc" rows="3" placeholder="Detalles de la capacitación..." class="w-full p-3 rounded-xl text-xs bg-blue-900 border border-blue-700 text-white font-semibold focus:outline-none focus:ring-2 focus:ring-orange-400 resize-none"></textarea>
+                </div>
+
+                <div id="trainAlert" class="hidden p-2.5 rounded-xl text-xs font-semibold text-center"></div>
+
+                <div class="flex space-x-2 pt-2">
+                    <button type="button" id="cancelEditBtn" onclick="resetTrainingForm()" class="hidden w-1/3 bg-slate-600 hover:bg-slate-500 text-white font-bold py-3 rounded-xl text-xs transition-all cursor-pointer">
+                        Cancelar
+                    </button>
+                    <button type="submit" id="trainSubmitBtn" class="w-full bg-orange-600 hover:bg-orange-500 text-white font-extrabold py-3.5 rounded-xl text-xs shadow-lg transition-all cursor-pointer">
+                        Guardar Capacitación en Calendario
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Listado de Cursos Registrados -->
+        <div class="bg-blue-950/95 backdrop-blur-sm text-white p-6 rounded-2xl shadow-2xl border-2 border-orange-400/50 flex flex-col space-y-4">
+            <div class="flex justify-between items-center border-b border-blue-800 pb-3">
+                <h2 class="text-sm sm:text-base font-extrabold text-orange-200 flex items-center">
+                    <svg class="w-5 h-5 mr-2 text-orange-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                    Listado de Cursos Registrados
+                </h2>
+                <span id="trainCountBadge" class="text-[10px] bg-blue-900 text-orange-200 font-bold px-2.5 py-1 rounded-full">0 registrados</span>
+            </div>
+
+            <div class="overflow-y-auto max-h-[520px] border border-blue-800 rounded-xl relative bg-white text-slate-800">
+                <table class="w-full text-left text-xs border-collapse">
+                    <thead>
+                        <tr class="bg-blue-900 text-white uppercase sticky top-0 z-20 shadow-sm border-b border-blue-800">
+                            <th class="p-3 bg-blue-900 text-white">FECHA / SEDE</th>
+                            <th class="p-3 bg-blue-900 text-white">CURSO</th>
+                            <th class="p-3 bg-blue-900 text-white text-center">AVISO</th>
+                            <th class="p-3 bg-blue-900 text-white text-center">ACCIÓN</th>
+                        </tr>
+                    </thead>
+                    <tbody id="trainingsTableBody" class="divide-y divide-slate-100">
+                        <tr><td colspan="4" class="p-6 text-center text-slate-400">Cargando cursos...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Modal Calendario -->
+    <div id="calendarModal" class="fixed inset-0 bg-slate-900 bg-opacity-75 hidden flex items-center justify-center p-2 sm:p-4 z-50">
+        <div class="bg-white w-full max-w-5xl h-[90vh] rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-slate-200">
+            <div class="bg-blue-900 text-white p-4 flex justify-between items-center shadow-md">
+                <div class="flex items-center space-x-2">
+                    <svg class="w-6 h-6 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                    <h3 class="text-base font-bold">Calendario de Capacitaciones y Cursos 2026</h3>
+                </div>
+                <button onclick="closeCalendarModal()" class="text-white hover:text-red-300 font-bold text-3xl cursor-pointer">&times;</button>
+            </div>
+            <div class="bg-slate-100 border-b border-slate-200 px-6 py-3 flex justify-between items-center">
+                <button onclick="changeMonth(-1)" class="p-2 bg-white hover:bg-slate-200 border rounded-lg text-slate-700 font-bold shadow-sm text-xs cursor-pointer">&larr; Mes Anterior</button>
+                <h2 id="calendarMonthTitle" class="text-base font-extrabold text-blue-900 uppercase tracking-wide">Cargando mes...</h2>
+                <button onclick="changeMonth(1)" class="p-2 bg-white hover:bg-slate-200 border rounded-lg text-slate-700 font-bold shadow-sm text-xs cursor-pointer">Mes Siguiente &rarr;</button>
+            </div>
+            <div class="flex-grow bg-slate-50 p-4 overflow-y-auto flex flex-col">
+                <div class="grid grid-cols-7 gap-2 text-center font-bold text-xs text-slate-600 mb-2">
+                    <div class="py-2 bg-slate-200 rounded">Dom</div><div class="py-2 bg-slate-200 rounded">Lun</div><div class="py-2 bg-slate-200 rounded">Mar</div><div class="py-2 bg-slate-200 rounded">Mié</div><div class="py-2 bg-slate-200 rounded">Jue</div><div class="py-2 bg-slate-200 rounded">Vie</div><div class="py-2 bg-slate-200 rounded">Sáb</div>
+                </div>
+                <div id="calendarGrid" class="grid grid-cols-7 gap-2 flex-grow auto-rows-fr"></div>
+            </div>
+            <div class="bg-white p-3 border-t border-slate-200 text-right">
+                <button onclick="closeCalendarModal()" class="bg-blue-900 text-white font-bold py-2 px-6 rounded-xl text-xs cursor-pointer shadow">Cerrar Calendario</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Mensajes -->
+    <div id="msgModal" class="fixed inset-0 bg-slate-900 bg-opacity-60 hidden flex items-center justify-center p-4 z-50">
+        <div class="bg-white w-full max-w-md p-6 rounded-2xl shadow-2xl space-y-4 border border-slate-200">
+            <h3 id="msgTitle" class="text-base font-bold text-blue-900 border-b pb-2">Aviso</h3>
+            <p id="msgBody" class="text-sm text-slate-700 whitespace-pre-line leading-relaxed bg-slate-50 p-4 rounded-xl border border-slate-100 font-medium"></p>
+            <div class="flex justify-end space-x-2 pt-2">
+                <button id="msgCancelBtn" onclick="closeMsgModal()" class="hidden bg-slate-200 hover:bg-slate-300 text-slate-700 px-4 py-2 rounded-xl text-xs font-semibold cursor-pointer">Cancelar</button>
+                <button id="msgConfirmBtn" onclick="closeMsgModal()" class="bg-blue-900 hover:bg-blue-800 text-white px-6 py-2 rounded-xl text-xs font-semibold shadow cursor-pointer">Aceptar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentUser = null;
+        let globalTrainings = [];
+        let pendingAction = null;
+        let viewDate = new Date();
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const userStr = localStorage.getItem('uipc_current_user');
+            if (userStr) {
+                currentUser = JSON.parse(userStr);
+            } else {
+                currentUser = { usuario: 'invitado', nombre: 'Usuario General' };
+            }
+            loadTrainings();
+            setInterval(loadTrainings, 5000);
+        });
+
+        function formatHoraInput(input) {
+            let val = input.value.trim();
+            if (val && !val.toLowerCase().includes('hr') && !val.toLowerCase().includes('am') && !val.toLowerCase().includes('pm')) {
+                input.value = val + ' Hrs';
+            }
+        }
+
+        async function handleSaveTraining(event) {
+            event.preventDefault();
+            const btn = document.getElementById('trainSubmitBtn');
+            const alertBox = document.getElementById('trainAlert');
+            const editId = document.getElementById('editTrainingId').value;
+            
+            let hora = document.getElementById('trainHora').value.trim();
+            if (hora && !hora.toLowerCase().includes('hr') && !hora.toLowerCase().includes('am') && !hora.toLowerCase().includes('pm')) {
+                hora = hora + ' Hrs';
+            }
+
+            const payload = {
+                id: editId ? editId : Date.now().toString(),
+                titulo: document.getElementById('trainTitulo').value.trim(),
+                fecha: document.getElementById('trainFecha').value,
+                fechaFin: document.getElementById('trainFechaFin').value || document.getElementById('trainFecha').value,
+                hora: hora || '10:00 Hrs',
+                sede: document.getElementById('trainSede').value.trim(),
+                modalidad: document.getElementById('trainModalidad').value,
+                cupo: document.getElementById('trainCupo').value.trim(),
+                descripcion: document.getElementById('trainDesc').value.trim(),
+                esCapacitacion: true,
+                creadoPor: currentUser.usuario
+            };
+
+            btn.disabled = true; btn.innerText = "Guardando...";
+            try {
+                if (editId) {
+                    await fetch('/api/admin/delete-activity', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ id: editId })
+                    });
+                }
+                const res = await fetch('/api/admin/add-activity', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const result = await res.json();
+                alertBox.classList.remove('hidden');
+                if (result.success) {
+                    alertBox.className = "p-2.5 rounded-xl text-xs font-semibold bg-emerald-100 text-emerald-800 border border-emerald-200";
+                    alertBox.innerText = editId ? "✓ Curso actualizado con éxito." : "✓ Curso registrado con éxito en el calendario.";
+                    resetTrainingForm();
+                    loadTrainings();
+                } else {
+                    alertBox.className = "p-2.5 rounded-xl text-xs font-semibold bg-red-100 text-red-700 border border-red-200";
+                    alertBox.innerText = "✕ Error al guardar curso.";
+                }
+            } catch (e) {
+                alertBox.classList.remove('hidden');
+                alertBox.className = "p-2.5 rounded-xl text-xs font-semibold bg-red-100 text-red-700 border border-red-200";
+                alertBox.innerText = "✕ Error de conexión con el servidor.";
+            } finally {
+                btn.disabled = false; btn.innerText = editId ? "Actualizar Curso" : "Guardar Capacitación en Calendario";
+                setTimeout(() => alertBox.classList.add('hidden'), 4000);
+            }
+        }
+
+        async function loadTrainings() {
+            const tbody = document.getElementById('trainingsTableBody');
+            const badge = document.getElementById('trainCountBadge');
+            if (!tbody) return;
+            try {
+                const res = await fetch('/api/actividades');
+                const data = await res.json();
+                const acts = Array.isArray(data) ? data : (data.activities || []);
+                const trainings = acts.filter(a => a.esCapacitacion);
+                trainings.sort((a, b) => Number(b.id || 0) - Number(a.id || 0));
+                globalTrainings = trainings;
+                badge.innerText = `${trainings.length} registrados`;
+
+                if (trainings.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="4" class="p-6 text-center text-slate-400">No hay cursos o capacitaciones registradas.</td></tr>`;
+                    return;
+                }
+
+                const viewedKey = `uipc_viewed_trainings_${currentUser.usuario}`;
+                let viewedIds = JSON.parse(localStorage.getItem(viewedKey) || '[]');
+                tbody.innerHTML = '';
+
+                trainings.forEach(train => {
+                    const isViewed = viewedIds.includes(String(train.id));
+                    const dateText = train.fechaFin && train.fechaFin !== train.fecha ? `${train.fecha} al ${train.fechaFin}` : train.fecha;
+                    const badgeHtml = isViewed 
+                        ? `<span class="px-2 py-0.5 bg-slate-100 text-slate-600 rounded-full text-[9px] font-bold border border-slate-200 whitespace-nowrap">VISTO</span>`
+                        : `<span class="px-2 py-0.5 bg-gradient-to-r from-orange-500 to-amber-600 text-white rounded-full text-[9px] font-extrabold shadow-sm animate-pulse whitespace-nowrap">NUEVO</span>`;
+
+                    const tr = document.createElement('tr');
+                    tr.className = "hover:bg-slate-50 transition-colors border-b border-slate-50 last:border-none";
+                    tr.innerHTML = `
+                        <td class="p-3"><div class="text-xs font-mono text-slate-700 font-bold">${dateText}</div><div class="text-[10px] text-orange-800 font-bold uppercase truncate max-w-[130px]" title="${train.sede}">SEDE: ${train.sede}</div></td>
+                        <td class="p-3">
+                            <span class="text-[9px] bg-orange-100 text-orange-800 font-extrabold px-1.5 py-0.5 rounded mr-1">CURSO</span>
+                            <strong class="text-slate-900 text-xs">${train.titulo}</strong><br>
+                            <span class="text-[11px] text-slate-500">${train.hora}</span> <span class="text-[10px] text-slate-400">[${train.modalidad || 'Presencial'}]</span>
+                        </td>
+                        <td class="p-3 text-center">${badgeHtml}</td>
+                        <td class="p-3 text-center space-x-1">
+                            <button onclick="viewTraining('${train.id}')" class="bg-blue-100 hover:bg-blue-200 text-blue-900 px-2.5 py-1 rounded-lg text-[10px] font-bold cursor-pointer">Ver</button>
+                            <button onclick="editTraining('${train.id}')" class="bg-amber-100 hover:bg-amber-200 text-amber-900 px-2.5 py-1 rounded-lg text-[10px] font-bold cursor-pointer">Editar</button>
+                            <button onclick="deleteTraining('${train.id}')" class="bg-red-100 hover:bg-red-200 text-red-800 px-2.5 py-1 rounded-lg text-[10px] font-bold cursor-pointer">Eliminar</button>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            } catch (e) {
+                tbody.innerHTML = `<tr><td colspan="4" class="p-6 text-center text-slate-400">Error al cargar cursos.</td></tr>`;
+            }
+        }
+
+        function viewTraining(id) {
+            const train = globalTrainings.find(a => String(a.id) === String(id));
+            if (!train) return;
+            const viewedKey = `uipc_viewed_trainings_${currentUser.usuario}`;
+            let viewedIds = JSON.parse(localStorage.getItem(viewedKey) || '[]');
+            if (!viewedIds.includes(String(id))) {
+                viewedIds.push(String(id));
+                localStorage.setItem(viewedKey, JSON.stringify(viewedIds));
+                loadTrainings();
+            }
+            const dateText = train.fechaFin && train.fechaFin !== train.fecha ? `${train.fecha} al ${train.fechaFin}` : train.fecha;
+            showModal(`🎓 ${train.titulo}`, `🕒 Horario: ${train.hora}\n📅 Fecha: ${dateText}\n📍 Sede: ${train.sede}\n💻 Modalidad: ${train.modalidad || 'Presencial'}\n👥 Cupo: ${train.cupo || 'General'}\n\n${train.descripcion || 'Sin observaciones.'}`);
+        }
+
+        function editTraining(id) {
+            const train = globalTrainings.find(a => String(a.id) === String(id));
+            if (!train) return;
+            document.getElementById('editTrainingId').value = train.id;
+            document.getElementById('trainTitulo').value = train.titulo || '';
+            document.getElementById('trainFecha').value = train.fecha || '';
+            document.getElementById('trainFechaFin').value = train.fechaFin || '';
+            document.getElementById('trainHora').value = train.hora || '';
+            document.getElementById('trainSede').value = train.sede || '';
+            document.getElementById('trainModalidad').value = train.modalidad || 'Presencial';
+            document.getElementById('trainCupo').value = train.cupo || '';
+            document.getElementById('trainDesc').value = train.descripcion || '';
+            
+            document.getElementById('trainSubmitBtn').innerText = "Actualizar Curso";
+            document.getElementById('cancelEditBtn').classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function resetTrainingForm() {
+            document.getElementById('editTrainingId').value = '';
+            document.getElementById('trainSubmitBtn').innerText = "Guardar Capacitación en Calendario";
+            document.getElementById('cancelEditBtn').classList.add('hidden');
+            document.querySelector('form').reset();
+        }
+
+        async function deleteTraining(id) {
+            showModal("Confirmación", "¿Está seguro de eliminar este curso del calendario institucional?", async () => {
+                try {
+                    const res = await fetch('/api/admin/delete-activity', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ id })
+                    });
+                    if (res.ok) {
+                        loadTrainings();
+                        showModal("Éxito", "Curso eliminado correctamente.");
+                    }
+                } catch (e) {}
+            }, true);
+        }
+
+        function openCalendarModal() { 
+            viewDate = new Date(); 
+            document.getElementById('calendarModal').classList.remove('hidden'); 
+            renderCalendarGrid(); 
+        }
+        function closeCalendarModal() { document.getElementById('calendarModal').classList.add('hidden'); }
+        function changeMonth(direction) { viewDate.setDate(1); viewDate.setMonth(viewDate.getMonth() + direction); renderCalendarGrid(); }
+
+        function renderCalendarGrid() {
+            const gridContainer = document.getElementById('calendarGrid');
+            const titleEl = document.getElementById('calendarMonthTitle');
+            const year = viewDate.getFullYear(); const month = viewDate.getMonth();
+            const monthsNames = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+            titleEl.innerText = `${monthsNames[month]} ${year}`;
+            const firstDayIndex = new Date(year, month, 1).getDay();
+            const totalDays = new Date(year, month + 1, 0).getDate();
+            const prevTotalDays = new Date(year, month, 0).getDate();
+            gridContainer.innerHTML = '';
+            for (let i = firstDayIndex; i > 0; i--) { gridContainer.appendChild(createDayCell(prevTotalDays - i + 1, true)); }
+            for (let day = 1; day <= totalDays; day++) {
+                const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                const dayTrainings = globalTrainings.filter(a => {
+                    const fInicio = a.fecha;
+                    const fFin = a.fechaFin || a.fecha;
+                    return dateStr >= fInicio && dateStr <= fFin;
+                });
+                gridContainer.appendChild(createDayCell(day, false, dayTrainings));
+            }
+            const totalCells = firstDayIndex + totalDays;
+            const remaining = totalCells <= 35 ? 35 - totalCells : 42 - totalCells;
+            for (let i = 1; i <= remaining; i++) { gridContainer.appendChild(createDayCell(i, true)); }
+        }
+
+        function createDayCell(dayNum, isInactive, trainings = []) {
+            const hasEvent = trainings.length > 0;
+            const cell = document.createElement('div');
+            const bgClass = isInactive ? 'opacity-40 bg-slate-50' : (hasEvent ? 'bg-orange-50/90 border-orange-200 shadow-sm' : 'bg-white');
+            cell.className = `border rounded-xl p-2 flex flex-col justify-start min-h-[90px] overflow-hidden ${bgClass}`;
+            
+            const num = document.createElement('span'); 
+            num.className = `text-xs font-bold mb-1 ${isInactive ? 'text-slate-400' : (hasEvent ? 'text-orange-900' : 'text-slate-800')}`; 
+            num.innerText = dayNum; 
+            cell.appendChild(num);
+
+            const content = document.createElement('div'); content.className = "space-y-1 overflow-y-auto";
+            if (hasEvent) {
+                trainings.forEach(train => {
+                    const badge = document.createElement('div');
+                    badge.className = `p-1 border rounded text-[9px] truncate cursor-pointer transition-colors shadow-xs bg-white border-orange-200 text-orange-900 font-bold`;
+                    badge.title = train.titulo; 
+                    badge.innerHTML = train.titulo;
+                    badge.onclick = () => viewTraining(train.id);
+                    content.appendChild(badge);
+                });
+            }
+            cell.appendChild(content); return cell;
+        }
+
+        function showModal(title, body, callback = null, showCancel = false) {
+            document.getElementById('msgTitle').innerText = title;
+            document.getElementById('msgBody').innerText = body;
+            const confirmBtn = document.getElementById('msgConfirmBtn');
+            const cancelBtn = document.getElementById('msgCancelBtn');
+            if (cancelBtn) {
+                if (showCancel) {
+                    cancelBtn.classList.remove('hidden');
+                    confirmBtn.innerText = "Sí, Continuar";
+                } else {
+                    cancelBtn.classList.add('hidden');
+                    confirmBtn.innerText = "Aceptar";
+                }
+            }
+            pendingAction = callback;
+            document.getElementById('msgModal').classList.remove('hidden');
+        }
+
+        function closeMsgModal() {
+            document.getElementById('msgModal').classList.add('hidden');
+            if (pendingAction) {
+                pendingAction();
+                pendingAction = null;
+            }
+        }
+    </script>
+</body>
+</html>

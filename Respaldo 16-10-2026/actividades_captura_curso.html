@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Captura Rápida de Cursos - UIPC</title>
+    <link rel="icon" type="image/png" href="../logo_UIPC.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { 
+            background: transparent;
+            font-family: 'Inter', sans-serif; 
+        }
+    </style>
+</head>
+<body class="p-0 m-0 text-slate-800">
+
+    <div class="bg-blue-950/95 backdrop-blur-sm text-white p-6 rounded-2xl shadow-xl border-2 border-orange-400/50 space-y-4">
+        <div class="flex items-center justify-between border-b border-blue-800 pb-3">
+            <div class="flex items-center space-x-2">
+                <span class="text-orange-400 font-black text-lg">+</span>
+                <h2 class="text-sm sm:text-base font-extrabold text-orange-200">Panel de Captura Rápida de Cursos y Capacitaciones</h2>
+            </div>
+            <span class="px-2.5 py-1 bg-orange-500/20 border border-orange-400 text-orange-300 rounded-full text-[10px] font-bold">Modo Captura Exclusivo</span>
+        </div>
+        
+        <form onsubmit="handleSaveCurso(event)" class="space-y-3">
+            <div>
+                <label class="block text-xs font-semibold text-orange-200 mb-1">Título del Curso / Actividad *</label>
+                <input type="text" id="actTitulo" required placeholder="Ej. Curso Básico de Primeros Auxilios" class="w-full p-2.5 rounded-xl text-xs bg-blue-900 border border-blue-700 text-white font-semibold focus:outline-none focus:ring-2 focus:ring-orange-400">
+            </div>
+
+            <!-- Checkbox predeterminado y marcado como Curso Oficial en Naranja -->
+            <div class="bg-orange-950/80 p-3 rounded-xl border border-orange-500/60 flex items-center space-x-3">
+                <input type="checkbox" id="actEsCurso" checked onclick="return false;" class="w-4 h-4 text-orange-600 bg-blue-900 border-orange-400 rounded cursor-not-allowed">
+                <div>
+                    <label class="text-xs font-black text-orange-300">Categoría: Curso Oficial (Naranja)</label>
+                    <p class="text-[10px] text-orange-200">Este registro se publicará automáticamente con distintivo de curso en el calendario y listados.</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                    <label class="block text-xs font-semibold text-blue-200 mb-1">Fecha Inicio *</label>
+                    <input type="date" id="actFecha" required class="w-full p-2.5 rounded-xl text-xs bg-blue-900 border border-blue-700 text-white font-mono font-semibold focus:outline-none focus:ring-2 focus:ring-orange-400">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-blue-200 mb-1">Fecha Fin (Opcional)</label>
+                    <input type="date" id="actFechaFin" class="w-full p-2.5 rounded-xl text-xs bg-blue-900 border border-blue-700 text-white font-mono font-semibold focus:outline-none focus:ring-2 focus:ring-orange-400">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                    <label class="block text-xs font-semibold text-blue-200 mb-1">Horario / Duración</label>
+                    <input type="text" id="actHora" placeholder="Ej. 11:00 Hrs" class="w-full p-2.5 rounded-xl text-xs bg-blue-900 border border-blue-700 text-white font-semibold focus:outline-none focus:ring-2 focus:ring-orange-400">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-blue-200 mb-1">Sede *</label>
+                    <input type="text" id="actSede" required placeholder="Ej. Sala Audiovisual" class="w-full p-2.5 rounded-xl text-xs bg-blue-900 border border-blue-700 text-white font-semibold focus:outline-none focus:ring-2 focus:ring-orange-400">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                    <label class="block text-xs font-semibold text-blue-200 mb-1">Modalidad *</label>
+                    <select id="actModalidad" class="w-full p-2.5 rounded-xl text-xs bg-blue-900 border border-blue-700 text-white font-semibold focus:outline-none focus:ring-2 focus:ring-orange-400 cursor-pointer">
+                        <option value="Presencial">Presencial</option>
+                        <option value="En línea">En línea</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-blue-200 mb-1">Descripción u Observaciones</label>
+                    <input type="text" id="actDesc" placeholder="Detalles breves..." class="w-full p-2.5 rounded-xl text-xs bg-blue-900 border border-blue-700 text-white font-semibold focus:outline-none focus:ring-2 focus:ring-orange-400">
+                </div>
+            </div>
+
+            <div id="actAlert" class="hidden p-2 rounded-xl text-xs font-semibold text-center"></div>
+
+            <div class="pt-1">
+                <button type="submit" id="actSubmitBtn" class="w-full bg-orange-600 hover:bg-orange-500 text-white font-black py-3 rounded-xl text-xs shadow-lg transition-all cursor-pointer uppercase tracking-wider">
+                    Registrar y Publicar Curso
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        let currentUser = null;
+        window.addEventListener('DOMContentLoaded', () => {
+            const userStr = sessionStorage.getItem('uipc_current_user');
+            if (userStr) { try { currentUser = JSON.parse(userStr); } catch(e) {} }
+        });
+
+        async function handleSaveCurso(event) {
+            event.preventDefault();
+            const btn = document.getElementById('actSubmitBtn');
+            const alertBox = document.getElementById('actAlert');
+            
+            let hora = document.getElementById('actHora').value.trim();
+            if (hora && !hora.toLowerCase().includes('hr') && !hora.toLowerCase().includes('am') && !hora.toLowerCase().includes('pm')) {
+                hora = hora + ' Hrs';
+            }
+
+            const payload = {
+                id: Date.now().toString(),
+                titulo: document.getElementById('actTitulo').value.trim(),
+                fecha: document.getElementById('actFecha').value,
+                fechaFin: document.getElementById('actFechaFin').value || document.getElementById('actFecha').value,
+                hora: hora || '11:00 Hrs',
+                sede: document.getElementById('actSede').value.trim(),
+                modalidad: document.getElementById('actModalidad').value,
+                descripcion: document.getElementById('actDesc').value.trim(),
+                esCapacitacion: true, // Forzado a curso oficial (color naranja)
+                creadoPor: currentUser ? currentUser.usuario : 'myriam.rojas'
+            };
+
+            btn.disabled = true; btn.innerText = "Guardando curso...";
+            try {
+                const res = await fetch('/api/admin/add-activity', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const result = await res.json();
+                alertBox.classList.remove('hidden');
+                if (result.success) {
+                    alertBox.className = "p-2 rounded-xl text-xs font-semibold bg-emerald-100 text-emerald-800 border border-emerald-200";
+                    alertBox.innerText = "✓ Curso registrado y publicado exitosamente.";
+                    document.querySelector('form').reset();
+                    document.getElementById('actEsCurso').checked = true;
+                } else {
+                    alertBox.className = "p-2 rounded-xl text-xs font-semibold bg-red-100 text-red-700 border border-red-200";
+                    alertBox.innerText = "✕ Error al registrar el curso.";
+                }
+            } catch (e) {
+                alertBox.classList.remove('hidden');
+                alertBox.className = "p-2 rounded-xl text-xs font-semibold bg-red-100 text-red-700 border border-red-200";
+                alertBox.innerText = "✕ Error de conexión con el servidor.";
+            } finally {
+                btn.disabled = false; btn.innerText = "Registrar y Publicar Curso";
+                setTimeout(() => alertBox.classList.add('hidden'), 4000);
+            }
+        }
+    </script>
+</body>
+</html>

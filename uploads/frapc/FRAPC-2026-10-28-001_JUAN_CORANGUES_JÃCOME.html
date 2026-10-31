@@ -1,0 +1,223 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><title>FRAPC FRAPC-2026-10-28-001</title><script src="https://cdn.tailwindcss.com"></script><style>body{font-family:sans-serif;padding:20px;background:#f4f6f5;}</style></head><body><div id="printArea" class="bg-white p-3 rounded-xl shadow-lg border border-slate-400 space-y-2 container-print relative">
+            
+            <div class="text-center border-b border-slate-300 pb-1.5 flex flex-col items-center justify-center relative min-h-[40px]">
+                <div class="absolute left-0 top-0 w-10 h-10 bg-white rounded-full flex items-center justify-center overflow-hidden shadow-sm border border-slate-300">
+                    <img src="logo_UIPC.png" alt="Logo UIPC" class="w-full h-full object-contain" crossorigin="anonymous" onerror="this.src='https://placehold.co/40x40/1e3a8a/ffffff?text=UIPC'">
+                </div>
+                
+                <h1 class="text-xs font-extrabold text-blue-950 ml-10">Registro de Atención del Primer Contacto (FRAPC)</h1>
+                <p class="text-[8.5px] text-slate-700 font-bold ml-10">Unidad Interna de Protección Civil - Avenida Universidad N°1200</p>
+            </div>
+
+            <form id="frapcForm" class="space-y-2 text-[8.5px]" onsubmit="event.preventDefault(); return false;">
+                
+                <div>
+                    <h2 class="text-[8.5px] font-extrabold text-blue-950 border-b border-slate-300 pb-0.5 uppercase tracking-wider mb-1">1. Datos generales</h2>
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-1.5">
+                        <div><label class="block font-bold text-slate-800 mb-0.5">Fecha</label><input type="date" id="fechaInput" name="fecha" class="w-full p-0.5 rounded font-medium" onchange="generarFolioAutomatico()" value="2026-10-28"></div>
+                        <div><label class="block font-bold text-slate-800 mb-0.5">Hora</label><input type="time" name="hora" class="w-full p-0.5 rounded font-medium" value="07:20"></div>
+                        <div><label class="block font-bold text-slate-800 mb-0.5">Día</label><input type="text" id="diaInput" name="dia" class="w-full p-0.5 rounded font-medium" placeholder="Ej. Lunes" value="Miércoles"></div>
+                        <div><label class="block font-bold text-slate-800 mb-0.5">Folio (Auto)</label><input type="text" id="folioInput" name="folio" class="w-full p-0.5 rounded bg-slate-100 font-extrabold text-blue-950 text-center" readonly="" value="FRAPC-2026-10-28-001"></div>
+                    </div>
+                </div>
+
+                <div>
+                    <h2 class="text-[8.5px] font-extrabold text-blue-950 border-b border-slate-300 pb-0.5 uppercase tracking-wider mb-1">2. Motivo de la atención</h2>
+                    <div class="flex flex-wrap gap-4 mb-1">
+                        <label class="flex items-center space-x-1 font-semibold"><input type="radio" name="motivo" value="Enfermedad"> <span>Enfermedad</span></label>
+                        <label class="flex items-center space-x-1 font-semibold"><input type="radio" name="motivo" value="Traumatismo" checked="checked"> <span>Traumatismo</span></label>
+                        <label class="flex items-center space-x-1 font-semibold"><input type="radio" name="motivo" value="Otro"> <span>Otro</span></label>
+                    </div>
+                    <div>
+                        <label class="block font-bold text-slate-800 mb-0.5">Otro / Especifique motivo</label>
+                        <input type="text" name="motivo_otro" class="w-full p-0.5 rounded" value="caida en la salida del metro herida de 8 cms en la parte frontal del rostro">
+                    </div>
+                </div>
+
+                <div>
+                    <h2 class="text-[8.5px] font-extrabold text-blue-950 border-b border-slate-300 pb-0.5 uppercase tracking-wider mb-1">3. Datos del paciente</h2>
+                    <div class="grid grid-cols-1 sm:grid-cols-4 gap-1.5">
+                        <div><label class="block font-bold text-slate-800 mb-0.5">Nombre del paciente</label><input type="text" name="nombre_paciente" class="w-full p-0.5 rounded font-medium" value="JUAN CORANGUES JÁCOME"></div>
+                        <div>
+                            <label class="block font-bold text-slate-800 mb-0.5">Sexo</label>
+                            <select name="sexo" class="w-full p-0.5 rounded font-medium">
+                                <option value="">Seleccione</option>
+                                <option selected="selected">Masculino</option>
+                                <option>Femenino</option>
+                                <option>Otro</option>
+                            </select>
+                        </div>
+                        <div><label class="block font-bold text-slate-800 mb-0.5">Edad</label><input type="number" name="edad" min="0" class="w-full p-0.5 rounded font-medium" value="70"></div>
+                        <div><label class="block font-bold text-slate-800 mb-0.5">Área de adscripción</label><input type="text" name="area_adscripcion" class="w-full p-0.5 rounded font-medium" value="DGCFT"></div>
+                    </div>
+                </div>
+
+                <div>
+                    <h2 class="text-[8.5px] font-extrabold text-blue-950 border-b border-slate-300 pb-0.5 uppercase tracking-wider mb-1">4. Signos vitales (3 Tomas)</h2>
+                    <div class="overflow-x-auto">
+                        <table class="w-full border-collapse text-[8px]">
+                            <thead>
+                                <tr class="bg-blue-950 text-white font-bold">
+                                    <th class="p-1 border border-slate-900 text-center">Toma</th>
+                                    <th class="p-1 border border-slate-900 text-center">Hora</th>
+                                    <th class="p-1 border border-slate-900 text-center">Freq. resp.</th>
+                                    <th class="p-1 border border-slate-900 text-center">Freq. card.</th>
+                                    <th class="p-1 border border-slate-900 text-center">Tensión art.</th>
+                                    <th class="p-1 border border-slate-900 text-center">Temp.</th>
+                                    <th class="p-1 border border-slate-900 text-center">Saturación O₂</th>
+                                    <th class="p-1 border border-slate-900 text-center">Prioridad</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="p-1 border border-slate-900 font-extrabold text-center bg-slate-100">1</td>
+                                    <td class="p-1 border border-slate-900"><input type="time" name="sv1_hora" class="w-full p-0.5 rounded text-center" value="07:25"></td>
+                                    <td class="p-1 border border-slate-900"><input type="text" name="sv1_fr" class="w-full p-0.5 rounded text-center" value="22"></td>
+                                    <td class="p-1 border border-slate-900"><input type="text" name="sv1_fc" class="w-full p-0.5 rounded text-center" value="80"></td>
+                                    <td class="p-1 border border-slate-900"><input type="text" name="sv1_ta" class="w-full p-0.5 rounded text-center" value="160-80"></td>
+                                    <td class="p-1 border border-slate-900"><input type="text" name="sv1_temp" class="w-full p-0.5 rounded text-center" value="36.0"></td>
+                                    <td class="p-1 border border-slate-900"><input type="text" name="sv1_sat" class="w-full p-0.5 rounded text-center" value="95"></td>
+                                    <td class="p-1 border border-slate-900">
+                                        <select name="sv1_prioridad" class="w-full p-0.5 rounded text-center">
+                                            <option></option><option>Uno</option><option selected="selected">Dos</option><option>Tres</option><option>Cuatro</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="p-1 border border-slate-900 font-extrabold text-center bg-slate-100">2</td>
+                                    <td class="p-1 border border-slate-900"><input type="time" name="sv2_hora" class="w-full p-0.5 rounded text-center" value=""></td>
+                                    <td class="p-1 border border-slate-900"><input type="text" name="sv2_fr" class="w-full p-0.5 rounded text-center" value=""></td>
+                                    <td class="p-1 border border-slate-900"><input type="text" name="sv2_fc" class="w-full p-0.5 rounded text-center" value=""></td>
+                                    <td class="p-1 border border-slate-900"><input type="text" name="sv2_ta" class="w-full p-0.5 rounded text-center" value=""></td>
+                                    <td class="p-1 border border-slate-900"><input type="text" name="sv2_temp" class="w-full p-0.5 rounded text-center" value=""></td>
+                                    <td class="p-1 border border-slate-900"><input type="text" name="sv2_sat" class="w-full p-0.5 rounded text-center" value=""></td>
+                                    <td class="p-1 border border-slate-900">
+                                        <select name="sv2_prioridad" class="w-full p-0.5 rounded text-center">
+                                            <option selected="selected"></option><option>Uno</option><option>Dos</option><option>Tres</option><option>Cuatro</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="p-1 border border-slate-900 font-extrabold text-center bg-slate-100">3</td>
+                                    <td class="p-1 border border-slate-900"><input type="time" name="sv3_hora" class="w-full p-0.5 rounded text-center" value=""></td>
+                                    <td class="p-1 border border-slate-900"><input type="text" name="sv3_fr" class="w-full p-0.5 rounded text-center" value=""></td>
+                                    <td class="p-1 border border-slate-900"><input type="text" name="sv3_fc" class="w-full p-0.5 rounded text-center" value=""></td>
+                                    <td class="p-1 border border-slate-900"><input type="text" name="sv3_ta" class="w-full p-0.5 rounded text-center" value=""></td>
+                                    <td class="p-1 border border-slate-900"><input type="text" name="sv3_temp" class="w-full p-0.5 rounded text-center" value=""></td>
+                                    <td class="p-1 border border-slate-900"><input type="text" name="sv3_sat" class="w-full p-0.5 rounded text-center" value=""></td>
+                                    <td class="p-1 border border-slate-900">
+                                        <select name="sv3_prioridad" class="w-full p-0.5 rounded text-center">
+                                            <option selected="selected"></option><option>Uno</option><option>Dos</option><option>Tres</option><option>Cuatro</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
+                    <div class="custom-border-box p-1.5 rounded bg-slate-50">
+                        <h2 class="text-[8.5px] font-extrabold text-blue-950 border-b border-slate-300 pb-0.5 uppercase tracking-wider mb-1">5. Manejo traumatismo</h2>
+                        <div class="grid grid-cols-3 gap-1 text-[8px]">
+                            <label class="p-1 bg-white border border-slate-900 rounded flex items-center space-x-1"><input type="checkbox" name="trauma" value="Vía aérea"> <span>Vía aérea</span></label>
+                            <label class="p-1 bg-white border border-slate-900 rounded flex items-center space-x-1"><input type="checkbox" name="trauma" value="Collarín cervical"> <span>Collarín</span></label>
+                            <label class="p-1 bg-white border border-slate-900 rounded flex items-center space-x-1"><input type="checkbox" name="trauma" value="Oxígeno"> <span>Oxígeno</span></label>
+                            <label class="p-1 bg-white border border-slate-900 rounded flex items-center space-x-1"><input type="checkbox" name="trauma" value="Curación" checked="checked"> <span>Curación</span></label>
+                            <label class="p-1 bg-white border border-slate-900 rounded flex items-center space-x-1"><input type="checkbox" name="trauma" value="Férula"> <span>Férula</span></label>
+                            <label class="p-1 bg-white border border-slate-900 rounded flex items-center space-x-1"><input type="checkbox" name="trauma" value="RCP básica"> <span>RCP</span></label>
+                        </div>
+                    </div>
+                    <div class="custom-border-box p-1.5 rounded bg-slate-50">
+                        <h2 class="text-[8.5px] font-extrabold text-blue-950 border-b border-slate-300 pb-0.5 uppercase tracking-wider mb-1">6. Traslado traumatismo</h2>
+                        <div class="grid grid-cols-2 gap-1.5">
+                            <div><label class="font-bold text-slate-800 mb-0.5 block">Traslado</label>
+                                <select name="trauma_traslado" class="w-full p-0.5 rounded">
+                                    <option></option><option selected="selected">No amerita</option><option>Se niega</option><option>ISSSTE</option><option>IMSS</option><option>Otro</option>
+                                </select>
+                            </div>
+                            <div><label class="font-bold text-slate-800 mb-0.5 block">Denominación</label><input type="text" name="trauma_denominacion" class="w-full p-0.5 rounded" value=""></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
+                    <div class="custom-border-box p-1.5 rounded bg-slate-50">
+                        <h2 class="text-[8.5px] font-extrabold text-blue-950 border-b border-slate-300 pb-0.5 uppercase tracking-wider mb-1">7. Manejo enfermedad</h2>
+                        <div class="grid grid-cols-2 gap-1 text-[8px]">
+                            <label class="p-1 bg-white border border-slate-900 rounded flex items-center space-x-1"><input type="checkbox" name="enfermedad" value="Neurológica"> <span>Neurológica</span></label>
+                            <label class="p-1 bg-white border border-slate-900 rounded flex items-center space-x-1"><input type="checkbox" name="enfermedad" value="Respiratoria"> <span>Respiratoria</span></label>
+                            <label class="p-1 bg-white border border-slate-900 rounded flex items-center space-x-1"><input type="checkbox" name="enfermedad" value="Digestiva"> <span>Digestiva</span></label>
+                            <label class="p-1 bg-white border border-slate-900 rounded flex items-center space-x-1"><input type="checkbox" name="enfermedad" value="Cardiovascular"> <span>Cardiovascular</span></label>
+                        </div>
+                    </div>
+                    <div class="custom-border-box p-1.5 rounded bg-slate-50">
+                        <h2 class="text-[8.5px] font-extrabold text-blue-950 border-b border-slate-300 pb-0.5 uppercase tracking-wider mb-1">8. Traslado enfermedad</h2>
+                        <div class="grid grid-cols-2 gap-1.5">
+                            <div><label class="font-bold text-slate-800 mb-0.5 block">Traslado</label>
+                                <select name="enfermedad_traslado" class="w-full p-0.5 rounded">
+                                    <option selected="selected"></option><option>No amerita</option><option>Se niega</option><option>ISSSTE</option><option>IMSS</option><option>Otro</option>
+                                </select>
+                            </div>
+                            <div><label class="font-bold text-slate-800 mb-0.5 block">Denominación</label><input type="text" name="enfermedad_denominacion" class="w-full p-0.5 rounded" value=""></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-1.5">
+                    <div>
+                        <h2 class="text-[8.5px] font-extrabold text-blue-950 border-b border-slate-300 pb-0.5 uppercase tracking-wider mb-0.5">9. Personal</h2>
+                        <label class="font-bold text-slate-800 text-[8px]">Brigadistas</label>
+                        <textarea name="brigadistas" rows="1.5" class="w-full p-0.5 rounded resize-none" data-lt-tmp-id="lt-189381" spellcheck="false" data-gramm="false" value="ALFA, GUERRERRO, CISNE, DEMIAN">ALFA, GUERRERRO, CISNE, DEMIAN</textarea>
+                    </div>
+                    <div>
+                        <h2 class="text-[8.5px] font-extrabold text-blue-950 border-b border-slate-300 pb-0.5 uppercase tracking-wider mb-0.5">10. Seguimiento</h2>
+                        <label class="font-bold text-slate-800 text-[8px]">¿Traslado a consultorios?</label>
+                        <select name="consultorios" class="w-full p-0.5 rounded mb-0.5"><option></option><option>Sí</option><option selected="selected">No</option></select>
+                        <label class="font-bold text-slate-800 text-[8px]">Médico</label>
+                        <input type="text" name="medico_atiende" class="w-full p-0.5 rounded" value="">
+                    </div>
+                    <div>
+                        <h2 class="text-[8.5px] font-extrabold text-blue-950 border-b border-slate-300 pb-0.5 uppercase tracking-wider mb-0.5">11. Observaciones</h2>
+                        <textarea name="observaciones" rows="2" placeholder="Observaciones..." class="w-full p-0.5 rounded resize-none" data-lt-tmp-id="lt-332710" spellcheck="false" data-gramm="false" value="SE LE HACE UNA CAPELINA Y SE MANDA A SU HOSPITAL">SE LE HACE UNA CAPELINA Y SE MANDA A SU HOSPITAL</textarea>
+                    </div>
+                </div>
+
+                <!-- Sección de Firmas / Rúbricas -->
+                <div class="custom-border-box p-2 rounded bg-slate-50 mt-2">
+                    <h2 class="text-[8.5px] font-extrabold text-blue-950 border-b border-slate-300 pb-0.5 uppercase tracking-wider mb-2 text-center">12. Conformidad y Validación de la Atención</h2>
+                    <div class="grid grid-cols-3 gap-3 pt-4 text-center">
+                        <div class="flex flex-col items-center">
+                            <div class="w-full border-b border-slate-900 pb-6 mb-1"></div>
+                            <span class="font-bold text-slate-900 text-[8px]">Nombre y Firma del Brigadista</span>
+                        </div>
+                        <div class="flex flex-col items-center">
+                            <div class="w-full border-b border-slate-900 pb-6 mb-1"></div>
+                            <span class="font-bold text-slate-900 text-[8px]">Nombre y Firma del Familiar</span>
+                        </div>
+                        <div class="flex flex-col items-center">
+                            <div class="w-full border-b border-slate-900 pb-6 mb-1"></div>
+                            <span class="font-bold text-slate-900 text-[8px]">Nombre y Firma del Médico</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="statusAlert" class="p-2 rounded-lg text-xs font-bold bg-blue-100 text-blue-900 text-center mt-2 border border-blue-300">Guardando formato FRAPC en el servidor...</div>
+
+                <div class="flex justify-center space-x-3 pt-2 border-t border-slate-300 mt-2 no-print">
+                    <button type="button" onclick="imprimirPDF()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-5 rounded-xl shadow-md text-xs transition-colors cursor-pointer flex items-center">
+                        <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
+                        Imprimir / Guardar PDF (Alta Calidad)
+                    </button>
+                    
+                    <button type="button" onclick="guardarEnServidor()" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-5 rounded-xl shadow-md text-xs transition-colors cursor-pointer flex items-center">
+                        <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path></svg>
+                        Guardar en Servidor
+                    </button>
+
+                    <button type="button" onclick="limpiarFormulario()" class="bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold py-2 px-5 rounded-xl text-xs transition-colors cursor-pointer">
+                        Limpiar
+                    </button>
+                </div>
+            </form>
+        </div></body></html>

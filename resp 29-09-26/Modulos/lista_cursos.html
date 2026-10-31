@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listado de Cursos y Capacitaciones - UIPC</title>
+    <link rel="icon" type="image/png" href="logo_UIPC.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            background-image: url('fdo2uipc.jpeg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            font-family: 'Inter', sans-serif; 
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between text-slate-800 p-4 sm:p-6 space-y-6">
+
+    <header class="bg-[#042f2e]/95 backdrop-blur-sm text-white p-4 sm:p-6 rounded-2xl shadow-xl border-2 border-teal-400/70 flex flex-col sm:flex-row justify-between items-center gap-4">
+        <div class="flex items-center space-x-3">
+            <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center overflow-hidden shadow-md p-1 border-2 border-teal-300">
+                <img src="logo_UIPC.png" alt="Logo UIPC" class="w-full h-full object-contain" onerror="this.src='https://placehold.co/48x48/115e59/ffffff?text=UIPC'">
+            </div>
+            <div>
+                <h1 class="text-base sm:text-lg font-extrabold text-teal-100 tracking-tight">Calendario y Listado de Cursos UIPC</h1>
+                <p class="text-xs text-teal-300">Consulta de fechas y capacitaciones institucionales programadas (Modo Consulta).</p>
+            </div>
+        </div>
+        <div class="flex items-center space-x-3 flex-wrap gap-2">
+            <button onclick="window.location.href='dashboard.html'" class="bg-slate-200 hover:bg-slate-300 text-slate-700 px-4 py-2 rounded-xl text-xs font-bold transition-all shadow-sm cursor-pointer">
+                &larr; Volver al Dashboard
+            </button>
+            <button onclick="openCalendarModal()" class="bg-teal-400 hover:bg-teal-300 text-teal-950 font-extrabold px-4 py-2 rounded-xl text-xs shadow-md transition-all cursor-pointer flex items-center space-x-1.5">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                <span>Ver Calendario</span>
+            </button>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto w-full flex flex-col gap-6">
+        
+        <div class="bg-white/95 backdrop-blur-md p-6 rounded-2xl shadow-xl border border-teal-300 flex flex-col space-y-4">
+            <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+                <div class="flex items-center space-x-2.5">
+                    <div class="w-9 h-9 bg-teal-100 rounded-xl flex items-center justify-center text-teal-800 shadow-sm border border-teal-200">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                    </div>
+                    <div>
+                        <h2 class="text-sm font-extrabold text-teal-950">Fechas de Capacitación Programadas</h2>
+                        <p class="text-[11px] text-slate-500">Listado oficial de cursos institucionales disponibles para el personal</p>
+                    </div>
+                </div>
+                <span id="trainCountBadge" class="px-3 py-1 bg-teal-50 text-teal-800 rounded-full text-[10px] font-bold border border-teal-200">0 registrados</span>
+            </div>
+
+            <div class="overflow-y-auto max-h-[500px] border border-teal-200 rounded-xl relative bg-white">
+                <table class="w-full text-left text-xs border-collapse">
+                    <thead>
+                        <tr class="bg-[#115e59] text-white uppercase sticky top-0 z-20 shadow-sm border-b border-teal-700 text-[11px]">
+                            <th class="p-3 bg-[#115e59] text-white">FECHA / SEDE</th>
+                            <th class="p-3 bg-[#115e59] text-white">CURSO / CAPACITACIÓN</th>
+                            <th class="p-3 bg-[#115e59] text-white text-center">AVISO</th>
+                            <th class="p-3 bg-[#115e59] text-white text-center">ACCIÓN</th>
+                        </tr>
+                    </thead>
+                    <tbody id="trainingsTableBody" class="divide-y divide-slate-100 text-xs">
+                        <tr><td colspan="4" class="p-6 text-center text-slate-400">Cargando capacitaciones...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="text-center text-xs text-white/80 py-4">
+        Plataforma UIPC - Centro Operativo SEP Universidad 1200
+    </footer>
+
+    <div id="detailModal" class="fixed inset-0 bg-slate-900 bg-opacity-60 hidden flex items-center justify-center p-4 z-50">
+        <div class="bg-white w-full max-w-md p-6 rounded-2xl shadow-2xl space-y-4 border border-teal-100">
+            <h3 id="modalTitle" class="text-base font-extrabold text-teal-900 border-b pb-2">Detalles del Curso</h3>
+            <p id="modalBody" class="text-xs text-slate-700 whitespace-pre-line leading-relaxed bg-slate-50 p-4 rounded-xl border border-slate-100 font-medium"></p>
+            <div class="flex justify-end pt-2">
+                <button onclick="closeDetailModal()" class="bg-[#115e59] hover:bg-[#0f766e] text-white px-6 py-2 rounded-xl text-xs font-bold cursor-pointer shadow">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Calendario -->
+    <div id="calendarModal" class="fixed inset-0 bg-slate-900 bg-opacity-75 hidden flex items-center justify-center p-2 sm:p-4 z-50">
+        <div class="bg-white w-full max-w-5xl h-[90vh] rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-slate-200">
+            <div class="bg-[#042f2e] text-white p-4 flex justify-between items-center shadow-md">
+                <div class="flex items-center space-x-2">
+                    <svg class="w-6 h-6 text-teal-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                    <h3 class="text-base font-bold">Calendario de Capacitaciones y Cursos 2026</h3>
+                </div>
+                <button onclick="closeCalendarModal()" class="text-white hover:text-red-300 font-bold text-3xl cursor-pointer">&times;</button>
+            </div>
+            <div class="bg-slate-100 border-b border-slate-200 px-6 py-3 flex justify-between items-center">
+                <button onclick="changeMonth(-1)" class="p-2 bg-white hover:bg-slate-200 border rounded-lg text-slate-700 font-bold shadow-sm text-xs cursor-pointer">&larr; Mes Anterior</button>
+                <h2 id="calendarMonthTitle" class="text-base font-extrabold text-teal-900 uppercase tracking-wide">Cargando mes...</h2>
+                <button onclick="changeMonth(1)" class="p-2 bg-white hover:bg-slate-200 border rounded-lg text-slate-700 font-bold shadow-sm text-xs cursor-pointer">Mes Siguiente &rarr;</button>
+            </div>
+            <div class="flex-grow bg-slate-50 p-4 overflow-y-auto flex flex-col">
+                <div class="grid grid-cols-7 gap-2 text-center font-bold text-xs text-slate-600 mb-2">
+                    <div class="py-2 bg-slate-200 rounded">Dom</div><div class="py-2 bg-slate-200 rounded">Lun</div><div class="py-2 bg-slate-200 rounded">Mar</div><div class="py-2 bg-slate-200 rounded">Mié</div><div class="py-2 bg-slate-200 rounded">Jue</div><div class="py-2 bg-slate-200 rounded">Vie</div><div class="py-2 bg-slate-200 rounded">Sáb</div>
+                </div>
+                <div id="calendarGrid" class="grid grid-cols-7 gap-2 flex-grow auto-rows-fr"></div>
+            </div>
+            <div class="bg-white p-3 border-t border-slate-200 text-right">
+                <button onclick="closeCalendarModal()" class="bg-[#042f2e] text-white font-bold py-2 px-6 rounded-xl text-xs cursor-pointer shadow">Cerrar Calendario</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentUser = null;
+        let globalTrainings = [];
+        let viewDate = new Date();
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const userStr = localStorage.getItem('uipc_current_user');
+            if (userStr) {
+                currentUser = JSON.parse(userStr);
+            } else {
+                currentUser = { usuario: 'invitado', nombre: 'Usuario General' };
+            }
+            loadTrainings();
+            setInterval(loadTrainings, 5000);
+        });
+
+        async function loadTrainings() {
+            const tbody = document.getElementById('trainingsTableBody');
+            const badge = document.getElementById('trainCountBadge');
+            if (!tbody) return;
+            try {
+                const res = await fetch('/api/actividades');
+                const data = await res.json();
+                const acts = Array.isArray(data) ? data : (data.activities || []);
+                const trainings = acts.filter(a => a.esCapacitacion);
+                trainings.sort((a, b) => Number(b.id || 0) - Number(a.id || 0));
+                globalTrainings = trainings;
+                if (badge) badge.innerText = `${trainings.length} registrados`;
+
+                if (trainings.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="4" class="p-6 text-center text-slate-400">No hay cursos o capacitaciones registradas.</td></tr>`;
+                    return;
+                }
+
+                const viewedKey = `uipc_viewed_trainings_${currentUser.usuario}`;
+                let viewedIds = JSON.parse(localStorage.getItem(viewedKey) || '[]');
+                tbody.innerHTML = '';
+
+                trainings.forEach(train => {
+                    const isViewed = viewedIds.includes(String(train.id));
+                    const dateText = train.fechaFin && train.fechaFin !== train.fecha ? `${train.fecha} al ${train.fechaFin}` : train.fecha;
+                    const badgeHtml = isViewed 
+                        ? `<span class="px-2.5 py-0.5 bg-slate-100 text-slate-600 rounded-full text-[9px] font-bold border border-slate-200 whitespace-nowrap">VISTO</span>`
+                        : `<span class="px-2.5 py-0.5 bg-gradient-to-r from-teal-500 to-emerald-600 text-white rounded-full text-[9px] font-extrabold shadow-sm animate-pulse whitespace-nowrap">NUEVO</span>`;
+
+                    const tr = document.createElement('tr');
+                    tr.className = "hover:bg-slate-50 transition-colors border-b border-slate-50 last:border-none";
+                    tr.innerHTML = `
+                        <td class="p-3"><div class="text-xs font-mono text-slate-700 font-bold">${dateText}</div><div class="text-[10px] text-teal-800 font-bold uppercase truncate max-w-[130px]" title="${train.sede}">SEDE: ${train.sede}</div></td>
+                        <td class="p-3">
+                            <span class="text-[9px] bg-teal-100 text-teal-800 font-extrabold px-1.5 py-0.5 rounded mr-1">CURSO</span>
+                            <strong class="text-slate-900 text-xs">${train.titulo}</strong><br>
+                            <span class="text-[11px] text-slate-500">${train.hora}</span> <span class="text-[10px] text-slate-400">[${train.modalidad || 'Presencial'}]</span>
+                        </td>
+                        <td class="p-3 text-center">${badgeHtml}</td>
+                        <td class="p-3 text-center">
+                            <button onclick="viewTraining('${train.id}')" class="bg-teal-100 hover:bg-teal-200 text-teal-900 px-3.5 py-1.5 rounded-lg text-xs font-bold cursor-pointer transition-all shadow-xs">Ver Detalles</button>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            } catch (e) {
+                tbody.innerHTML = `<tr><td colspan="4" class="p-6 text-center text-red-500 font-semibold">Error al cargar cursos (Verifique que el servidor Node.js esté activo).</td></tr>`;
+            }
+        }
+
+        function viewTraining(id) {
+            const train = globalTrainings.find(a => String(a.id) === String(id));
+            if (!train) return;
+            const viewedKey = `uipc_viewed_trainings_${currentUser.usuario}`;
+            let viewedIds = JSON.parse(localStorage.getItem(viewedKey) || '[]');
+            if (!viewedIds.includes(String(id))) {
+                viewedIds.push(String(id));
+                localStorage.setItem(viewedKey, JSON.stringify(viewedIds));
+                loadTrainings();
+            }
+            const dateText = train.fechaFin && train.fechaFin !== train.fecha ? `${train.fecha} al ${train.fechaFin}` : train.fecha;
+            document.getElementById('modalTitle').innerText = `🎓 ${train.titulo}`;
+            document.getElementById('modalBody').innerText = `🕒 Horario: ${train.hora}\n📅 Fecha: ${dateText}\n📍 Sede: ${train.sede}\n💻 Modalidad: ${train.modalidad || 'Presencial'}\n👥 Cupo: ${train.cupo || 'General'}\n\n${train.descripcion || 'Sin observaciones.'}`;
+            document.getElementById('detailModal').classList.remove('hidden');
+        }
+
+        function closeDetailModal() { document.getElementById('detailModal').classList.add('hidden'); }
+
+        function openCalendarModal() { 
+            viewDate = new Date(); 
+            document.getElementById('calendarModal').classList.remove('hidden'); 
+            renderCalendarGrid(); 
+        }
+        function closeCalendarModal() { document.getElementById('calendarModal').classList.add('hidden'); }
+        function changeMonth(direction) { viewDate.setDate(1); viewDate.setMonth(viewDate.getMonth() + direction); renderCalendarGrid(); }
+
+        function renderCalendarGrid() {
+            const gridContainer = document.getElementById('calendarGrid');
+            const titleEl = document.getElementById('calendarMonthTitle');
+            const year = viewDate.getFullYear(); const month = viewDate.getMonth();
+            const monthsNames = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+            titleEl.innerText = `${monthsNames[month]} ${year}`;
+            const firstDayIndex = new Date(year, month, 1).getDay();
+            const totalDays = new Date(year, month + 1, 0).getDate();
+            const prevTotalDays = new Date(year, month, 0).getDate();
+            gridContainer.innerHTML = '';
+            for (let i = firstDayIndex; i > 0; i--) { gridContainer.appendChild(createDayCell(prevTotalDays - i + 1, true)); }
+            for (let day = 1; day <= totalDays; day++) {
+                const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                const dayTrainings = globalTrainings.filter(a => {
+                    const fInicio = a.fecha;
+                    const fFin = a.fechaFin || a.fecha;
+                    return dateStr >= fInicio && dateStr <= fFin;
+                });
+                gridContainer.appendChild(createDayCell(day, false, dayTrainings));
+            }
+            const totalCells = firstDayIndex + totalDays;
+            const remaining = totalCells <= 35 ? 35 - totalCells : 42 - totalCells;
+            for (let i = 1; i <= remaining; i++) { gridContainer.appendChild(createDayCell(i, true)); }
+        }
+
+        function createDayCell(dayNum, isInactive, trainings = []) {
+            const hasEvent = trainings.length > 0;
+            const cell = document.createElement('div');
+            const bgClass = isInactive ? 'opacity-40 bg-slate-50' : (hasEvent ? 'bg-teal-50/90 border-teal-200 shadow-sm' : 'bg-white');
+            cell.className = `border rounded-xl p-2 flex flex-col justify-start min-h-[90px] overflow-hidden ${bgClass}`;
+            
+            const num = document.createElement('span'); 
+            num.className = `text-xs font-bold mb-1 ${isInactive ? 'text-slate-400' : (hasEvent ? 'text-teal-900' : 'text-slate-800')}`; 
+            num.innerText = dayNum; 
+            cell.appendChild(num);
+
+            const content = document.createElement('div'); content.className = "space-y-1 overflow-y-auto";
+            if (hasEvent) {
+                trainings.forEach(train => {
+                    const badge = document.createElement('div');
+                    badge.className = `p-1 border rounded text-[9px] truncate cursor-pointer transition-colors shadow-xs bg-white border-teal-200 text-teal-900 font-bold`;
+                    badge.title = train.titulo; 
+                    badge.innerHTML = train.titulo;
+                    badge.onclick = () => viewTraining(train.id);
+                    content.appendChild(badge);
+                });
+            }
+            cell.appendChild(content); return cell;
+        }
+    </script>
+</body>
+</html>

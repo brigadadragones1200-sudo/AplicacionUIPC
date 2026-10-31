@@ -1,0 +1,706 @@
+[
+  {
+    "usuario": "daniel.gonzalez",
+    "nombre": "Daniel. Gonzalez Pacheco",
+    "ur": "DGDySNEM",
+    "nivel": "2",
+    "cantidad": "95",
+    "fecha": "2026-09-08"
+  },
+  {
+    "usuario": "daniel.gonzalez",
+    "nombre": "Daniel Gonzalez Pacheco",
+    "ur": "DGDySNEM",
+    "nivel": "2",
+    "cantidad": 25,
+    "fecha": "2026-09-14"
+  },
+  {
+    "usuario": "daniel.gonzalez",
+    "nombre": "Daniel Gonzalez Pacheco",
+    "ur": "DGDySNEM",
+    "nivel": "2",
+    "cantidad": 98,
+    "fecha": "2026-09-16"
+  },
+  {
+    "usuario": "gio.diaz",
+    "nombre": "Giovann Eduardo Díaz López",
+    "ur": "UnADM",
+    "nivel": "1",
+    "cantidad": 98,
+    "fecha": "2026-09-16"
+  },
+  {
+    "usuario": "gio.diaz",
+    "nombre": "Giovann Eduardo Díaz López",
+    "ur": "UnADM",
+    "nivel": "3",
+    "cantidad": 300,
+    "fecha": "2026-09-16"
+  },
+  {
+    "usuario": "gio.diaz",
+    "nombre": "Giovann Eduardo Díaz López",
+    "ur": "UnADM",
+    "nivel": "5",
+    "cantidad": 450,
+    "fecha": "2026-09-16"
+  },
+  {
+    "usuario": "gio.diaz",
+    "nombre": "Giovann Eduardo Díaz López",
+    "ur": "UnADM",
+    "nivel": "0",
+    "cantidad": 200,
+    "fecha": "16-09-2026"
+  },
+  {
+    "usuario": "gio.diaz",
+    "nombre": "Giovann Eduardo Díaz López",
+    "ur": "UnADM",
+    "nivel": "1",
+    "cantidad": 350,
+    "fecha": "16-09-2026"
+  },
+  {
+    "usuario": "gio.diaz",
+    "nombre": "Giovann Eduardo Díaz López",
+    "ur": "UnADM",
+    "nivel": "2",
+    "cantidad": 4,
+    "fecha": "16-09-2026"
+  },
+  {
+    "usuario": "gio.diaz",
+    "nombre": "Giovann Eduardo Díaz López",
+    "ur": "UnADM",
+    "nivel": "5",
+    "cantidad": 20,
+    "fecha": "16-09-2026"
+  },
+  {
+    "usuario": "daniel.gonzalez",
+    "nombre": "Daniel Gonzalez Pacheco",
+    "ur": "DGDySNEM",
+    "nivel": "6",
+    "cantidad": 360,
+    "fecha": "16-09-2026"
+  },
+  {
+    "usuario": "daniel.gonzalez",
+    "nombre": "Daniel Gonzalez Pacheco",
+    "ur": "DGDySNEM",
+    "nivel": "5",
+    "cantidad": 450,
+    "fecha": "16-09-2026"
+  },
+  {
+    "usuario": "daniel.gonzalez",
+    "nombre": "Daniel Gonzalez Pacheco",
+    "ur": "DGDySNEM",
+    "nivel": "0",
+    "cantidad": 250,
+    "fecha": "16-09-2026"
+  },
+  {
+    "usuario": "daniel.gonzalez",
+    "nombre": "Daniel Gonzalez Pacheco",
+    "ur": "DGDySNEM",
+    "nivel": "1",
+    "cantidad": 400,
+    "fecha": "16-09-2026"
+  },
+  {
+    "usuario": "flor.real",
+    "nombre": "Flor Gabriela Real Galicia",
+    "ur": "DGDCyPEI",
+    "nivel": "6",
+    "cantidad": 129,
+    "fecha": "17-09-2026"
+  },
+  {
+    "usuario": "julio.bautista",
+    "nombre": "Julio Bautista Flores",
+    "ur": "DGME",
+    "nivel": "1",
+    "cantidad": 2,
+    "fecha": "17-09-2026"
+  },
+  {
+    "usuario": "julio.bautista",
+    "nombre": "Julio Bautista Flores",
+    "ur": "DGME",
+    "nivel": "6",
+    "cantidad": 141,
+    "fecha": "17-09-2026"
+  },
+  {
+    "usuario": "genaro.bautista",
+    "nombre": "Genaro Bautista Garcia",
+    "ur": "DGGEyET",
+    "nivel": "6",
+    "cantidad": 77,
+    "fecha": "17-09-2026"
+  },
+  {
+    "usuario": "ludwing.gutierrez",
+    "nombre": "Ludwing Ivan Gutierrez Romero",
+    "ur": "DGBTD",
+    "nivel": "6",
+    "cantidad": 50,
+    "fecha": "18-09-2026"
+  },
+  {
+    "usuario": "ludwing.gutierrez",
+    "nombre": "Ludwing Ivan Gutierrez Romero",
+    "ur": "DGBTD",
+    "nivel": "5",
+    "cantidad": 6,
+    "fecha": "18-09-2026"
+  },
+  {
+    "usuario": "oscar.mondragon",
+    "nombre": "Oscar Mondragón Pineda",
+    "ur": "DGFCDD",
+    "nivel": "6",
+    "cantidad": 52,
+    "fecha": "18-09-2026"
+  },
+  {
+    "usuario": "ignacio.reyes",
+    "nombre": "Ignacio de los Reyes Mayorga",
+    "ur": "DGETAYCM",
+    "nivel": "4",
+    "cantidad": 297,
+    "fecha": "18-09-2026"
+  },
+  {
+    "usuario": "ignacio.reyes",
+    "nombre": "Ignacio de los Reyes Mayorga",
+    "ur": "DGETAYCM",
+    "nivel": "0",
+    "cantidad": 4,
+    "fecha": "18-09-2026"
+  },
+  {
+    "usuario": "hector.victoria",
+    "nombre": "Hector Victoria Cortes",
+    "ur": "SES",
+    "nivel": "5",
+    "cantidad": 742,
+    "fecha": "18-09-2026"
+  },
+  {
+    "usuario": "julio.bautista",
+    "nombre": "Julio Bautista Flores",
+    "ur": "DGME",
+    "nivel": "1",
+    "cantidad": 2,
+    "fecha": "18-09-2026"
+  },
+  {
+    "usuario": "julio.bautista",
+    "nombre": "Julio Bautista Flores",
+    "ur": "DGME",
+    "nivel": "6",
+    "cantidad": 153,
+    "fecha": "18-09-2026"
+  },
+  {
+    "usuario": "sonia.zermeño",
+    "nombre": "Sonia Zermeño Guzmán",
+    "ur": "TecNM",
+    "nivel": "5",
+    "cantidad": 156,
+    "fecha": "18-09-2026"
+  },
+  {
+    "usuario": "ludwing.gutierrez",
+    "nombre": "Ludwing Ivan Gutierrez Romero",
+    "ur": "DGBTD",
+    "nivel": "6",
+    "cantidad": 40,
+    "fecha": "21-09-2026"
+  },
+  {
+    "usuario": "ludwing.gutierrez",
+    "nombre": "Ludwing Ivan Gutierrez Romero",
+    "ur": "DGBTD",
+    "nivel": "5",
+    "cantidad": 4,
+    "fecha": "21-09-2026"
+  },
+  {
+    "usuario": "julio.bautista",
+    "nombre": "Julio Bautista Flores",
+    "ur": "DGME",
+    "nivel": "1",
+    "cantidad": 2,
+    "fecha": "21-09-2026"
+  },
+  {
+    "usuario": "julio.bautista",
+    "nombre": "Julio Bautista Flores",
+    "ur": "DGME",
+    "nivel": "6",
+    "cantidad": 141,
+    "fecha": "21-09-2026"
+  },
+  {
+    "usuario": "genaro.bautista",
+    "nombre": "Genaro Bautista Garcia",
+    "ur": "DGGEYET",
+    "nivel": "6",
+    "cantidad": 68,
+    "fecha": "21-09-2026"
+  },
+  {
+    "usuario": "sonia.zermeño",
+    "nombre": "Sonia Zermeño Guzmán",
+    "ur": "TecNM",
+    "nivel": "5",
+    "cantidad": 148,
+    "fecha": "21-09-2026"
+  },
+  {
+    "usuario": "ignacio.reyes",
+    "nombre": "Ignacio de los Reyes Mayorga",
+    "ur": "DGETAYCM",
+    "nivel": "0",
+    "cantidad": 4,
+    "fecha": "21-09-2026"
+  },
+  {
+    "usuario": "ignacio.reyes",
+    "nombre": "Ignacio de los Reyes Mayorga",
+    "ur": "DGETAYCM",
+    "nivel": "4",
+    "cantidad": 330,
+    "fecha": "21-09-2026"
+  },
+  {
+    "usuario": "hector.victoria",
+    "nombre": "Hector Victoria Cortes",
+    "ur": "SES",
+    "nivel": "5",
+    "cantidad": 995,
+    "fecha": "21-09-2026"
+  },
+  {
+    "usuario": "gustavo.gudino",
+    "nombre": "Gustavo Gudiño López",
+    "ur": "USICAMM (JEFE DE PISO 2)",
+    "nivel": "2",
+    "cantidad": 254,
+    "fecha": "21-09-2026"
+  },
+  {
+    "usuario": "ezequiel.badillo",
+    "nombre": "C. Ezequiel Badillo Pérez",
+    "ur": "DGCFT",
+    "nivel": "5",
+    "cantidad": 292,
+    "fecha": "21-09-2026"
+  },
+  {
+    "usuario": "david.alfredo",
+    "nombre": "David Alfredo Muñoz Guagnelli",
+    "ur": "DGETI",
+    "nivel": "0",
+    "cantidad": 2,
+    "fecha": "21-09-2026"
+  },
+  {
+    "usuario": "david.alfredo",
+    "nombre": "David Alfredo Muñoz Guagnelli",
+    "ur": "DGETI",
+    "nivel": "3",
+    "cantidad": 4,
+    "fecha": "21-09-2026"
+  },
+  {
+    "usuario": "david.alfredo",
+    "nombre": "David Alfredo Muñoz Guagnelli",
+    "ur": "DGETI",
+    "nivel": "4",
+    "cantidad": 144,
+    "fecha": "21-09-2026"
+  },
+  {
+    "usuario": "david.alfredo",
+    "nombre": "David Alfredo Muñoz Guagnelli",
+    "ur": "DGETI",
+    "nivel": "5",
+    "cantidad": 148,
+    "fecha": "21-09-2026"
+  },
+  {
+    "usuario": "david.alfredo",
+    "nombre": "David Alfredo Muñoz Guagnelli",
+    "ur": "DGETI",
+    "nivel": "6",
+    "cantidad": 26,
+    "fecha": "21-09-2026"
+  },
+  {
+    "usuario": "oscar.mondragon",
+    "nombre": "Oscar Mondragón Pineda",
+    "ur": "DGFCDD",
+    "nivel": "6",
+    "cantidad": 56,
+    "fecha": "21-09-2026"
+  },
+  {
+    "usuario": "americo.rios",
+    "nombre": "Lic. Rafael Américo Rios Olivares",
+    "ur": "DGDySNEM",
+    "nivel": "2",
+    "cantidad": 78,
+    "fecha": "22-09-2026"
+  },
+  {
+    "usuario": "americo.rios",
+    "nombre": "Lic. Rafael Américo Rios Olivares",
+    "ur": "DGDySNEM",
+    "nivel": "0",
+    "cantidad": 10,
+    "fecha": "22-09-2026"
+  },
+  {
+    "usuario": "oscar.mondragon",
+    "nombre": "Oscar Mondragón Pineda",
+    "ur": "DGFCDD",
+    "nivel": "6",
+    "cantidad": 61,
+    "fecha": "22-09-2026"
+  },
+  {
+    "usuario": "julio.bautista",
+    "nombre": "Julio Bautista Flores",
+    "ur": "DGME",
+    "nivel": "1",
+    "cantidad": 3,
+    "fecha": "22-09-2026"
+  },
+  {
+    "usuario": "julio.bautista",
+    "nombre": "Julio Bautista Flores",
+    "ur": "DGME",
+    "nivel": "6",
+    "cantidad": 146,
+    "fecha": "22-09-2026"
+  },
+  {
+    "usuario": "genaro.bautista",
+    "nombre": "Genaro Bautista Garcia",
+    "ur": "DGGEYET",
+    "nivel": "6",
+    "cantidad": 70,
+    "fecha": "22-09-2026"
+  },
+  {
+    "usuario": "ignacio.reyes",
+    "nombre": "Ignacio de los Reyes Mayorga",
+    "ur": "DGETAYCM",
+    "nivel": "0",
+    "cantidad": 4,
+    "fecha": "22-09-2026"
+  },
+  {
+    "usuario": "ignacio.reyes",
+    "nombre": "Ignacio de los Reyes Mayorga",
+    "ur": "DGETAYCM",
+    "nivel": "4",
+    "cantidad": 343,
+    "fecha": "22-09-2026"
+  },
+  {
+    "usuario": "ismael.brigas",
+    "nombre": "Ismael Bringas",
+    "ur": "DGTIC",
+    "nivel": "0",
+    "cantidad": 167,
+    "fecha": "22-09-2026"
+  },
+  {
+    "usuario": "gustavo.gudino",
+    "nombre": "Gustavo Gudiño López",
+    "ur": "USICAMM (JEFE DE PISO 2)",
+    "nivel": "2",
+    "cantidad": 156,
+    "fecha": "22-09-2026"
+  },
+  {
+    "usuario": "eduardo.espinosa",
+    "nombre": "Lic. Eduardo Adalberto Espinosa González",
+    "ur": "DGPPYEE",
+    "nivel": "4",
+    "cantidad": 1125,
+    "fecha": "22-09-2026"
+  },
+  {
+    "usuario": "ezequiel.badillo",
+    "nombre": "C. Ezequiel Badillo Pérez",
+    "ur": "DGCFT",
+    "nivel": "5",
+    "cantidad": 290,
+    "fecha": "22-09-2026"
+  },
+  {
+    "usuario": "americo.rios",
+    "nombre": "Lic. Rafael Américo Rios Olivares",
+    "ur": "DGDySNEM",
+    "nivel": "0",
+    "cantidad": 10,
+    "fecha": "23-09-2026"
+  },
+  {
+    "usuario": "americo.rios",
+    "nombre": "Lic. Rafael Américo Rios Olivares",
+    "ur": "DGDySNEM",
+    "nivel": "2",
+    "cantidad": 83,
+    "fecha": "23-09-2026"
+  },
+  {
+    "usuario": "ludwing.gutierrez",
+    "nombre": "Ludwing Ivan Gutierrez Romero",
+    "ur": "DGBTD",
+    "nivel": "6",
+    "cantidad": 40,
+    "fecha": "23-09-2026"
+  },
+  {
+    "usuario": "ludwing.gutierrez",
+    "nombre": "Ludwing Ivan Gutierrez Romero",
+    "ur": "DGBTD",
+    "nivel": "5",
+    "cantidad": 4,
+    "fecha": "23-09-2026"
+  },
+  {
+    "usuario": "julio.bautista",
+    "nombre": "Julio Bautista Flores",
+    "ur": "DGME",
+    "nivel": "1",
+    "cantidad": 9,
+    "fecha": "23-09-2026"
+  },
+  {
+    "usuario": "julio.bautista",
+    "nombre": "Julio Bautista Flores",
+    "ur": "DGME",
+    "nivel": "6",
+    "cantidad": 151,
+    "fecha": "23-09-2026"
+  },
+  {
+    "usuario": "gustavo.sanchez",
+    "nombre": "Gustavo Sánchez Bazán",
+    "ur": "DGETI",
+    "nivel": "0",
+    "cantidad": 2,
+    "fecha": "23-09-2026"
+  },
+  {
+    "usuario": "gustavo.sanchez",
+    "nombre": "Gustavo Sánchez Bazán",
+    "ur": "DGETI",
+    "nivel": "3",
+    "cantidad": 4,
+    "fecha": "23-09-2026"
+  },
+  {
+    "usuario": "gustavo.sanchez",
+    "nombre": "Gustavo Sánchez Bazán",
+    "ur": "DGETI",
+    "nivel": "4",
+    "cantidad": 148,
+    "fecha": "23-09-2026"
+  },
+  {
+    "usuario": "gustavo.sanchez",
+    "nombre": "Gustavo Sánchez Bazán",
+    "ur": "DGETI",
+    "nivel": "5",
+    "cantidad": 150,
+    "fecha": "23-09-2026"
+  },
+  {
+    "usuario": "gustavo.sanchez",
+    "nombre": "Gustavo Sánchez Bazán",
+    "ur": "DGETI",
+    "nivel": "6",
+    "cantidad": 30,
+    "fecha": "23-09-2026"
+  },
+  {
+    "usuario": "sonia.zermeño",
+    "nombre": "Sonia Zermeño Guzmán",
+    "ur": "TecNM",
+    "nivel": "5",
+    "cantidad": 242,
+    "fecha": "23-09-2026"
+  },
+  {
+    "usuario": "eduardo.espinosa",
+    "nombre": "Lic. Eduardo Adalberto Espinosa González",
+    "ur": "DGPPYEE",
+    "nivel": "4",
+    "cantidad": 769,
+    "fecha": "23-09-2026"
+  },
+  {
+    "usuario": "juan.paz",
+    "nombre": "Juan Ramón Paz Bond",
+    "ur": "USICAMM",
+    "nivel": "1",
+    "cantidad": 305,
+    "fecha": "23-09-2026"
+  },
+  {
+    "usuario": "juan.paz",
+    "nombre": "Juan Ramón Paz Bond",
+    "ur": "USICAMM",
+    "nivel": "2",
+    "cantidad": 33,
+    "fecha": "23-09-2026"
+  },
+  {
+    "usuario": "daniel.gonzalez",
+    "nombre": "Daniel Gonzalez Pacheco",
+    "ur": "DGDYSNEM",
+    "nivel": "2",
+    "cantidad": 600,
+    "observaciones": "pedro",
+    "fecha": "23-09-2026"
+  },
+  {
+    "usuario": "coordinador.uipc",
+    "nombre": "Administrador Coordinador Operativo",
+    "ur": "UIPC",
+    "nivel": "4",
+    "cantidad": 300,
+    "observaciones": "conteo SEMS",
+    "fecha": "23-09-2026"
+  },
+  {
+    "usuario": "daniel.gonzalez",
+    "nombre": "Daniel Gonzalez Pacheco",
+    "ur": "sems",
+    "nivel": "2",
+    "cantidad": 100,
+    "observaciones": "aclaracion",
+    "fecha": "23-09-2026"
+  },
+  {
+    "usuario": "daniel.gonzalez",
+    "nombre": "Daniel Gonzalez Pacheco",
+    "ur": "UIPC",
+    "nivel": "2",
+    "cantidad": 600,
+    "observaciones": "conteo",
+    "fecha": "23-09-2026"
+  },
+  {
+    "id": "1790195734271",
+    "usuario": "daniel.gonzalez",
+    "nombre": "Daniel Gonzalez Pacheco",
+    "ur": "DGDYSNEM",
+    "nivel": "2",
+    "cantidad": 2,
+    "observaciones": "daniel",
+    "fecha": "23-09-2026"
+  },
+  {
+    "id": "1790195743688",
+    "usuario": "daniel.gonzalez",
+    "nombre": "Daniel Gonzalez Pacheco",
+    "ur": "DGDYSNEM",
+    "nivel": "2",
+    "cantidad": 300,
+    "observaciones": "daniel",
+    "fecha": "23-09-2026"
+  },
+  {
+    "id": "1790195884434",
+    "usuario": "daniel.gonzalez",
+    "nombre": "Daniel Gonzalez Pacheco",
+    "ur": "DGDYSNEM",
+    "nivel": "2",
+    "cantidad": 100,
+    "observaciones": "luis",
+    "fecha": "23-09-2026"
+  },
+  {
+    "id": "1790271347000",
+    "usuario": "daniel.gonzalez",
+    "nombre": "Daniel Gonzalez Pacheco",
+    "ur": "DGDYSNEM",
+    "nivel": "2",
+    "cantidad": 45,
+    "observaciones": "x",
+    "fecha": "24-09-2026"
+  },
+  {
+    "id": "1790271353727",
+    "usuario": "daniel.gonzalez",
+    "nombre": "Daniel Gonzalez Pacheco",
+    "ur": "DGDYSNEM",
+    "nivel": "3",
+    "cantidad": 23,
+    "observaciones": "x",
+    "fecha": "24-09-2026"
+  },
+  {
+    "id": "1790271362290",
+    "usuario": "daniel.gonzalez",
+    "nombre": "Daniel Gonzalez Pacheco",
+    "ur": "DGDYSNEM",
+    "nivel": "4",
+    "cantidad": 3000,
+    "observaciones": "x",
+    "fecha": "24-09-2026"
+  },
+  {
+    "id": "1790271370463",
+    "usuario": "daniel.gonzalez",
+    "nombre": "Daniel Gonzalez Pacheco",
+    "ur": "DGDYSNEM",
+    "nivel": "5",
+    "cantidad": 3333,
+    "observaciones": "x",
+    "fecha": "24-09-2026"
+  },
+  {
+    "id": "1790271379466",
+    "usuario": "daniel.gonzalez",
+    "nombre": "Daniel Gonzalez Pacheco",
+    "ur": "DGDYSNEM",
+    "nivel": "6",
+    "cantidad": 34,
+    "observaciones": "ff",
+    "fecha": "24-09-2026"
+  },
+  {
+    "id": "1790271393962",
+    "usuario": "daniel.gonzalez",
+    "nombre": "Daniel Gonzalez Pacheco",
+    "ur": "DGDYSNEM",
+    "nivel": "0",
+    "cantidad": 3444,
+    "observaciones": "dgedysnem",
+    "fecha": "24-09-2026"
+  },
+  {
+    "id": "1790271403666",
+    "usuario": "daniel.gonzalez",
+    "nombre": "Daniel Gonzalez Pacheco",
+    "ur": "DGDYSNEM",
+    "nivel": "2",
+    "cantidad": 456,
+    "observaciones": "añadido",
+    "fecha": "24-09-2026"
+  }
+]

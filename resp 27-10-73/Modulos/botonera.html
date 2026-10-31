@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Botonera Institucional UIPC</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: transparent !important;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 8px 12px;
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            100% { transform: translateX(200%) rotate(45deg); }
+        }
+
+        .btn-eventos-brillo {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-eventos-brillo::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 50%;
+            height: 200%;
+            background: linear-gradient(
+                to right,
+                rgba(255, 255, 255, 0) 0%,
+                rgba(255, 255, 255, 0.5) 50%,
+                rgba(255, 255, 255, 0) 100%
+            );
+            transform: rotate(45deg);
+            animation: shine 2.5s infinite;
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-[75px]">
+
+    <nav class="w-full max-w-7xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2.5">
+
+        <!-- Botón 0: Eventos HOY (Destacado Verde) -->
+        <a href="agenda_eventos.html" target="_blank" rel="noopener noreferrer" 
+           class="btn-eventos-brillo h-[52px] bg-gradient-to-r from-[#77af9c] to-[#5e9381] hover:from-[#68a08d] hover:to-[#4e7a6b] text-white rounded-xl flex items-center justify-center gap-2 px-3 border-2 border-[#4e7a6b] shadow-md transition-all duration-200 hover:-translate-y-0.5 cursor-pointer text-decoration-none">
+            <svg class="w-5 h-5 shrink-0 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
+            </svg>
+            <span class="font-black text-xs tracking-wide text-center uppercase">Eventos HOY</span>
+        </a>
+
+        <!-- Botón 1: Ver Concentrado (Fondo Muestra #e2dece) -->
+        <a href="/Modulos/poblacion_user.html" target="_blank" rel="noopener noreferrer" 
+           style="background-color: #e2dece;"
+           class="h-[52px] hover:bg-[#d6d1c0] text-[#1f3a31] rounded-xl flex items-center justify-center gap-2 px-3 border-2 border-[#77af9c] shadow-sm transition-all duration-200 hover:-translate-y-0.5 cursor-pointer text-decoration-none">
+            <svg class="w-5 h-5 shrink-0 text-[#77af9c]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+            </svg>
+            <span class="font-extrabold text-xs tracking-wide text-center">Ver Concentrado</span>
+        </a>
+
+        <!-- Botón 2: Código de Colores (Fondo Muestra #e2dece) -->
+        <a href="/Modulos/codigo_colores.html" target="_blank" rel="noopener noreferrer" 
+           style="background-color: #e2dece;"
+           class="h-[52px] hover:bg-[#d6d1c0] text-[#1f3a31] rounded-xl flex items-center justify-center gap-2 px-3 border-2 border-[#77af9c] shadow-sm transition-all duration-200 hover:-translate-y-0.5 cursor-pointer text-decoration-none">
+            <svg class="w-5 h-5 shrink-0 text-[#77af9c]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"></path>
+            </svg>
+            <span class="font-extrabold text-xs tracking-wide text-center">Código de Colores</span>
+        </a>
+
+        <!-- Botón 3: Reglamento y Formato Salas (Fondo Muestra #e2dece) -->
+        <a href="/api/file?path=/uploads/Salas.rar" download="Salas.rar" 
+           style="background-color: #e2dece;"
+           class="h-[52px] hover:bg-[#d6d1c0] text-[#1f3a31] rounded-xl flex items-center justify-center gap-2 px-3 border-2 border-[#77af9c] shadow-sm transition-all duration-200 hover:-translate-y-0.5 cursor-pointer text-decoration-none">
+            <svg class="w-5 h-5 shrink-0 text-[#77af9c]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+            </svg>
+            <span class="font-extrabold text-xs tracking-wide text-center">Reglamento y Formato Salas</span>
+        </a>
+
+        <!-- Botón 4: Calendario Actividades (Fondo Muestra #e2dece) -->
+        <a href="/Modulos/calendario_actividades.html" target="_blank" rel="noopener noreferrer" 
+           style="background-color: #e2dece;"
+           class="h-[52px] hover:bg-[#d6d1c0] text-[#1f3a31] rounded-xl flex items-center justify-center gap-2 px-3 border-2 border-[#77af9c] shadow-sm transition-all duration-200 hover:-translate-y-0.5 cursor-pointer text-decoration-none">
+            <svg class="w-5 h-5 shrink-0 text-[#77af9c]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+            </svg>
+            <span class="font-extrabold text-xs tracking-wide text-center">Calendario Actividades</span>
+        </a>
+
+    </nav>
+
+    <script>
+        function triggerParentModal(modalId) {
+            if (window.parent && window.parent !== window) {
+                if (modalId === 'calendarModal' && typeof window.parent.openCalendarModal === 'function') {
+                    window.parent.openCalendarModal();
+                } else {
+                    const target = window.parent.document.getElementById(modalId);
+                    if (target) target.classList.remove('hidden');
+                }
+            }
+        }
+    </script>
+</body>
+</html>
