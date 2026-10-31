@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo Formato RED - UIPC</title>
+    <link rel="icon" type="image/png" href="logo_UIPC.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        body { background: transparent !important; font-family: 'Inter', sans-serif; }
+        
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: rgba(0,0,0,0.05); border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(239, 68, 68, 0.6); border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(239, 68, 68, 0.9); }
+    </style>
+</head>
+<body class="min-h-[auto] flex flex-col justify-center text-slate-800 p-2 m-0 bg-transparent">
+
+    <main class="max-w-7xl mx-auto w-full">
+        <!-- Contenedor Limpio con Borde Institucional #77af9c -->
+        <div class="bg-white text-slate-800 px-5 py-3 rounded-2xl shadow-lg border-2 border-[#77af9c] flex flex-col sm:flex-row items-center justify-between relative overflow-hidden gap-4">
+            
+            <!-- Marca de agua decorativa de fuego en rojo suave -->
+            <div class="absolute right-0 bottom-0 top-0 w-64 opacity-5 pointer-events-none flex items-center justify-end pr-6">
+                <svg class="w-full h-full text-red-600" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M17.5,11.53c-1.39-1.92-2.73-3.23-2.73-5.28c0-1.5,1.06-2.9,2.56-3.25c-2.31-2.12-6.04-1.87-8.02,0.67 c-0.89,1.14-1.31,2.56-1.31,4.01c0,1.26,0.3,2.46,0.85,3.53C6.7,13.56,5,15.65,5,18c0,3.87,3.13,7,7,7s7-3.13,7-7 C19,15.65,17.5,11.53,17.5,11.53z M12,23c-2.76,0-5-2.24-5-5c0-1.89,1.04-3.56,2.61-4.43c-0.27,0.73-0.42,1.52-0.42,2.34 c0,2.15,1.23,4.01,3.01,4.86c-0.07-0.78-0.08-1.57-0.04-2.36c0.05-1.15,0.42-2.23,1.02-3.15c1.47,1.86,2.82,3.32,2.82,5.74 C17,20.76,14.76,23,12,23z"/>
+                </svg>
+            </div>
+
+            <!-- Información Izquierda -->
+            <div class="flex items-center space-x-4 relative z-10 w-full sm:flex-1">
+                <!-- ÍCONO DE FLAMA SEGURO CON TONOS ROJOS Y AMARILLOS -->
+                <div class="w-11 h-11 bg-red-600 rounded-xl flex items-center justify-center overflow-hidden shadow-md p-2 border-2 border-red-500 flex-shrink-0">
+                    <svg class="w-full h-full text-amber-300" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M17.5,11.53c-1.39-1.92-2.73-3.23-2.73-5.28c0-1.5,1.06-2.9,2.56-3.25c-2.31-2.12-6.04-1.87-8.02,0.67 c-0.89,1.14-1.31,2.56-1.31,4.01c0,1.26,0.3,2.46,0.85,3.53C6.7,13.56,5,15.65,5,18c0,3.87,3.13,7,7,7s7-3.13,7-7 C19,15.65,17.5,11.53,17.5,11.53z M12,23c-2.76,0-5-2.24-5-5c0-1.89,1.04-3.56,2.61-4.43c-0.27,0.73-0.42,1.52-0.42,2.34 c0,2.15,1.23,4.01,3.01,4.86c-0.07-0.78-0.08-1.57-0.04-2.36c0.05-1.15,0.42-2.23,1.02-3.15c1.47,1.86,2.82,3.32,2.82,5.74 C17,20.76,14.76,23,12,23z"/>
+                    </svg>
+                </div>
+                <div>
+                    <div class="flex items-center space-x-2">
+                        <h2 class="text-xs sm:text-sm font-black text-slate-900 tracking-tight">Atención de Código Rojo</h2>
+                        <span class="px-2 py-0.5 bg-red-600 text-white rounded-full text-[9px] font-extrabold uppercase tracking-wider shadow-xs animate-pulse">FORMATO RED</span>
+                    </div>
+                    <p class="text-[10px] sm:text-[11px] text-slate-500 leading-tight mt-0.5 font-medium">
+                        Reporte de Emergencia y Diagnóstico (Incendio / Falsa Alarma).
+                    </p>
+                </div>
+            </div>
+
+            <!-- Bloque Derecho Completo: Lista de PDFs y Botón de Captura -->
+            <div class="relative z-10 w-full sm:w-[450px] flex flex-col gap-1.5 flex-shrink-0">
+                
+                <div id="lista-red" class="w-full h-[40px] bg-slate-50 border border-red-200 rounded-lg p-1 overflow-y-auto custom-scrollbar flex flex-col gap-1 shadow-inner">
+                    <span class="text-[9px] text-slate-500 text-center block mt-1.5 font-semibold">Buscando reportes RED...</span>
+                </div>
+
+                <a href="formato_RED.html" target="_blank" rel="noopener noreferrer" class="w-full bg-red-600 hover:bg-red-700 text-white font-black py-2 px-4 rounded-lg text-[10px] shadow-md transition-all flex items-center justify-center space-x-1.5 cursor-pointer border border-red-500">
+                    <svg class="w-3.5 h-3.5 text-amber-300" fill="currentColor" viewBox="0 0 24 24"><path d="M12 23c-4.97 0-9-4.03-9-9 0-3.14 1.63-6.07 4.16-7.72.39-.25.91-.18 1.21.16.31.34.33.86.06 1.23C7.14 9.4 6.5 11.13 6.5 13c0 3.03 2.47 5.5 5.5 5.5s5.5-2.47 5.5-5.5c0-1.25-.43-2.44-1.21-3.39-.28-.35-.26-.86.04-1.2.3-.34.82-.41 1.2-.16C19.9 9.87 21 11.36 21 14c0 4.97-4.03 9-9 9z"/></svg>
+                    <span class="tracking-wide uppercase font-black">Capturar Nuevo Formato RED</span>
+                </a>
+            </div>
+
+        </div>
+
+    </main>
+
+    <script>
+        async function cargarListadoRED() {
+            const listaContenedor = document.getElementById('lista-red');
+            try {
+                const response = await fetch('/api/list/red');
+                const data = await response.json();
+
+                if (data.success && data.files) {
+                    if (data.files.length > 0) {
+                        listaContenedor.innerHTML = '';
+                        data.files.reverse().forEach(file => {
+                            const link = document.createElement('a');
+                            link.href = '/api/file/red?name=' + encodeURIComponent(file.filename);
+                            link.target = '_blank';
+                            link.className = 'text-[9px] font-bold text-slate-700 hover:text-red-700 hover:bg-red-50 px-2 py-1 rounded w-full transition-colors flex items-center justify-between border border-transparent hover:border-red-200 group';
+                            link.innerHTML = `
+                                <div class="flex items-center gap-1.5 truncate">
+                                    <svg class="w-3 h-3 text-red-600 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd"></path></svg> 
+                                    <span class="truncate">${file.filename}</span>
+                                </div>
+                                <span class="text-[8px] bg-red-100 text-red-700 px-1.5 py-0.5 rounded font-bold border border-red-200 group-hover:bg-red-600 group-hover:text-white transition-colors">Abrir PDF</span>
+                            `;
+                            
+                            listaContenedor.appendChild(link);
+                        });
+                    } else {
+                        listaContenedor.innerHTML = '<span class="text-[9px] text-slate-400 text-center block mt-1.5 font-semibold">No hay formatos RED guardados.</span>';
+                    }
+                }
+            } catch (error) {
+                listaContenedor.innerHTML = '<span class="text-[9px] text-red-500 text-center block mt-1.5 font-semibold">Error de conexión.</span>';
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            cargarListadoRED();
+            setInterval(cargarListadoRED, 15000);
+        });
+    </script>
+</body>
+</html>

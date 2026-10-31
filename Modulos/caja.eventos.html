@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caja de Eventos - UIPC Admin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    
+    <!-- ======================================================= -->
+    <!-- ESTILOS CENTRALIZADOS Y VARIABLES EDITABLES             -->
+    <!-- ======================================================= -->
+    <style>
+        :root {
+            /* Colores adaptados a la paleta equilibrada */
+            --color-fondo-pagina: #f4f6f5;
+            --color-tarjeta-bg: #FFFFFF;
+            --color-primario: #77af9c;
+            --color-primario-hover: #5e9381;
+            --color-peligro: #e06d7e;
+            --color-peligro-hover: #be123c;
+            
+            /* Textos y Bordes */
+            --color-texto-principal: #1E293B;
+            --color-texto-secundario: #64748B;
+            --color-borde-caja: #77af9c;
+            
+            /* Fuentes y Espaciados */
+            background-color: var(--color-fondo-pagina);
+            --fuente-principal: 'Inter', sans-serif;
+            --radio-borde-principal: 1.5rem; /* 24px */
+        }
+
+        body {
+            font-family: var(--fuente-principal); 
+            background-color: var(--color-fondo-pagina);
+            background-image: radial-gradient(#9baec8 1px, transparent 1px);
+            background-size: 20px 20px;
+            margin: 0;
+        }
+
+        /* Clases semánticas personalizadas para fácil mantenimiento */
+        .contenedor-principal {
+            width: 100%;
+            max-width: 1100px;
+            background-color: var(--color-tarjeta-bg);
+            padding: 2rem;
+            border-radius: var(--radio-borde-principal);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
+            border: 2px solid var(--color-borde-caja);
+        }
+
+        .icono-encabezado {
+            width: 3.5rem;
+            height: 3.5rem;
+            background-color: var(--color-primario);
+            border-radius: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            flex-shrink: 0;
+        }
+
+        .campo-texto {
+            width: 100%;
+            padding: 1rem;
+            background-color: #F8FAFC;
+            border: 2px solid #9baec8;
+            border-radius: 1rem;
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--color-texto-principal);
+            outline: none;
+            resize: none;
+            transition: all 0.2s ease-in-out;
+            line-height: 1.6;
+        }
+
+        .campo-texto:focus {
+            border-color: var(--color-primario);
+            box-shadow: 0 0 0 4px rgba(119, 175, 156, 0.15);
+        }
+
+        .btn-accion-principal {
+            flex: 1;
+            background-color: var(--color-primario);
+            color: white;
+            font-weight: 800;
+            padding: 1rem;
+            font-size: 1.125rem;
+            border-radius: 1rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            transition: all 0.2s ease-in-out;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-accion-principal:hover {
+            background-color: var(--color-primario-hover);
+            transform: translateY(-1px);
+        }
+
+        .btn-accion-peligro {
+            background-color: var(--color-peligro);
+            color: white;
+            font-weight: 800;
+            padding: 1rem 1.5rem;
+            font-size: 1rem;
+            border-radius: 1rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            transition: all 0.2s ease-in-out;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-accion-peligro:hover {
+            background-color: var(--color-peligro-hover);
+            transform: translateY(-1px);
+        }
+    </style>
+</head>
+<body class="p-6 flex justify-center items-center w-full min-h-screen">
+
+    <div class="contenedor-principal">
+        
+        <!-- Encabezado -->
+        <div class="flex items-center gap-4 mb-6 border-b border-slate-200 pb-5">
+            <div class="icono-encabezado">
+                <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
+            </div>
+            <div>
+                <h1 class="text-3xl font-black text-slate-800 tracking-tight">Caja de Captura de Eventos</h1>
+                <p class="text-sm font-bold text-slate-500 mt-1">Copia y pega el texto íntegro de WhatsApp. El sistema lo publicará directo en el muro de la agenda.</p>
+            </div>
+        </div>
+
+        <!-- Formulario de Captura -->
+        <form id="formCajaEvento" onsubmit="publicarEvento(event)">
+            <label for="textoEvento" class="block text-sm font-black text-slate-400 uppercase tracking-wider mb-2">Mensaje del Evento</label>
+            
+            <textarea id="textoEvento" required rows="8" 
+                      placeholder="Ej. Explanada Principal del Centro SEP, Nivel 3&#10;Fecha: miércoles 7 de octubre...&#10;Horario: de las 12 30 a 13:00 horas..." 
+                      class="campo-texto"></textarea>
+            
+            <div id="alertaExito" class="hidden mt-4 p-4 bg-emerald-50 text-emerald-700 text-sm font-bold rounded-xl border border-emerald-200 flex items-center justify-center gap-2 transition-all">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                ¡Evento publicado correctamente en el muro de la agenda!
+            </div>
+
+            <!-- Botones de Acción -->
+            <div class="flex flex-col sm:flex-row gap-4 mt-6">
+                <button type="submit" id="btnPublicar" class="btn-accion-principal">
+                    Publicar Evento
+                </button>
+                
+                <button type="button" onclick="borrarTodosLosDatos()" class="btn-accion-peligro sm:w-auto">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                    Borrar Datos del Muro
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        async function publicarEvento(e) {
+            e.preventDefault();
+            
+            const textoInput = document.getElementById('textoEvento').value;
+            const btn = document.getElementById('btnPublicar');
+            const alerta = document.getElementById('alertaExito');
+            
+            btn.disabled = true;
+            btn.innerHTML = 'Publicando en el servidor...';
+            btn.classList.add('opacity-75');
+
+            try {
+                const response = await fetch('/api/eventos/rapido', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ contenido_whatsapp: textoInput })
+                });
+
+                if(response.ok) {
+                    document.getElementById('formCajaEvento').reset();
+                    alerta.classList.remove('hidden');
+                    
+                    setTimeout(() => {
+                        alerta.classList.add('hidden');
+                    }, 4000);
+                } else {
+                    alert("No se pudo publicar el evento.");
+                }
+            } catch (error) {
+                alert("Error de conexión con el servidor.");
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = 'Publicar Evento';
+                btn.classList.remove('opacity-75');
+            }
+        }
+
+        async function borrarTodosLosDatos() {
+            if(!confirm("⚠️ ¿Estás seguro de que deseas vaciar y borrar todos los eventos actuales del muro? Esta acción no se puede deshacer.")) {
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/eventos/borrar', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+
+                if(response.ok) {
+                    alert("🗑️ ¡El muro de eventos ha sido borrado y limpiado con éxito!");
+                } else {
+                    alert("No se pudieron borrar los datos.");
+                }
+            } catch (error) {
+                alert("Error de conexión con el servidor al intentar borrar.");
+            }
+        }
+    </script>
+</body>
+</html>

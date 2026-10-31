@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minutas Oficiales Publicadas - UIPC</title>
+    <link rel="icon" type="image/png" href="logo_UIPC.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        body { 
+            background: transparent;
+            font-family: 'Inter', sans-serif; 
+        }
+    </style>
+</head>
+<body class="h-auto flex flex-col text-slate-800 p-2 m-0">
+
+    <main class="max-w-7xl mx-auto w-full bg-white/95 backdrop-blur-md p-4 rounded-2xl shadow-xl border border-indigo-200 flex flex-col space-y-3">
+        <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+            <div class="flex items-center space-x-2.5">
+                <div class="w-9 h-9 bg-indigo-100 rounded-xl flex items-center justify-center text-indigo-700 shadow-sm border border-indigo-200">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                </div>
+                <div>
+                    <h2 class="text-sm font-extrabold text-indigo-950">Minutas Oficiales Publicadas</h2>
+                    <p class="text-[11px] text-slate-500">Registro y consulta de minutas de acuerdos de la UIPC</p>
+                </div>
+            </div>
+            <div id="elaborarBtnContainer">
+                <!-- Se mostrará solo para sujei.alonso o coordinador -->
+            </div>
+        </div>
+
+        <div class="overflow-y-auto max-h-[220px] border border-slate-200 rounded-xl relative bg-white">
+            <table class="w-full text-left text-xs border-collapse">
+                <thead>
+                    <tr class="bg-indigo-900 text-white uppercase sticky top-0 z-20 shadow-sm border-b border-indigo-800 text-[11px]">
+                        <th class="p-3 bg-indigo-900 text-white">NOMBRE DE MINUTA</th>
+                        <th class="p-3 bg-indigo-900 text-white">FECHA</th>
+                        <th class="p-3 bg-indigo-900 text-white text-center">AVISO</th>
+                        <th class="p-3 bg-indigo-900 text-white text-center">ACCIÓN</th>
+                    </tr>
+                </thead>
+                <tbody id="minutasTableBody" class="divide-y divide-slate-100 text-xs">
+                    <tr><td colspan="4" class="p-4 text-center text-slate-400">Cargando minutas oficiales...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <!-- Modal Elaborar Minuta -->
+    <div id="elaborarModal" class="fixed inset-0 bg-slate-900 bg-opacity-70 hidden flex items-center justify-center p-4 z-50">
+        <div class="bg-white w-full max-w-lg p-6 rounded-3xl shadow-2xl space-y-4 border border-indigo-100">
+            <div class="flex justify-between items-center border-b pb-3">
+                <h3 class="text-base font-extrabold text-indigo-950 flex items-center">
+                    <svg class="w-5 h-5 mr-2 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                    Elaborar y Publicar Nueva Minuta
+                </h3>
+                <button onclick="closeElaborarModal()" class="text-slate-400 hover:text-slate-700 text-2xl font-bold">&times;</button>
+            </div>
+            
+            <form onsubmit="handlePublicarMinuta(event)" class="space-y-3">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Título / Nombre de la Minuta *</label>
+                    <input type="text" id="minutaTitulo" required placeholder="Ej. MinUIPC_20260908_001.pdf" class="w-full p-2.5 rounded-xl text-xs border bg-slate-50 font-mono font-bold">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Acuerdos y Temas Tratados *</label>
+                    <textarea id="minutaContenido" required rows="4" placeholder="Describa los puntos clave de la minuta..." class="w-full p-2.5 rounded-xl text-xs border bg-slate-50 resize-none font-medium"></textarea>
+                </div>
+                <div id="minutaAlert" class="hidden p-2 rounded-xl text-xs font-semibold text-center"></div>
+                <div class="flex justify-end space-x-2 pt-2 border-t">
+                    <button type="button" onclick="closeElaborarModal()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 px-4 py-2 rounded-xl text-xs font-bold cursor-pointer">Cancelar</button>
+                    <button type="submit" id="minutaSubmitBtn" class="bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-2 rounded-xl text-xs font-extrabold shadow cursor-pointer">Publicar Minuta</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Mensajes -->
+    <div id="msgModal" class="fixed inset-0 bg-slate-900 bg-opacity-60 hidden flex items-center justify-center p-4 z-50">
+        <div class="bg-white w-full max-w-md p-6 rounded-2xl shadow-2xl space-y-4 border border-slate-200">
+            <h3 id="msgTitle" class="text-base font-bold text-indigo-900 border-b pb-2">Aviso</h3>
+            <p id="msgBody" class="text-sm text-slate-700 whitespace-pre-line leading-relaxed bg-slate-50 p-4 rounded-xl border border-slate-100 font-medium"></p>
+            <div class="flex justify-end space-x-2 pt-2">
+                <button id="msgCancelBtn" onclick="closeMsgModal()" class="hidden bg-slate-200 hover:bg-slate-300 text-slate-700 px-4 py-2 rounded-xl text-xs font-semibold cursor-pointer">Cancelar</button>
+                <button id="msgConfirmBtn" onclick="closeMsgModal()" class="bg-indigo-900 hover:bg-indigo-800 text-white px-6 py-2 rounded-xl text-xs font-semibold shadow cursor-pointer">Aceptar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentUser = null;
+        let pendingAction = null;
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const userStr = localStorage.getItem('uipc_current_user');
+            if (userStr) {
+                currentUser = JSON.parse(userStr);
+            } else {
+                currentUser = { usuario: 'invitado', nombre: 'Usuario General' };
+            }
+
+            // Privilegio exclusivo para sujei.alonso o coordinador.uipc
+            const container = document.getElementById('elaborarBtnContainer');
+            if (currentUser.usuario === 'sujei.alonso' || currentUser.usuario === 'coordinador.uipc') {
+                container.innerHTML = `
+                    <button onclick="openElaborarModal()" class="bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-blue-950 px-4 py-2 rounded-xl text-xs font-black shadow-md transition-all flex items-center space-x-1.5 cursor-pointer">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                        <span>Elaborar Minuta</span>
+                    </button>
+                `;
+            } else {
+                container.innerHTML = `<span class="text-[10px] text-slate-400 font-semibold bg-slate-100 px-3 py-1.5 rounded-lg border">Acceso de consulta</span>`;
+            }
+
+            loadMinutas();
+            setInterval(loadMinutas, 5000);
+        });
+
+        async function loadMinutas() {
+            const tbody = document.getElementById('minutasTableBody');
+            if (!tbody) return;
+            try {
+                const res = await fetch('/api/admin/files');
+                const data = await res.json();
+                if (data.success && Array.isArray(data.files)) {
+                    const minutas = data.files.filter(f => f.filename.toLowerCase().includes('min') || f.filename.toLowerCase().includes('minuta'));
+
+                    if (minutas.length === 0) {
+                        tbody.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-slate-400">No hay minutas oficiales publicadas.</td></tr>`;
+                        return;
+                    }
+
+                    const viewedKey = `uipc_viewed_minutas_${currentUser.usuario}`;
+                    let viewedIds = JSON.parse(localStorage.getItem(viewedKey) || '[]');
+                    tbody.innerHTML = '';
+
+                    minutas.forEach(f => {
+                        const isViewed = viewedIds.includes(f.filename);
+                        const badgeHtml = isViewed 
+                            ? `<span class="px-2.5 py-0.5 bg-slate-100 text-slate-600 rounded-full text-[9px] font-bold border border-slate-200 whitespace-nowrap">VISTO</span>`
+                            : `<span class="px-2.5 py-0.5 bg-gradient-to-r from-amber-500 to-red-600 text-white rounded-full text-[9px] font-extrabold shadow-sm animate-pulse whitespace-nowrap">NUEVO</span>`;
+
+                        const canDelete = currentUser.usuario === 'sujei.alonso' || currentUser.usuario === 'coordinador.uipc';
+
+                        const tr = document.createElement('tr');
+                        tr.className = "hover:bg-slate-50 transition-colors border-b border-slate-100";
+                        tr.innerHTML = `
+                            <td class="p-3 font-bold text-slate-900 font-mono">${f.filename}</td>
+                            <td class="p-3 text-[11px] text-slate-500">${f.fecha}</td>
+                            <td class="p-3 text-center">${badgeHtml}</td>
+                            <td class="p-3 text-center space-x-1">
+                                <a href="${f.path}" target="_blank" onclick="markMinutaViewed('${f.filename}')" class="bg-indigo-100 hover:bg-indigo-200 text-indigo-900 px-3 py-1 rounded-lg text-[11px] font-bold cursor-pointer inline-block">Visualizar</a>
+                                ${canDelete ? `<button onclick="deleteMinuta('${f.filename}')" class="bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 px-2.5 py-1 rounded-lg text-[11px] font-bold cursor-pointer">Eliminar</button>` : ''}
+                            </td>
+                        `;
+                        tbody.appendChild(tr);
+                    });
+                }
+            } catch (e) {
+                tbody.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-slate-400">Sin conexión con el servidor de archivos.</td></tr>`;
+            }
+        }
+
+        function markMinutaViewed(filename) {
+            const viewedKey = `uipc_viewed_minutas_${currentUser.usuario}`;
+            let viewedIds = JSON.parse(localStorage.getItem(viewedKey) || '[]');
+            if (!viewedIds.includes(filename)) {
+                viewedIds.push(filename);
+                localStorage.setItem(viewedKey, JSON.stringify(viewedIds));
+                loadMinutas();
+            }
+        }
+
+        function openElaborarModal() {
+            const hoy = new Date();
+            const yyyy = hoy.getFullYear();
+            const mm = String(hoy.getMonth() + 1).padStart(2, '0');
+            const dd = String(hoy.getDate()).padStart(2, '0');
+            document.getElementById('minutaTitulo').value = `MinUIPC_${yyyy}${mm}${dd}_001.pdf`;
+            document.getElementById('elaborarModal').classList.remove('hidden');
+        }
+
+        function closeElaborarModal() {
+            document.getElementById('elaborarModal').classList.add('hidden');
+        }
+
+        async function handlePublicarMinuta(event) {
+            event.preventDefault();
+            const titulo = document.getElementById('minutaTitulo').value.trim();
+            const contenido = document.getElementById('minutaContenido').value.trim();
+            const btn = document.getElementById('minutaSubmitBtn');
+            const alertBox = document.getElementById('minutaAlert');
+
+            btn.disabled = true; btn.innerText = "Generando PDF y Publicando...";
+
+            // Crear contenido HTML temporal para generar PDF con html2pdf
+            const tempDiv = document.createElement('div');
+            tempDiv.style.padding = '20px';
+            tempDiv.style.background = 'white';
+            tempDiv.style.fontFamily = 'Inter, sans-serif';
+            tempDiv.innerHTML = `
+                <div style="text-align: center; border-bottom: 2px solid #1e3a8a; padding-bottom: 10px; margin-bottom: 15px;">
+                    <h2 style="color: #1e3a8a; font-size: 16px; margin: 0;">Unidad Interna de Protección Civil (UIPC)</h2>
+                    <p style="color: #555; font-size: 12px; margin: 5px 0;">Minuta Oficial Publicada</p>
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <p style="font-size: 11px; color: #333;"><strong>Archivo:</strong> ${titulo}</p>
+                    <p style="font-size: 11px; color: #333;"><strong>Fecha de Publicación:</strong> ${new Date().toLocaleDateString()}</p>
+                    <p style="font-size: 11px; color: #333;"><strong>Elaborado por:</strong> ${currentUser.nombre} (${currentUser.usuario})</p>
+                </div>
+                <div style="background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0;">
+                    <h3 style="font-size: 13px; color: #1e3a8a; margin-top: 0;">Contenido y Acuerdos:</h3>
+                    <p style="font-size: 11px; color: #334155; white-space: pre-line; line-height: 1.5;">${contenido}</p>
+                </div>
+            `;
+
+            const opt = {
+                margin: 10,
+                filename: titulo.endsWith('.pdf') ? titulo : titulo + '.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2, useCORS: true },
+                jsPDF: { unit: 'mm', format: 'letter', orientation: 'portrait' }
+            };
+
+            try {
+                const pdfBlob = await html2pdf().set(opt).from(tempDiv).output('blob');
+                const file = new File([pdfBlob], opt.filename, { type: 'application/pdf' });
+                
+                const formData = new FormData();
+                formData.append('pdfFile', file);
+                formData.append('usuario', currentUser.nombre);
+                formData.append('userId', currentUser.usuario);
+                formData.append('comentarios', 'Minuta oficial publicada');
+
+                const res = await fetch('/api/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+                const result = await res.json();
+                
+                alertBox.classList.remove('hidden');
+                if (result.success) {
+                    alertBox.className = "p-2 rounded-xl text-xs font-semibold bg-emerald-100 text-emerald-800";
+                    alertBox.innerText = "✓ Minuta elaborada y publicada con éxito.";
+                    setTimeout(() => {
+                        closeElaborarModal();
+                        alertBox.classList.add('hidden');
+                        loadMinutas();
+                    }, 1500);
+                } else {
+                    alertBox.className = "p-2 rounded-xl text-xs font-semibold bg-red-100 text-red-700";
+                    alertBox.innerText = "✕ Error al publicar minuta.";
+                }
+            } catch (e) {
+                alertBox.classList.remove('hidden');
+                alertBox.className = "p-2 rounded-xl text-xs font-semibold bg-red-100 text-red-700";
+                alertBox.innerText = "✕ Error de conexión.";
+            } finally {
+                btn.disabled = false; btn.innerText = "Publicar Minuta";
+            }
+        }
+
+        async function deleteMinuta(filename) {
+            showModal("Confirmación", `¿Está seguro de eliminar la minuta '${filename}'?`, async () => {
+                try {
+                    const res = await fetch('/api/delete-file', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ filename })
+                    });
+                    if (res.ok) {
+                        loadMinutas();
+                        showModal("Éxito", "Minuta eliminada correctamente.");
+                    }
+                } catch (e) {}
+            }, true);
+        }
+
+        function showModal(title, body, callback = null, showCancel = false) {
+            document.getElementById('msgTitle').innerText = title;
+            document.getElementById('msgBody').innerText = body;
+            const confirmBtn = document.getElementById('msgConfirmBtn');
+            const cancelBtn = document.getElementById('msgCancelBtn');
+            if (cancelBtn) {
+                if (showCancel) {
+                    cancelBtn.classList.remove('hidden');
+                    confirmBtn.innerText = "Sí, Continuar";
+                } else {
+                    cancelBtn.classList.add('hidden');
+                    confirmBtn.innerText = "Aceptar";
+                }
+            }
+            pendingAction = callback;
+            document.getElementById('msgModal').classList.remove('hidden');
+        }
+
+        function closeMsgModal() {
+            document.getElementById('msgModal').classList.add('hidden');
+            if (pendingAction) {
+                pendingAction();
+                pendingAction = null;
+            }
+        }
+    </script>
+</body>
+</html>

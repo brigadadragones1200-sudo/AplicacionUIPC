@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carga de Minutas Oficiales - UIPC</title>
+    <!-- Favicon Oficial UIPC -->
+    <link rel="icon" type="image/png" href="logo_UIPC.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-image: url('fdo2uipc.jpeg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between text-slate-800">
+
+    <header class="bg-white/95 backdrop-blur-sm border-b border-slate-200 shadow-sm py-3 px-6 flex justify-between items-center sticky top-0 z-30">
+        <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center overflow-hidden shadow-sm border border-slate-200 p-1">
+                <img src="logo_UIPC.png" alt="Logo UIPC" class="w-full h-full object-contain" onerror="this.src='https://placehold.co/40x40/1e3a8a/ffffff?text=UIPC'">
+            </div>
+            <div>
+                <span class="text-xs font-bold text-slate-800">Módulo de Carga de Minutas · Área de Comunicación</span>
+                <p class="text-[10px] text-slate-500">Unidad Interna de Protección Civil</p>
+            </div>
+        </div>
+        
+        <button onclick="window.close()" class="bg-red-500 hover:bg-red-600 text-white font-bold py-1.5 px-3 rounded-xl text-xs transition-all shadow-sm cursor-pointer flex items-center space-x-1">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            <span>Cerrar</span>
+        </button>
+    </header>
+
+    <main class="flex-grow max-w-3xl w-full mx-auto px-4 pt-8 pb-12 my-auto">
+        <div class="bg-white/95 backdrop-blur-md p-8 rounded-2xl shadow-2xl border border-blue-200 space-y-6">
+            
+            <div class="flex items-center space-x-3 border-b border-slate-100 pb-4">
+                <div class="w-12 h-12 bg-blue-100 rounded-2xl flex items-center justify-center text-blue-800 shadow-inner border border-blue-200 flex-shrink-0">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+                </div>
+                <div>
+                    <h1 class="text-lg font-extrabold text-blue-950">Subir Minuta de Reunión (PDF)</h1>
+                    <p class="text-xs text-slate-500">Seleccione el archivo PDF generado en su equipo para depositarlo directamente en el servidor institucional.</p>
+                </div>
+            </div>
+
+            <form onsubmit="handleUploadMinutaServidor(event)" class="space-y-4">
+                <div class="flex flex-col space-y-2">
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider">Archivo PDF de la Minuta:</label>
+                    <div class="flex flex-col sm:flex-row items-center gap-3">
+                        <label class="w-full sm:w-auto flex items-center justify-center px-6 py-3.5 bg-blue-700 hover:bg-blue-600 text-white rounded-xl text-xs font-extrabold shadow-md cursor-pointer transition-all">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                            Examinar equipo
+                            <input type="file" id="pdfMinutaFile" accept=".pdf" required onchange="updateFileName(this)" class="hidden">
+                        </label>
+                        <span id="fileNameDisplay" class="text-xs text-slate-500 font-medium italic">Ningún archivo seleccionado</span>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Comentarios / Observaciones de la Reunión (Opcional):</label>
+                    <textarea id="minutaComentarios" rows="3" placeholder="Ej. Minuta correspondiente a la reunión de trabajo..." class="w-full p-3 rounded-xl text-xs border border-slate-200 bg-slate-50 focus:bg-white resize-none font-medium outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                </div>
+
+                <div id="uploadStatus" class="hidden p-3 rounded-xl text-xs font-bold text-center"></div>
+
+                <button type="submit" id="submitBtn" class="w-full bg-blue-900 hover:bg-blue-800 text-white font-black py-4 rounded-xl text-xs shadow-lg transition-all cursor-pointer uppercase tracking-wider">
+                    Guardar Minuta en el Servidor
+                </button>
+            </form>
+
+        </div>
+    </main>
+
+    <footer class="w-full py-3 px-6 bg-slate-900 text-white text-center text-[10px]">
+        Dirección General de Recursos Materiales y Servicios · Subdirección de Protección Civil · Área de Comunicación
+    </footer>
+
+    <script>
+        let currentUser = null;
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const userStr = localStorage.getItem('uipc_current_user') || sessionStorage.getItem('uipc_current_user');
+            if (userStr) {
+                try { currentUser = JSON.parse(userStr); } catch(e) {}
+            }
+            if (!currentUser) {
+                currentUser = { usuario: 'invitado', nombre: 'Área de Comunicación' };
+            }
+        });
+
+        function updateFileName(input) {
+            const display = document.getElementById('fileNameDisplay');
+            if (input.files && input.files.length > 0) {
+                display.innerText = input.files[0].name;
+                display.className = "text-xs text-blue-900 font-bold";
+            } else {
+                display.innerText = "Ningún archivo seleccionado";
+                display.className = "text-xs text-slate-500 font-medium italic";
+            }
+        }
+
+        async function handleUploadMinutaServidor(event) {
+            event.preventDefault();
+            const fileInput = document.getElementById('pdfMinutaFile');
+            const comentarios = document.getElementById('minutaComentarios').value.trim();
+            const btn = document.getElementById('submitBtn');
+            const statusBox = document.getElementById('uploadStatus');
+
+            if (!fileInput.files || fileInput.files.length === 0) return;
+
+            const file = fileInput.files[0];
+            const formData = new FormData();
+            formData.append('pdfFile', file);
+            formData.append('usuario', currentUser ? currentUser.nombre : 'Área de Comunicación');
+            formData.append('tipoCarpeta', 'Minutas');
+            formData.append('comentarios', comentarios || 'Minuta institucional de reunión');
+
+            btn.disabled = true;
+            btn.innerText = "Subiendo archivo al servidor...";
+            statusBox.classList.remove('hidden');
+            statusBox.className = "p-3 rounded-xl text-xs font-bold bg-blue-100 text-blue-900";
+            statusBox.innerText = "Transfiriendo archivo hacia la ruta oficial de minutas...";
+
+            try {
+                const res = await fetch('/api/upload', {
+                    method: 'POST',
+                    headers: { 'X-Target-Folder': 'Minutas' },
+                    body: formData
+                });
+
+                const result = await res.json();
+
+                if (responseOkCheck(res, result)) {
+                    statusBox.className = "p-3 rounded-xl text-xs font-bold bg-emerald-100 text-emerald-900 border border-emerald-300";
+                    statusBox.innerText = "✓ ¡Minuta guardada con éxito en el servidor! Cerrando ventana...";
+                    setTimeout(() => { window.close(); }, 2000);
+                } else {
+                    throw new Error(result.message || 'Error desconocido al guardar');
+                }
+            } catch (e) {
+                statusBox.className = "p-3 rounded-xl text-xs font-bold bg-red-100 text-red-800 border border-red-300";
+                statusBox.innerText = "✕ Error al subir el archivo: " + e.message;
+                btn.disabled = false;
+                btn.innerText = "Guardar Minuta en el Servidor";
+            }
+        }
+
+        function responseOkCheck(res, result) {
+            return res.ok && result.success;
+        }
+    </script>
+</body>
+</html>

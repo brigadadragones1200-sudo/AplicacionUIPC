@@ -1,0 +1,1506 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Súper Administración - UIPC</title>
+    <link rel="icon" type="image/png" href="logo_UIPC.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { 
+            background-image: url('fdo3uipc.jpeg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            font-family: 'Inter', sans-serif; 
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between text-slate-800">
+
+    <header class="bg-white/95 backdrop-blur-sm border-b border-slate-200 shadow-sm py-3 px-6 flex justify-between items-center sticky top-0 z-30 no-print">
+        <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center p-1 border border-slate-200 overflow-hidden shadow-sm">
+                <img src="logo_UIPC.png" alt="Logo UIPC" class="w-full h-full object-contain" onerror="this.src='https://placehold.co/40x40/1e3a8a/ffffff?text=UIPC'">
+            </div>
+            <div>
+                <span class="text-sm font-bold text-slate-800">Panel de Súper Administración UIPC</span>
+                <p class="text-xs text-slate-500">Sesión activa: coordinador.uipc</p>
+            </div>
+        </div>
+        <div class="flex items-center space-x-3">
+            <a href="dashboard.html" class="text-xs bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold py-2 px-4 rounded-lg transition-all">
+                Ir al Dashboard
+            </a>
+            <button onclick="handleLogout()" class="text-xs bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-lg transition-all cursor-pointer shadow">
+                Cerrar Sesión
+            </button>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-7xl w-full mx-auto p-4 sm:p-6 space-y-6">
+        
+        <div class="bg-white/90 backdrop-blur-md p-4 rounded-2xl shadow-xl border border-slate-200/80">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+                <a href="poblacion.html" class="bg-gradient-to-r from-teal-800 to-teal-700 hover:from-teal-700 hover:to-teal-600 text-white p-3.5 rounded-xl shadow-md flex items-center justify-center space-x-2.5 transition-all transform hover:scale-[1.02] cursor-pointer border border-teal-500/40">
+                    <svg class="w-5 h-5 text-teal-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                    <span class="font-extrabold text-xs sm:text-sm tracking-wide">Ver Concentrado</span>
+                </a>
+                <button onclick="openColorCodesModal()" class="bg-gradient-to-r from-indigo-700 to-indigo-600 hover:from-indigo-600 hover:to-indigo-500 text-white p-3.5 rounded-xl shadow-md flex items-center justify-center space-x-2.5 transition-all transform hover:scale-[1.02] cursor-pointer border border-indigo-400/40">
+                    <svg class="w-5 h-5 text-indigo-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"></path></svg>
+                    <span class="font-extrabold text-xs sm:text-sm tracking-wide">Código de Colores</span>
+                </button>
+                <a href="/uploads/Documentos/Formato%20de%20PC%20Salas%202025.xlsx" target="_blank" class="bg-gradient-to-r from-emerald-700 to-emerald-600 hover:from-emerald-600 hover:to-emerald-500 text-white p-3.5 rounded-xl shadow-md flex items-center justify-center space-x-2.5 transition-all transform hover:scale-[1.02] cursor-pointer border border-emerald-400/40">
+                    <svg class="w-5 h-5 text-emerald-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                    <span class="font-extrabold text-xs sm:text-sm tracking-wide">Reglamento Salas</span>
+                </a>
+                <button onclick="openCalendarModal()" class="bg-gradient-to-r from-amber-700 to-amber-600 hover:from-amber-600 hover:to-amber-500 text-white p-3.5 rounded-xl shadow-md flex items-center justify-center space-x-2.5 transition-all transform hover:scale-[1.02] cursor-pointer border border-amber-400/40">
+                    <svg class="w-5 h-5 text-amber-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                    <span class="font-extrabold text-xs sm:text-sm tracking-wide">Calendario 2026</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- PANEL DE MONITOREO DE POBLACIÓN -->
+            <div class="bg-teal-950/95 backdrop-blur-sm text-white p-6 rounded-2xl shadow-xl border-2 border-teal-400 flex flex-col space-y-4">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b border-teal-800 pb-3">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center overflow-hidden shadow-md p-1">
+                            <img src="logo_UIPC.png" alt="Logo UIPC" class="w-full h-full object-contain" onerror="this.src='https://placehold.co/40x40/1e3a8a/ffffff?text=UIPC'">
+                        </div>
+                        <div>
+                            <h2 class="text-sm font-extrabold text-teal-200">Conteo de Población (Hoy)</h2>
+                            <p class="text-[10px] text-teal-100">Consolidado general de personal en el edificio.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-3 flex-wrap gap-2">
+                        <div class="flex items-center space-x-1.5">
+                            <label class="text-[11px] text-teal-200 font-bold whitespace-nowrap">Filtrar Piso:</label>
+                            <select id="adminPisoFilter" onchange="loadAdminPopulation()" class="p-1.5 rounded text-xs bg-teal-900 border border-teal-700 text-white font-bold">
+                                <option value="todos">Todos los Pisos</option>
+                                <option value="0">Nivel 0</option>
+                                <option value="1">Nivel 1</option>
+                                <option value="2">Nivel 2</option>
+                                <option value="3">Nivel 3</option>
+                                <option value="4">Nivel 4</option>
+                                <option value="5">Nivel 5</option>
+                                <option value="6">Nivel 6</option>
+                            </select>
+                        </div>
+                        <span id="adminCensusDate" class="text-[10px] font-mono font-bold text-teal-900 bg-teal-200 px-2 py-1 rounded-full"></span>
+                    </div>
+                </div>
+                <div class="overflow-y-auto max-h-[250px] border border-teal-800 rounded-xl relative bg-white text-slate-800 flex-grow">
+                    <table class="w-full text-left text-xs border-collapse">
+                        <thead>
+                            <tr class="bg-teal-800 text-white uppercase sticky top-0 z-20 shadow-sm border-b border-teal-700">
+                                <th class="p-2 bg-teal-800 text-white">UR</th>
+                                <th class="p-2 bg-teal-800 text-white">NOMBRE</th>
+                                <th class="p-2 bg-teal-800 text-white text-center">NIVEL</th>
+                                <th class="p-2 bg-teal-800 text-white text-center">CANTIDAD</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminPobTableBody" class="divide-y divide-slate-100">
+                            <tr><td colspan="4" class="p-6 text-center text-slate-400">Cargando conteo de población...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="bg-teal-900 p-4 rounded-xl border border-teal-700 flex justify-between items-center">
+                    <span class="text-xs font-extrabold uppercase text-teal-200">Gran Total en el Edificio (En Vivo):</span>
+                    <span id="adminGrandTotalPob" class="text-base font-black text-teal-950 bg-teal-200 px-3 py-1 rounded-lg shadow-xs">0</span>
+                </div>
+            </div>
+
+            <!-- PANEL DE MONITOREO DE CONEXIONES -->
+            <div class="bg-white/95 backdrop-blur-sm p-6 rounded-2xl shadow-xl border border-slate-200 flex flex-col space-y-4">
+                <div class="flex justify-between items-center border-b pb-3">
+                    <h3 class="font-bold text-sm text-slate-800 flex items-center">
+                        <svg class="w-5 h-5 text-emerald-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                        Conexiones de Usuarios (Tiempo Real)
+                    </h3>
+                    <span id="onlineCountBadge" class="text-[10px] bg-emerald-100 text-emerald-800 font-bold px-2 py-1 rounded-full">Actualizando...</span>
+                </div>
+                <div class="overflow-y-auto max-h-[300px] border border-slate-100 rounded-xl relative flex-grow">
+                    <table class="w-full text-left text-xs border-collapse">
+                        <thead>
+                            <tr class="bg-blue-900 text-white uppercase sticky top-0 z-20 shadow-sm border-b border-blue-800">
+                                <th class="p-2 bg-blue-900 text-white">USUARIO</th>
+                                <th class="p-2 bg-blue-900 text-white">NOMBRE / UR</th>
+                                <th class="p-2 bg-blue-900 text-white text-center">ESTADO</th>
+                                <th class="p-2 bg-blue-900 text-white text-center">ÚLTIMA ACT.</th>
+                            </tr>
+                        </thead>
+                        <tbody id="onlineUsersTableBody" class="divide-y divide-slate-100">
+                            <tr><td colspan="4" class="p-6 text-center text-slate-400">Cargando estado de conexiones...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-blue-950/90 backdrop-blur-sm text-white p-6 rounded-2xl shadow-xl border border-blue-800 space-y-6">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-2 pb-4 border-b border-blue-900">
+                <div class="flex items-center space-x-3">
+                    <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center overflow-hidden shadow-md border-2 border-amber-400 flex-shrink-0">
+                        <img src="icono_primeros_auxilios.png" alt="Primeros Auxilios" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/48x48/1e3a8a/ffffff?text=PA'">
+                    </div>
+                    <div>
+                        <h2 class="text-lg font-bold">Módulo de Captura del Calendario Institucional UIPC</h2>
+                        <p class="text-xs text-teal-200">Gestión independiente: Actividades (Azul) y Cursos Admin (Verde Agua).</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <span class="text-[11px] bg-emerald-500 text-white font-semibold px-3 py-1.5 rounded-full flex items-center shadow-xs">
+                        <span class="w-2 h-2 bg-white rounded-full animate-ping mr-1.5"></span> Sincronizado en vivo
+                    </span>
+                    <button onclick="openCalendarModal()" class="bg-amber-600 hover:bg-amber-700 text-white text-xs font-extrabold py-2 px-4 rounded-xl shadow-md flex items-center space-x-2 transition-all cursor-pointer">
+                        <svg class="w-4 h-4 text-yellow-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                        <span>Ver Calendario</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- SECCIÓN 1: ACTIVIDADES UIPC -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 bg-blue-900/40 p-4 rounded-xl border border-blue-800/60">
+                <div class="bg-white/95 backdrop-blur-sm text-slate-800 p-5 rounded-xl shadow-md border border-slate-200 space-y-4">
+                    <h3 class="text-sm font-bold text-slate-900 border-b pb-2 flex items-center text-blue-900">
+                        <svg class="w-5 h-5 mr-2 text-blue-900" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                        1. Registrar Actividad UIPC (Bandera Azul)
+                    </h3>
+                    <form onsubmit="handleRegisterActivity(event, false)" class="space-y-3">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 mb-1">Título de la Actividad *</label>
+                            <input type="text" id="actTitulo" required placeholder="Ej. Reunión General UIPC" class="w-full p-2 border rounded-lg text-xs text-slate-800">
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div><label class="block text-xs font-semibold text-slate-600 mb-1">Fecha Inicio *</label><input type="date" id="actFecha" required class="w-full p-2 border rounded-lg text-xs text-slate-800"></div>
+                            <div><label class="block text-xs font-semibold text-slate-600 mb-1">Fecha Fin (Opcional)</label><input type="date" id="actFechaFin" class="w-full p-2 border rounded-lg text-xs text-slate-800"></div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div><label class="block text-xs font-semibold text-slate-600 mb-1">Horario / Duración</label><input type="text" id="actHora" placeholder="Ej. 10" onblur="formatTrainHora(this)" class="w-full p-2 border rounded-lg text-xs text-slate-800"></div>
+                            <div><label class="block text-xs font-semibold text-slate-600 mb-1">Sede *</label><input type="text" id="actSede" required placeholder="Ej. Sala Audiovisual" class="w-full p-2 border rounded-lg text-xs text-slate-800"></div>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 mb-1">Modalidad *</label>
+                            <select id="actModalidad" class="w-full p-2 border rounded-lg text-xs text-slate-800 bg-white"><option value="Presencial">Presencial</option><option value="En línea">En línea</option></select>
+                        </div>
+                        <div><label class="block text-xs font-semibold text-slate-600 mb-1">Descripción u Observaciones</label><textarea id="actDesc" rows="2" placeholder="Detalles..." class="w-full p-2 border rounded-lg text-xs text-slate-800"></textarea></div>
+                        <div id="actAlert" class="hidden p-2 rounded-lg text-xs font-semibold"></div>
+                        <button type="submit" id="actSubmitBtn" class="w-full bg-blue-900 hover:bg-blue-800 text-white font-extrabold py-2 rounded-lg text-xs shadow-md transition-all cursor-pointer">Guardar Actividad UIPC</button>
+                    </form>
+                </div>
+                <div class="bg-white/95 backdrop-blur-sm text-slate-800 p-5 rounded-xl shadow-md border border-slate-200 space-y-4 flex flex-col">
+                    <div class="flex justify-between items-center border-b pb-2">
+                        <h3 class="text-sm font-bold text-slate-900 flex items-center">
+                            <svg class="w-5 h-5 mr-2 text-blue-900" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
+                            Listado de Actividades (Bandera Azul)
+                        </h3>
+                    </div>
+                    <div class="overflow-y-auto max-h-[360px] flex-grow">
+                        <table class="w-full text-left text-xs">
+                            <thead class="bg-blue-900 text-white uppercase sticky top-0 z-20 shadow-sm">
+                                <tr>
+                                    <th class="p-2 w-1/3 bg-blue-900">Fecha / Sede</th><th class="p-2 w-1/3 bg-blue-900">Evento</th><th class="p-2 text-center w-1/6 bg-blue-900">Aviso</th><th class="p-2 text-center w-1/6 bg-blue-900">Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody id="activitiesTableBody" class="divide-y divide-slate-100"><tr><td colspan="4" class="p-3 text-center text-slate-400">Cargando actividades...</td></tr></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECCIÓN 2: CURSOS UIPC -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 bg-teal-950/40 p-4 rounded-xl border border-teal-800/60">
+                <div class="bg-white/95 backdrop-blur-sm text-slate-800 p-5 rounded-xl shadow-md border border-slate-200 space-y-4">
+                    <h3 class="text-sm font-bold text-slate-900 border-b pb-2 flex items-center text-teal-800">
+                        <svg class="w-5 h-5 mr-2 text-teal-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                        2. Registrar Curso UIPC (Verde Agua)
+                    </h3>
+                    <form onsubmit="handleRegisterActivity(event, true)" class="space-y-3">
+                        <div><label class="block text-xs font-semibold text-slate-600 mb-1">Título del Curso *</label><input type="text" id="courseTitulo" required placeholder="Ej. Curso Especial PC" class="w-full p-2 border rounded-lg text-xs text-slate-800"></div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div><label class="block text-xs font-semibold text-slate-600 mb-1">Fecha Inicio *</label><input type="date" id="courseFecha" required class="w-full p-2 border rounded-lg text-xs text-slate-800"></div>
+                            <div><label class="block text-xs font-semibold text-slate-600 mb-1">Fecha Fin (Opcional)</label><input type="date" id="courseFechaFin" class="w-full p-2 border rounded-lg text-xs text-slate-800"></div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div><label class="block text-xs font-semibold text-slate-600 mb-1">Horario / Duración</label><input type="text" id="courseHora" placeholder="Ej. 11" onblur="formatTrainHora(this)" class="w-full p-2 border rounded-lg text-xs text-slate-800"></div>
+                            <div><label class="block text-xs font-semibold text-slate-600 mb-1">Sede *</label><input type="text" id="courseSede" required placeholder="Ej. Sala 2" class="w-full p-2 border rounded-lg text-xs text-slate-800"></div>
+                        </div>
+                        <div><label class="block text-xs font-semibold text-slate-600 mb-1">Modalidad *</label><select id="courseModalidad" class="w-full p-2 border rounded-lg text-xs text-slate-800 bg-white"><option value="Presencial">Presencial</option><option value="En línea">En línea</option></select></div>
+                        <div><label class="block text-xs font-semibold text-slate-600 mb-1">Descripción u Observaciones</label><textarea id="courseDesc" rows="2" placeholder="Detalles..." class="w-full p-2 border rounded-lg text-xs text-slate-800"></textarea></div>
+                        <div id="courseAlert" class="hidden p-2 rounded-lg text-xs font-semibold"></div>
+                        <button type="submit" id="courseSubmitBtn" class="w-full bg-teal-700 hover:bg-teal-800 text-white font-extrabold py-2 rounded-lg text-xs shadow-md transition-all cursor-pointer">Guardar Curso UIPC</button>
+                    </form>
+                </div>
+                <div class="bg-white/95 backdrop-blur-sm text-slate-800 p-5 rounded-xl shadow-md border border-slate-200 space-y-4 flex flex-col">
+                    <div class="flex justify-between items-center border-b pb-2">
+                        <h3 class="text-sm font-bold text-slate-900 flex items-center">
+                            <svg class="w-5 h-5 mr-2 text-teal-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
+                            Listado de Cursos UIPC (Verde Agua)
+                        </h3>
+                    </div>
+                    <div class="overflow-y-auto max-h-[360px] flex-grow">
+                        <table class="w-full text-left text-xs">
+                            <thead class="bg-teal-800 text-white uppercase sticky top-0 z-20 shadow-sm">
+                                <tr>
+                                    <th class="p-2 w-1/3 bg-teal-800">Fecha / Sede</th><th class="p-2 w-1/3 bg-teal-800">Curso</th><th class="p-2 text-center w-1/6 bg-teal-800">Aviso</th><th class="p-2 text-center w-1/6 bg-teal-800">Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody id="coursesTableBody" class="divide-y divide-slate-100"><tr><td colspan="4" class="p-3 text-center text-slate-400">Cargando cursos...</td></tr></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div class="bg-gradient-to-br from-red-900 via-blue-950 to-slate-900 text-white rounded-2xl shadow-xl border border-red-500/30 p-6 flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center space-x-3 mb-3">
+                        <div class="w-14 h-14 bg-white rounded-full flex items-center justify-center overflow-hidden shadow-md border-2 border-amber-400 flex-shrink-0">
+                            <img src="icono_primeros_auxilios.png" alt="Primeros Auxilios" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/56x56/1e3a8a/ffffff?text=PA'">
+                        </div>
+                        <div>
+                            <h3 class="font-extrabold text-base tracking-wide text-amber-300">Atención Prehospitalaria</h3>
+                            <span class="text-[10px] bg-red-800/80 text-red-200 px-2 py-0.5 rounded-full font-semibold">Módulo FRAPC</span>
+                        </div>
+                    </div>
+                    <p class="text-xs text-slate-200 mb-5 leading-relaxed text-justify">
+                        Capture y registre de forma digital la atención de primer contacto, signos vitales y traslados de emergencia en el formato oficial FRAPC de la UIPC.
+                    </p>
+                </div>
+                <a href="frapc.html" class="w-full bg-amber-500 hover:bg-amber-400 text-blue-950 font-extrabold py-3 rounded-xl text-xs transition-all shadow-lg flex items-center justify-center space-x-2 cursor-pointer transform hover:scale-[1.02]">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                    <span>Capturar FRAPC</span>
+                </a>
+            </div>
+
+            <div class="lg:col-span-2 bg-white/95 backdrop-blur-sm p-6 rounded-2xl shadow-md border border-slate-200 flex flex-col justify-between space-y-4">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b pb-3">
+                    <h2 class="text-base font-bold text-slate-900 flex items-center">
+                        <svg class="w-5 h-5 mr-2 text-blue-900" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                        Formatos FRAPC Registrados en el Servidor
+                    </h2>
+                    <span class="text-xs bg-red-100 text-red-700 font-bold px-3 py-1 rounded-full">Atención Prehospitalaria</span>
+                </div>
+                <div class="overflow-y-auto max-h-[220px] border border-slate-100 rounded-xl">
+                    <table class="w-full text-left text-xs">
+                        <thead class="bg-blue-900 text-white uppercase sticky top-0 z-20 shadow-sm">
+                            <tr>
+                                <th class="p-3 font-semibold bg-blue-900 text-center">NOMBRE DEL ARCHIVO FRAPC</th>
+                                <th class="p-3 font-semibold bg-blue-900 text-center">FECHA Y HORA</th>
+                                <th class="p-3 font-semibold bg-blue-900 text-center">AVISO</th>
+                                <th class="p-3 font-semibold bg-blue-900 text-center">ACCIÓN</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminFrapcTableBody" class="divide-y divide-slate-100">
+                            <tr><td colspan="4" class="p-6 text-center text-slate-400">Cargando formatos FRAPC...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white/95 backdrop-blur-sm p-6 rounded-xl shadow-md border border-slate-200 space-y-4">
+            <div class="flex justify-between items-center border-b pb-2">
+                <h2 class="text-lg font-bold text-slate-900 flex items-center">
+                    <svg class="w-5 h-5 mr-2 text-blue-900" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path></svg>
+                    Minutas Oficiales Publicadas
+                </h2>
+                <a href="minuta.html" class="bg-amber-600 hover:bg-amber-700 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition-all shadow-sm">
+                    ✍️ Elaborar Minuta
+                </a>
+            </div>
+            <div class="overflow-y-auto max-h-[220px]">
+                <table class="w-full text-left text-xs">
+                    <thead class="bg-blue-900 text-white uppercase sticky top-0 z-20 shadow-sm">
+                        <tr>
+                            <th class="p-2 w-1/3 bg-blue-900">Nombre de Minuta</th><th class="p-2 w-1/4 bg-blue-900">Fecha</th><th class="p-2 text-center w-1/4 bg-blue-900">Aviso</th><th class="p-2 text-center w-1/4 bg-blue-900">Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody id="adminMinutasTableBody" class="divide-y divide-slate-100"><tr><td colspan="4" class="p-3 text-center text-slate-400">Cargando minutas...</td></tr></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div class="bg-white/95 backdrop-blur-sm p-6 rounded-xl shadow-md border border-slate-200 space-y-4">
+                <h2 class="text-lg font-bold text-slate-900 border-b pb-2 flex items-center">
+                    <svg class="w-5 h-5 mr-2 text-blue-900" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path></svg>
+                    Dar de Alta Nuevo Usuario
+                </h2>
+                <form onsubmit="handleRegisterUser(event)" class="space-y-3">
+                    <div class="grid grid-cols-2 gap-3">
+                        <div><label class="block text-xs font-semibold text-slate-600 mb-1">Usuario (ID) *</label><input type="text" id="regUsuario" required placeholder="ej. juan.perez" class="w-full p-2 border rounded-lg text-xs"></div>
+                        <div><label class="block text-xs font-semibold text-slate-600 mb-1">Contraseña *</label><input type="text" id="regPassword" required placeholder="Contraseña" class="w-full p-2 border rounded-lg text-xs font-mono"></div>
+                    </div>
+                    <div><label class="block text-xs font-semibold text-slate-600 mb-1">Nombre Completo *</label><input type="text" id="regNombre" required placeholder="Ej. Juan Pérez Gómez" class="w-full p-2 border rounded-lg text-xs"></div>
+                    <div><label class="block text-xs font-semibold text-slate-600 mb-1">Correo Electrónico *</label><input type="email" id="regCorreo" required placeholder="Ej. juan.perez@sep.gob.mx" class="w-full p-2 border rounded-lg text-xs"></div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div><label class="block text-xs font-semibold text-slate-600 mb-1">UR</label><input type="text" id="regUr" placeholder="Ej. DGAIR" class="w-full p-2 border rounded-lg text-xs"></div>
+                        <div><label class="block text-xs font-semibold text-slate-600 mb-1">Cargo</label><input type="text" id="regCargo" placeholder="Ej. Jefe de Piso" class="w-full p-2 border rounded-lg text-xs"></div>
+                    </div>
+                    <div class="grid grid-cols-3 gap-2">
+                        <div><label class="block text-xs font-semibold text-slate-600 mb-1">Suplente</label><input type="text" id="regSuplente" placeholder="Nombre" class="w-full p-2 border rounded-lg text-xs"></div>
+                        <div><label class="block text-xs font-semibold text-slate-600 mb-1">Ubicación</label><input type="text" id="regUbicacion" placeholder="Sector" class="w-full p-2 border rounded-lg text-xs"></div>
+                        <div><label class="block text-xs font-semibold text-slate-600 mb-1">Extensión</label><input type="text" id="regExtension" placeholder="62015" class="w-full p-2 border rounded-lg text-xs"></div>
+                    </div>
+                    <div id="statusAlert" class="hidden p-2 rounded-lg text-xs font-semibold"></div>
+                    <button type="submit" id="submitBtn" class="w-full bg-blue-900 hover:bg-blue-800 text-white font-medium py-2.5 rounded-lg text-xs shadow cursor-pointer">Registrar Usuario</button>
+                </form>
+            </div>
+
+            <div class="bg-white/95 backdrop-blur-sm p-6 rounded-xl shadow-md border border-slate-200 space-y-4">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b pb-2">
+                    <h2 class="text-lg font-bold text-slate-900 flex items-center">
+                        <svg class="w-5 h-5 mr-2 text-blue-900" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                        Usuarios Registrados
+                    </h2>
+                    <div class="flex items-center space-x-2 w-full sm:w-auto">
+                        <div class="relative w-full sm:w-60 flex">
+                            <input type="text" id="searchUsersInput" oninput="filterRegisteredUsers()" placeholder="Buscar usuario o nombre..." class="w-full p-2 pl-3 pr-9 text-xs border rounded-l-lg bg-slate-50 focus:bg-white transition-all">
+                            <button class="bg-blue-900 text-white px-3 rounded-r-lg flex items-center justify-center cursor-default">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="overflow-y-auto max-h-[350px]">
+                    <table class="w-full text-left text-xs">
+                        <thead class="bg-blue-900 text-white uppercase sticky top-0 z-20 shadow-sm">
+                            <tr>
+                                <th class="p-2 bg-blue-900">Usuario</th><th class="p-2 bg-blue-900">Nombre</th><th class="p-2 bg-blue-900">Cargo</th><th class="p-2 text-center bg-blue-900">Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody id="usersTableBody" class="divide-y divide-slate-100"><tr><td colspan="4" class="p-3 text-center text-slate-400">Cargando usuarios...</td></tr></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white/95 backdrop-blur-sm p-6 rounded-xl shadow-md border border-slate-200 space-y-4">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b pb-3">
+                <h2 class="text-lg font-bold text-slate-900 flex items-center">
+                    <svg class="w-5 h-5 mr-2 text-blue-900" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                    Historial de Archivos Subidos por Usuarios en el Servidor
+                </h2>
+                <div class="w-full sm:w-auto">
+                    <input type="text" id="searchAdminFilesInput" oninput="filterAdminFiles()" placeholder="Buscar por usuario o archivo..." class="w-full sm:w-64 p-2 text-xs border rounded-lg bg-slate-50 focus:bg-white transition-all">
+                </div>
+            </div>
+            <div class="overflow-y-auto max-h-[350px] border border-slate-100 rounded-xl">
+                <table class="w-full text-left text-xs">
+                    <thead class="bg-blue-900 text-white uppercase sticky top-0 z-20 shadow-sm">
+                        <tr>
+                            <th class="p-3 font-semibold bg-blue-900 text-center">USUARIO / CARPETA</th>
+                            <th class="p-3 font-semibold bg-blue-900 text-center">NOMBRE DEL ARCHIVO</th>
+                            <th class="p-3 font-semibold bg-blue-900 text-center">FECHA Y HORA</th>
+                            <th class="p-3 font-semibold bg-blue-900 text-center">AVISO</th>
+                            <th class="p-3 font-semibold bg-blue-900">ACCIÓN</th>
+                        </tr>
+                    </thead>
+                    <tbody id="adminFilesTableBody" class="divide-y divide-slate-100">
+                        <tr><td colspan="5" class="p-6 text-center text-slate-400">Cargando archivos del servidor...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="bg-white/95 backdrop-blur-sm p-6 rounded-xl shadow-md border border-slate-200 space-y-4">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b pb-2">
+                <h2 class="text-lg font-bold text-slate-900 flex items-center">
+                    <svg class="w-5 h-5 mr-2 text-blue-900" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                    Directorio de la Estructura Operativa de la UIPC
+                </h2>
+                <div class="w-full sm:w-auto">
+                    <input type="text" id="adminDirSearch" oninput="filterAdminDirectory()" placeholder="Buscar por nombre, cargo o UR..." class="w-full sm:w-64 p-2 text-xs border rounded-lg bg-slate-50 focus:bg-white transition-all">
+                </div>
+            </div>
+            <div class="overflow-y-auto max-h-[300px] border border-slate-100 rounded-xl">
+                <table class="w-full text-left text-xs">
+                    <thead class="bg-blue-900 text-white uppercase sticky top-0 z-20 shadow-sm">
+                        <tr>
+                            <th class="p-3 font-semibold bg-blue-900">UR / NOMBRE</th>
+                            <th class="p-3 font-semibold bg-blue-900">CARGO / SUPLENTE</th>
+                            <th class="p-3 font-semibold bg-blue-900">UBICACIÓN / EXT.</th>
+                            <th class="p-3 font-semibold text-center bg-blue-900">ACCIÓN</th>
+                        </tr>
+                    </thead>
+                    <tbody id="adminDirectoryTableBody" class="divide-y divide-slate-100">
+                        <tr><td colspan="4" class="p-6 text-center text-slate-400">Cargando directorio...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Modal Detalle Directorio -->
+    <div id="userModal" class="fixed inset-0 bg-slate-900 bg-opacity-60 hidden flex items-center justify-center p-4 z-50">
+        <div class="bg-white w-full max-w-lg p-6 rounded-2xl shadow-2xl border border-slate-200 space-y-4">
+            <div class="flex justify-between items-center border-b pb-3">
+                <h3 class="text-base font-bold text-blue-900 flex items-center">
+                    <svg class="w-5 h-5 mr-2 text-blue-900" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                    Detalle del Integrante UIPC
+                </h3>
+                <button onclick="closeUserModal()" class="text-slate-400 hover:text-slate-600 font-bold text-2xl cursor-pointer">&times;</button>
+            </div>
+            <div id="userModalContent" class="space-y-3 text-xs bg-slate-50 p-4 rounded-xl border border-slate-100"></div>
+            <div class="flex justify-end pt-2">
+                <button onclick="closeUserModal()" class="bg-blue-900 hover:bg-blue-800 text-white px-5 py-2 rounded-xl text-xs font-semibold shadow cursor-pointer">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Editar Usuario -->
+    <div id="editUserModal" class="fixed inset-0 bg-slate-900 bg-opacity-60 hidden flex items-center justify-center p-4 z-50">
+        <div class="bg-white w-full max-w-lg rounded-2xl shadow-2xl flex flex-col overflow-hidden">
+            <div class="bg-blue-900 text-white p-4 flex justify-between items-center">
+                <h3 class="text-base font-bold">Editar Información de Usuario</h3>
+                <button onclick="closeEditUserModal()" class="text-white hover:text-red-300 font-bold text-2xl cursor-pointer">&times;</button>
+            </div>
+            <form onsubmit="handleUpdateUser(event)" class="p-6 space-y-3 overflow-y-auto max-h-[80vh]">
+                <input type="hidden" id="editOriginalUsuario">
+                <div class="grid grid-cols-2 gap-3">
+                    <div><label class="block text-xs font-semibold text-slate-600 mb-1">Usuario (ID)</label><input type="text" id="editUsuario" required class="w-full p-2 border rounded-lg text-xs bg-slate-100 font-mono font-bold" readonly></div>
+                    <div><label class="block text-xs font-semibold text-slate-600 mb-1">Contraseña</label><input type="text" id="editPassword" required class="w-full p-2 border rounded-lg text-xs font-mono font-bold"></div>
+                </div>
+                <div><label class="block text-xs font-semibold text-slate-600 mb-1">Nombre Completo *</label><input type="text" id="editNombre" required class="w-full p-2 border rounded-lg text-xs"></div>
+                <div><label class="block text-xs font-semibold text-slate-600 mb-1">Correo Electrónico *</label><input type="email" id="editCorreo" required class="w-full p-2 border rounded-lg text-xs"></div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div><label class="block text-xs font-semibold text-slate-600 mb-1">UR</label><input type="text" id="editUr" class="w-full p-2 border rounded-lg text-xs"></div>
+                    <div><label class="block text-xs font-semibold text-slate-600 mb-1">Cargo</label><input type="text" id="editCargo" class="w-full p-2 border rounded-lg text-xs"></div>
+                </div>
+                <div class="grid grid-cols-3 gap-2">
+                    <div><label class="block text-xs font-semibold text-slate-600 mb-1">Suplente</label><input type="text" id="editSuplente" class="w-full p-2 border rounded-lg text-xs"></div>
+                    <div><label class="block text-xs font-semibold text-slate-600 mb-1">Ubicación</label><input type="text" id="editUbicacion" class="w-full p-2 border rounded-lg text-xs"></div>
+                    <div><label class="block text-xs font-semibold text-slate-600 mb-1">Extensión</label><input type="text" id="editExtension" class="w-full p-2 border rounded-lg text-xs"></div>
+                </div>
+                <div id="editStatusAlert" class="hidden p-2 rounded-lg text-xs font-semibold"></div>
+                <div class="flex justify-between items-center pt-2">
+                    <button type="button" id="modalDeleteBtn" class="bg-red-100 hover:bg-red-200 text-red-700 py-2 px-4 rounded-lg text-xs font-bold cursor-pointer">Eliminar Usuario</button>
+                    <div class="flex space-x-2">
+                        <button type="button" onclick="closeEditUserModal()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 py-2 px-4 rounded-lg text-xs font-semibold cursor-pointer">Cancelar</button>
+                        <button type="submit" id="editSubmitBtn" class="bg-blue-900 hover:bg-blue-800 text-white py-2 px-6 rounded-lg text-xs font-semibold shadow cursor-pointer">Guardar Cambios</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Editar Actividad / Curso -->
+    <div id="editActivityModal" class="fixed inset-0 bg-slate-900 bg-opacity-60 hidden flex items-center justify-center p-4 z-50">
+        <div class="bg-white w-full max-w-lg rounded-2xl shadow-2xl flex flex-col overflow-hidden">
+            <div class="bg-blue-900 text-white p-4 flex justify-between items-center">
+                <h3 class="text-base font-bold">Editar Evento del Calendario</h3>
+                <button onclick="closeEditActivityModal()" class="text-white hover:text-red-300 font-bold text-2xl cursor-pointer">&times;</button>
+            </div>
+            <form onsubmit="handleUpdateActivity(event)" class="p-6 space-y-3">
+                <input type="hidden" id="editActId">
+                <div><label class="block text-xs font-semibold text-slate-600 mb-1">Título *</label><input type="text" id="editActTitulo" required class="w-full p-2.5 border rounded-lg text-xs"></div>
+                <div class="grid grid-cols-2 gap-2">
+                    <div><label class="block text-xs font-semibold text-slate-600 mb-1">Fecha Inicio *</label><input type="date" id="editActFecha" required class="w-full p-2.5 border rounded-lg text-xs"></div>
+                    <div><label class="block text-xs font-semibold text-slate-600 mb-1">Fecha Fin (Opcional)</label><input type="date" id="editActFechaFin" class="w-full p-2.5 border rounded-lg text-xs"></div>
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                    <div><label class="block text-xs font-semibold text-slate-600 mb-1">Horario / Duración</label><input type="text" id="editActHora" onblur="formatTrainHora(this)" class="w-full p-2.5 border rounded-lg text-xs"></div>
+                    <div><label class="block text-xs font-semibold text-slate-600 mb-1">Sede *</label><input type="text" id="editActSede" required class="w-full p-2.5 border rounded-lg text-xs"></div>
+                </div>
+                <div><label class="block text-xs font-semibold text-slate-600 mb-1">Modalidad *</label><select id="editActModalidad" class="w-full p-2.5 border rounded-lg text-xs"><option value="Presencial">Presencial</option><option value="En línea">En línea</option></select></div>
+                <div><label class="block text-xs font-semibold text-slate-600 mb-1">Descripción u Observaciones</label><textarea id="editActDesc" rows="3" class="w-full p-2.5 border rounded-lg text-xs"></textarea></div>
+                <div class="flex justify-end space-x-2 pt-2">
+                    <button type="button" onclick="closeEditActivityModal()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 py-2 px-4 rounded-lg text-xs font-semibold cursor-pointer">Cancelar</button>
+                    <button type="submit" id="editActSubmitBtn" class="bg-blue-900 hover:bg-blue-800 text-white py-2 px-6 rounded-lg text-xs font-semibold shadow cursor-pointer">Guardar Cambios</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Calendario Visual -->
+    <div id="calendarModal" class="fixed inset-0 bg-slate-900 bg-opacity-60 hidden flex items-center justify-center p-2 sm:p-4 z-50">
+        <div class="bg-white w-full max-w-5xl h-[90vh] rounded-2xl shadow-2xl flex flex-col overflow-hidden">
+            <div class="bg-blue-900 text-white p-4 flex justify-between items-center">
+                <div class="flex items-center space-x-2">
+                    <svg class="w-6 h-6 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                    <h3 class="text-base font-bold">Calendario de Actividades UIPC 2026</h3>
+                </div>
+                <button onclick="closeCalendarModal()" class="text-white hover:text-red-300 font-bold text-2xl cursor-pointer">&times;</button>
+            </div>
+            <div class="bg-slate-100 border-b border-slate-200 px-6 py-3 flex justify-between items-center">
+                <button onclick="changeMonth(-1)" class="p-2 bg-white hover:bg-slate-200 border rounded-lg text-slate-700 font-bold shadow-sm text-sm cursor-pointer">&larr; Anterior</button>
+                <h2 id="calendarMonthTitle" class="text-lg font-extrabold text-blue-900 uppercase tracking-wide">Cargando mes...</h2>
+                <button onclick="changeMonth(1)" class="p-2 bg-white hover:bg-slate-200 border rounded-lg text-slate-700 font-bold shadow-sm text-sm cursor-pointer">Siguiente &rarr;</button>
+            </div>
+            <div class="flex-grow bg-slate-50 p-4 overflow-y-auto flex flex-col">
+                <div class="grid grid-cols-7 gap-2 text-center font-bold text-xs text-slate-600 mb-2">
+                    <div class="py-2 bg-slate-200 rounded">Dom</div><div class="py-2 bg-slate-200 rounded">Lun</div><div class="py-2 bg-slate-200 rounded">Mar</div><div class="py-2 bg-slate-200 rounded">Mié</div><div class="py-2 bg-slate-200 rounded">Jue</div><div class="py-2 bg-slate-200 rounded">Vie</div><div class="py-2 bg-slate-200 rounded">Sáb</div>
+                </div>
+                <div id="calendarGrid" class="grid grid-cols-7 gap-2 flex-grow auto-rows-fr"></div>
+            </div>
+            <div class="bg-white p-3 border-t border-slate-200 text-right">
+                <button onclick="closeCalendarModal()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-medium py-2 px-6 rounded-lg text-xs cursor-pointer">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Códigos de Colores -->
+    <div id="colorCodesModal" class="fixed inset-0 bg-slate-900 bg-opacity-75 hidden flex items-center justify-center p-2 sm:p-4 z-50">
+        <div class="bg-white w-full max-w-4xl h-[90vh] rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-slate-200">
+            <div class="bg-gradient-to-r from-blue-950 via-blue-900 to-indigo-950 text-white p-4 sm:p-5 flex justify-between items-center shadow-md">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center p-1 shadow-inner">
+                        <img src="logo_UIPC.png" alt="UIPC" class="w-full h-full object-contain" onerror="this.src='https://placehold.co/40x40/1e3a8a/ffffff?text=UIPC'">
+                    </div>
+                    <div>
+                        <h3 class="text-sm sm:text-base font-extrabold tracking-tight uppercase">Unidad Interna de Protección Civil</h3>
+                        <p class="text-[11px] text-blue-200 font-medium">Nomenclatura de Claves Operativas en el Uso del Sistema de Intercomunicación</p>
+                    </div>
+                </div>
+                <button onclick="closeColorCodesModal()" class="text-white hover:text-red-300 font-bold text-3xl cursor-pointer transition-colors">&times;</button>
+            </div>
+            
+            <div class="flex-grow bg-slate-50 p-4 sm:p-6 overflow-y-auto space-y-3">
+                <div class="bg-blue-50 border-l-4 border-blue-900 p-3 rounded-r-xl text-xs text-blue-950 font-semibold mb-4">
+                    Centro Operativo SEP Universidad 1200 · Conozca los códigos de alertamiento y brigadas responsables para una respuesta inmediata ante cualquier eventualidad.
+                </div>
+
+                <div class="grid grid-cols-1 gap-2.5">
+                    <div class="bg-white p-3 rounded-xl shadow-xs border border-slate-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 hover:shadow-md transition-shadow">
+                        <div class="flex items-center space-x-3 w-full sm:w-1/3">
+                            <div class="w-8 h-8 rounded-lg bg-black flex-shrink-0 shadow-sm border border-slate-300"></div>
+                            <div><span class="text-xs font-black text-slate-900 tracking-wide uppercase">CÓDIGO NEGRO</span><span class="block text-[10px] text-slate-500 font-semibold">Alerta Sísmica</span></div>
+                        </div>
+                        <div class="w-full sm:w-1/3 text-xs font-bold text-blue-900 bg-slate-50 p-2 rounded-lg text-center border border-slate-100">ALERTA SÍSMICA</div>
+                        <div class="w-full sm:w-1/3 text-right"><span class="inline-block bg-blue-100 text-blue-900 text-[10px] font-extrabold px-3 py-1 rounded-full uppercase">TODAS LAS BRIGADAS</span></div>
+                    </div>
+
+                    <div class="bg-white p-3 rounded-xl shadow-xs border border-slate-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 hover:shadow-md transition-shadow">
+                        <div class="flex items-center space-x-3 w-full sm:w-1/3">
+                            <div class="w-8 h-8 rounded-lg bg-white flex-shrink-0 shadow-sm border-2 border-slate-300"></div>
+                            <div><span class="text-xs font-black text-slate-900 tracking-wide uppercase">CÓDIGO BLANCO</span><span class="block text-[10px] text-slate-500 font-semibold">Atención Médica</span></div>
+                        </div>
+                        <div class="w-full sm:w-1/3 text-xs font-bold text-blue-900 bg-slate-50 p-2 rounded-lg text-center border border-slate-100">PERSONA LESIONADA O ENFERMA</div>
+                        <div class="w-full sm:w-1/3 text-right"><span class="inline-block bg-teal-100 text-teal-900 text-[10px] font-extrabold px-3 py-1 rounded-full uppercase">COMUNICACIÓN / PRIMEROS AUXILIOS / BÚSQUEDA</span></div>
+                    </div>
+
+                    <div class="bg-white p-3 rounded-xl shadow-xs border border-slate-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 hover:shadow-md transition-shadow">
+                        <div class="flex items-center space-x-3 w-full sm:w-1/3">
+                            <div class="w-8 h-8 rounded-lg bg-red-600 flex-shrink-0 shadow-sm"></div>
+                            <div><span class="text-xs font-black text-slate-900 tracking-wide uppercase">CÓDIGO ROJO</span><span class="block text-[10px] text-slate-500 font-semibold">Incendio / Conato</span></div>
+                        </div>
+                        <div class="w-full sm:w-1/3 text-xs font-bold text-blue-900 bg-slate-50 p-2 rounded-lg text-center border border-slate-100">ALARMA CONTRA INCENDIO / INCENDIO</div>
+                        <div class="w-full sm:w-1/3 text-right"><span class="inline-block bg-red-100 text-red-900 text-[10px] font-extrabold px-3 py-1 rounded-full uppercase">COMUNICACIÓN / PREVENCIÓN / EVACUACIÓN</span></div>
+                    </div>
+
+                    <div class="bg-white p-3 rounded-xl shadow-xs border border-slate-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 hover:shadow-md transition-shadow">
+                        <div class="flex items-center space-x-3 w-full sm:w-1/3">
+                            <div class="w-8 h-8 rounded-lg bg-emerald-600 flex-shrink-0 shadow-sm"></div>
+                            <div><span class="text-xs font-black text-slate-900 tracking-wide uppercase">CÓDIGO VERDE/AZUL</span><span class="block text-[10px] text-slate-500 font-semibold">Seguridad Física</span></div>
+                        </div>
+                        <div class="w-full sm:w-1/3 text-xs font-bold text-blue-900 bg-slate-50 p-2 rounded-lg text-center border border-slate-100">PRESENCIA MANIFESTANTES / INTROMISIÓN</div>
+                        <div class="w-full sm:w-1/3 text-right"><span class="inline-block bg-blue-100 text-blue-900 text-[10px] font-extrabold px-3 py-1 rounded-full uppercase">TODAS LAS BRIGADAS</span></div>
+                    </div>
+
+                    <div class="bg-white p-3 rounded-xl shadow-xs border border-slate-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 hover:shadow-md transition-shadow">
+                        <div class="flex items-center space-x-3 w-full sm:w-1/3">
+                            <div class="w-8 h-8 rounded-lg bg-amber-500 flex-shrink-0 shadow-sm"></div>
+                            <div><span class="text-xs font-black text-slate-900 tracking-wide uppercase">CÓDIGO ÁMBAR</span><span class="block text-[10px] text-slate-500 font-semibold">Búsqueda de Persona</span></div>
+                        </div>
+                        <div class="w-full sm:w-1/3 text-xs font-bold text-blue-900 bg-slate-50 p-2 rounded-lg text-center border border-slate-100">PERSONA EXTRAVIADA</div>
+                        <div class="w-full sm:w-1/3 text-right"><span class="inline-block bg-blue-100 text-blue-900 text-[10px] font-extrabold px-3 py-1 rounded-full uppercase">TODAS LAS BRIGADAS</span></div>
+                    </div>
+
+                    <div class="bg-white p-3 rounded-xl shadow-xs border border-slate-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 hover:shadow-md transition-shadow">
+                        <div class="flex items-center space-x-3 w-full sm:w-1/3">
+                            <div class="w-8 h-8 rounded-lg bg-yellow-400 flex-shrink-0 shadow-sm border border-slate-300"></div>
+                            <div><span class="text-xs font-black text-slate-900 tracking-wide uppercase">CÓDIGO AMARILLO</span><span class="block text-[10px] text-slate-500 font-semibold">Simulacro</span></div>
+                        </div>
+                        <div class="w-full sm:w-1/3 text-xs font-bold text-blue-900 bg-slate-50 p-2 rounded-lg text-center border border-slate-100">EJERCICIO DE SIMULACRO</div>
+                        <div class="w-full sm:w-1/3 text-right"><span class="inline-block bg-yellow-100 text-yellow-900 text-[10px] font-extrabold px-3 py-1 rounded-full uppercase">CONFORME AL EJERCICIO</span></div>
+                    </div>
+
+                    <div class="bg-white p-3 rounded-xl shadow-xs border border-slate-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 hover:shadow-md transition-shadow">
+                        <div class="flex items-center space-x-3 w-full sm:w-1/3">
+                            <div class="w-8 h-8 rounded-lg bg-purple-600 flex-shrink-0 shadow-sm"></div>
+                            <div><span class="text-xs font-black text-slate-900 tracking-wide uppercase">CÓDIGO MORADO</span><span class="block text-[10px] text-slate-500 font-semibold">Amenaza de Bomba</span></div>
+                        </div>
+                        <div class="w-full sm:w-1/3 text-xs font-bold text-blue-900 bg-slate-50 p-2 rounded-lg text-center border border-slate-100">AMENAZA DE BOMBA</div>
+                        <div class="w-full sm:w-1/3 text-right"><span class="inline-block bg-purple-100 text-purple-900 text-[10px] font-extrabold px-3 py-1 rounded-full uppercase">TODAS LAS BRIGADAS</span></div>
+                    </div>
+
+                    <div class="bg-white p-3 rounded-xl shadow-xs border border-slate-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 hover:shadow-md transition-shadow">
+                        <div class="flex items-center space-x-3 w-full sm:w-1/3">
+                            <div class="w-8 h-8 rounded-lg bg-gray-400 flex-shrink-0 shadow-sm"></div>
+                            <div><span class="text-xs font-black text-slate-900 tracking-wide uppercase">CÓDIGO GRIS</span><span class="block text-[10px] text-slate-500 font-semibold">Elevadores</span></div>
+                        </div>
+                        <div class="w-full sm:w-1/3 text-xs font-bold text-blue-900 bg-slate-50 p-2 rounded-lg text-center border border-slate-100">PERSONAS DENTRO DE ELEVADORES</div>
+                        <div class="w-full sm:w-1/3 text-right"><span class="inline-block bg-gray-100 text-gray-800 text-[10px] font-extrabold px-3 py-1 rounded-full uppercase">COMUNICACIÓN/BÚSQUEDA/PREVENCIÓN</span></div>
+                    </div>
+
+                    <div class="bg-white p-3 rounded-xl shadow-xs border border-slate-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 hover:shadow-md transition-shadow">
+                        <div class="flex items-center space-x-3 w-full sm:w-1/3">
+                            <div class="w-8 h-8 rounded-lg bg-amber-800 flex-shrink-0 shadow-sm"></div>
+                            <div><span class="text-xs font-black text-slate-900 tracking-wide uppercase">CÓDIGO CAFÉ</span><span class="block text-[10px] text-slate-500 font-semibold">Armas de Fuego</span></div>
+                        </div>
+                        <div class="w-full sm:w-1/3 text-xs font-bold text-blue-900 bg-slate-50 p-2 rounded-lg text-center border border-slate-100">EVENTO CON ARMAS DE FUEGO</div>
+                        <div class="w-full sm:w-1/3 text-right"><span class="inline-block bg-amber-100 text-amber-900 text-[10px] font-extrabold px-3 py-1 rounded-full uppercase">TODAS LAS BRIGADAS</span></div>
+                    </div>
+
+                    <div class="bg-white p-3 rounded-xl shadow-xs border border-slate-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 hover:shadow-md transition-shadow">
+                        <div class="flex items-center space-x-3 w-full sm:w-1/3">
+                            <div class="w-8 h-8 rounded-lg bg-pink-300 flex-shrink-0 shadow-sm border border-slate-300"></div>
+                            <div><span class="text-xs font-black text-slate-900 tracking-wide uppercase">CÓDIGO ROSA</span><span class="block text-[10px] text-slate-500 font-semibold">Falta de Energía</span></div>
+                        </div>
+                        <div class="w-full sm:w-1/3 text-xs font-bold text-blue-900 bg-slate-50 p-2 rounded-lg text-center border border-slate-100">FALTA DE ENERGIA ELECTRICA EN EL INMUEBLE</div>
+                        <div class="w-full sm:w-1/3 text-right"><span class="inline-block bg-pink-100 text-pink-900 text-[10px] font-extrabold px-3 py-1 rounded-full uppercase">COMUNICACIÓN/BÚSQUEDA/EVACUACIÓN/PREV.</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white p-4 border-t border-slate-200 text-right">
+                <button onclick="closeColorCodesModal()" class="bg-blue-900 hover:bg-blue-800 text-white font-bold py-2 px-6 rounded-xl text-xs cursor-pointer shadow">Cerrar Ventana</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Mensajes Centrales -->
+    <div id="msgModal" class="fixed inset-0 bg-slate-900 bg-opacity-50 hidden flex items-center justify-center p-4 z-50">
+        <div class="bg-white w-full max-w-md p-6 rounded-2xl shadow-2xl space-y-4 border border-slate-200">
+            <h3 id="msgTitle" class="text-base font-bold text-blue-900 border-b pb-2">Aviso</h3>
+            <p id="msgBody" class="text-sm text-slate-700 whitespace-pre-line leading-relaxed bg-slate-50 p-4 rounded-xl border border-slate-100 font-medium"></p>
+            <div id="eventModalActions" class="hidden grid grid-cols-3 gap-2 pt-2 border-t mt-2">
+                <button id="eventDeleteBtn" class="bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 py-2 rounded-lg text-xs font-bold cursor-pointer text-center shadow-sm">Eliminar</button>
+                <button id="msgCancelBtn" onclick="closeMsgModal()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 py-2 rounded-lg text-xs font-bold cursor-pointer text-center shadow-sm">Cerrar</button>
+                <button id="eventEditBtn" class="bg-blue-100 hover:bg-blue-200 text-blue-900 border border-blue-200 py-2 rounded-lg text-xs font-bold cursor-pointer text-center shadow-sm">Editar</button>
+            </div>
+            <div class="flex justify-end space-x-2 pt-2">
+                <button id="msgCancelBtnFallback" onclick="closeMsgModal()" class="hidden bg-slate-200 hover:bg-slate-300 text-slate-700 px-4 py-2 rounded-xl text-xs font-semibold cursor-pointer">Cancelar</button>
+                <button id="msgConfirmBtn" onclick="closeMsgModal()" class="bg-blue-900 hover:bg-blue-800 text-white px-6 py-2 rounded-xl text-xs font-semibold shadow cursor-pointer">Aceptar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let globalAdminUsers = [];
+        let registeredUsersData = [];
+        let globalAdminFiles = [];
+        let globalActivities = [];
+        let viewDate = new Date();
+        let pendingAction = null;
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const userStr = localStorage.getItem('uipc_current_user');
+            if (!userStr) { window.location.href = 'login.html'; return; }
+            const user = JSON.parse(userStr);
+            if (user.usuario !== 'coordinador.uipc') { window.location.href = 'dashboard.html'; return; }
+
+            document.getElementById('adminCensusDate').innerText = 'Fecha: ' + new Date().toISOString().split('T')[0];
+
+            loadOnlineUsers();
+            loadAdminPopulation();
+            loadAdminActivities();
+            loadAdminMinutas();
+            loadAdminDirectory();
+            loadUsersList();
+            loadAdminFiles();
+            loadAdminFrapcFiles();
+
+            setInterval(() => {
+                loadOnlineUsers();
+                loadAdminPopulation();
+                loadAdminActivities();
+                loadAdminMinutas();
+                loadUsersList();
+                loadAdminFiles();
+                loadAdminFrapcFiles();
+            }, 4000);
+        });
+
+        async function loadOnlineUsers() {
+            const tbody = document.getElementById('onlineUsersTableBody');
+            const badge = document.getElementById('onlineCountBadge');
+            try {
+                const res = await fetch('/api/admin/online-users');
+                const data = await res.json();
+                if (data.success && Array.isArray(data.users)) {
+                    data.users.sort((a, b) => (b.isOnline ? 1 : 0) - (a.isOnline ? 1 : 0));
+                    
+                    const onlineCount = data.users.filter(u => u.isOnline).length;
+                    badge.innerText = `${onlineCount} en línea`;
+                    badge.className = "text-[10px] bg-emerald-100 text-emerald-800 font-bold px-2 py-1 rounded-full";
+
+                    tbody.innerHTML = '';
+                    data.users.forEach(u => {
+                        const tr = document.createElement('tr');
+                        tr.className = "hover:bg-slate-50 transition-colors border-b border-slate-50 last:border-none";
+                        const statusBadge = u.isOnline 
+                            ? `<span class="px-2 py-1 bg-emerald-100 text-emerald-800 rounded-full text-[9px] font-extrabold inline-flex items-center"><span class="w-1.5 h-1.5 bg-emerald-500 rounded-full mr-1.5 animate-pulse"></span> En línea</span>`
+                            : `<span class="text-slate-400 text-[10px]"><span class="inline-block w-1 h-1 bg-slate-400 rounded-full mr-1"></span> Desc.</span>`;
+
+                        tr.innerHTML = `
+                            <td class="p-2 font-mono font-bold text-blue-900">${u.usuario}</td>
+                            <td class="p-2 font-semibold text-slate-800"><div class="truncate w-32" title="${u.nombre}">${u.nombre}</div><div class="text-[9px] text-slate-500 uppercase font-bold">${u.ur || 'N/A'}</div></td>
+                            <td class="p-2 text-center">${statusBadge}</td>
+                            <td class="p-2 text-center font-mono text-[10px] text-slate-500">${u.lastActive}</td>
+                        `;
+                        tbody.appendChild(tr);
+                    });
+                }
+            } catch (e) {}
+        }
+
+        async function loadAdminPopulation() {
+            const tbody = document.getElementById('adminPobTableBody');
+            const totalEl = document.getElementById('adminGrandTotalPob');
+            const pisoFiltro = document.getElementById('adminPisoFilter').value;
+            const hoyStr = new Date().toISOString().split('T')[0];
+            try {
+                const res = await fetch('/api/poblacion');
+                const data = await res.json();
+                if (data.success && Array.isArray(data.records)) {
+                    let todayRecords = data.records.filter(r => r.fecha === hoyStr);
+                    if (pisoFiltro !== 'todos') {
+                        todayRecords = todayRecords.filter(r => String(r.nivel) === String(pisoFiltro));
+                    }
+                    if (todayRecords.length === 0) {
+                        tbody.innerHTML = `<tr><td colspan="4" class="p-6 text-center text-slate-400 text-xs italic">No hay registros de población para hoy (${hoyStr}) con el filtro seleccionado.</td></tr>`;
+                        totalEl.innerText = '0';
+                        return;
+                    }
+
+                    tbody.innerHTML = '';
+                    let grandTotal = 0;
+                    todayRecords.forEach(r => {
+                        grandTotal += Number(r.cantidad || 0);
+                        const tr = document.createElement('tr');
+                        tr.className = "hover:bg-slate-50 transition-colors border-b border-slate-50 last:border-none";
+                        tr.innerHTML = `
+                            <td class="p-2 font-mono font-bold text-teal-900">${r.ur}</td>
+                            <td class="p-2 font-semibold text-slate-800 truncate max-w-[120px]" title="${r.nombre}">${r.nombre}</td>
+                            <td class="p-2 text-center font-bold text-slate-700">Nivel ${r.nivel}</td>
+                            <td class="p-2 text-center font-extrabold text-teal-800">${r.cantidad}</td>
+                        `;
+                        tbody.appendChild(tr);
+                    });
+                    totalEl.innerText = grandTotal;
+                }
+            } catch (e) {}
+        }
+
+        async function loadAdminFrapcFiles() {
+            const tbody = document.getElementById('adminFrapcTableBody');
+            try {
+                const res = await fetch('/api/admin/files');
+                const data = await res.json();
+                if (data.success && Array.isArray(data.files)) {
+                    const frapcFiles = data.files.filter(f => f.usuario === 'FRAPC');
+                    if (frapcFiles.length === 0) {
+                        tbody.innerHTML = `<tr><td colspan="4" class="p-6 text-center text-slate-400 italic">No hay formatos FRAPC registrados en el servidor.</td></tr>`;
+                        return;
+                    }
+                    tbody.innerHTML = '';
+                    const viewedKey = 'uipc_admin_viewed_files';
+                    let viewedFiles = JSON.parse(localStorage.getItem(viewedKey) || '[]');
+
+                    frapcFiles.forEach(f => {
+                        const isViewed = viewedFiles.includes(f.filename);
+                        const badgeHtml = isViewed 
+                            ? `<span class="px-2 py-0.5 bg-slate-100 text-slate-600 rounded-full text-[9px] font-bold border border-slate-200 whitespace-nowrap">VISTO</span>`
+                            : `<span class="px-2 py-0.5 bg-gradient-to-r from-amber-500 to-red-600 text-white rounded-full text-[9px] font-extrabold shadow-sm animate-pulse whitespace-nowrap">NUEVO</span>`;
+
+                        const tr = document.createElement('tr');
+                        tr.className = "hover:bg-slate-50 transition-colors border-b border-slate-50 last:border-none";
+                        tr.innerHTML = `
+                            <td class="p-3 font-semibold text-slate-800 text-center">${f.filename}</td>
+                            <td class="p-3 text-xs text-slate-500 text-center">${f.fecha}</td>
+                            <td class="p-3 text-center">${badgeHtml}</td>
+                            <td class="p-3 text-center space-x-1">
+                                <a href="${f.path}" target="_blank" onclick="markFileAsViewed('${f.filename}')" class="bg-blue-100 hover:bg-blue-200 text-blue-800 px-3 py-1 rounded-lg text-xs font-bold transition-colors shadow-sm inline-block">Consultar</a>
+                                <button onclick="confirmAdminDeleteFile('FRAPC', '${f.filename}')" class="bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 px-3 py-1 rounded-lg text-xs font-bold transition-colors cursor-pointer inline-block">Eliminar</button>
+                            </td>
+                        `;
+                        tbody.appendChild(tr);
+                    });
+                }
+            } catch (e) {}
+        }
+
+        async function loadAdminMinutas() {
+            const tbody = document.getElementById('adminMinutasTableBody');
+            try {
+                const res = await fetch('/api/admin/files');
+                const data = await res.json();
+                if (data.success && Array.isArray(data.files)) {
+                    const minutas = data.files.filter(f => f.usuario === 'Minutas');
+                    if (minutas.length === 0) {
+                        tbody.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-slate-400 italic">No hay minutas publicadas.</td></tr>`;
+                        return;
+                    }
+                    tbody.innerHTML = '';
+                    const viewedKey = 'uipc_admin_viewed_files';
+                    let viewedFiles = JSON.parse(localStorage.getItem(viewedKey) || '[]');
+
+                    minutas.forEach(m => {
+                        const isViewed = viewedFiles.includes(m.filename);
+                        const badgeHtml = isViewed 
+                            ? `<span class="px-2 py-0.5 bg-slate-100 text-slate-600 rounded-full text-[9px] font-bold border border-slate-200 whitespace-nowrap">VISTO</span>`
+                            : `<span class="px-2 py-0.5 bg-gradient-to-r from-amber-500 to-red-600 text-white rounded-full text-[9px] font-extrabold shadow-sm animate-pulse whitespace-nowrap">NUEVO</span>`;
+
+                        const tr = document.createElement('tr');
+                        tr.className = "hover:bg-slate-50 transition-colors border-b border-slate-50 last:border-none";
+                        tr.innerHTML = `
+                            <td class="p-2.5 font-bold text-slate-900">${m.filename}</td>
+                            <td class="p-2.5 text-xs text-slate-500">${m.fecha}</td>
+                            <td class="p-2.5 text-center">${badgeHtml}</td>
+                            <td class="p-2.5 text-center space-x-1 flex justify-center">
+                                <a href="${m.path}" target="_blank" onclick="markFileAsViewed('${m.filename}')" class="bg-blue-100 hover:bg-blue-200 text-blue-800 px-3 py-1 rounded-lg text-xs font-bold transition-colors shadow-sm inline-block">Visualizar</a>
+                                <button onclick="confirmAdminDeleteFile('Minutas', '${m.filename}')" class="bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 px-2 py-1 rounded-lg text-xs font-bold transition-colors cursor-pointer inline-block">Eliminar</button>
+                            </td>
+                        `;
+                        tbody.appendChild(tr);
+                    });
+                }
+            } catch (e) {}
+        }
+
+        async function loadUsersList() {
+            try {
+                const res = await fetch('/api/admin/users');
+                const data = await res.json();
+                if (data.success) {
+                    registeredUsersData = [...data.users].reverse();
+                    filterRegisteredUsers();
+                }
+            } catch (e) {}
+        }
+
+        function renderUsersTable(users) {
+            const tbody = document.getElementById('usersTableBody');
+            if (users.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" class="p-3 text-center text-slate-400">No hay usuarios registrados.</td></tr>`;
+                return;
+            }
+            tbody.innerHTML = '';
+            users.forEach(u => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-50 border-b border-slate-50 last:border-none";
+                tr.innerHTML = `
+                    <td class="p-2 font-mono text-slate-700">${u.usuario}</td>
+                    <td class="p-2 font-semibold">${u.nombre}</td>
+                    <td class="p-2 text-slate-500">${u.cargo || 'N/A'}</td>
+                    <td class="p-2 text-center">
+                        <button onclick="openEditUserModal('${u.usuario}')" class="bg-blue-100 hover:bg-blue-200 text-blue-800 px-3 py-1.5 rounded-lg text-xs font-bold cursor-pointer shadow-sm">Editar</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function filterRegisteredUsers() {
+            const query = document.getElementById('searchUsersInput').value.toLowerCase().trim();
+            if (!query) {
+                renderUsersTable(registeredUsersData);
+                return;
+            }
+            const filtered = registeredUsersData.filter(u => 
+                (u.usuario && u.usuario.toLowerCase().includes(query)) ||
+                (u.nombre && u.nombre.toLowerCase().includes(query)) ||
+                (u.cargo && u.cargo.toLowerCase().includes(query))
+            );
+            renderUsersTable(filtered);
+        }
+
+        async function handleRegisterUser(event) {
+            event.preventDefault();
+            const alertBox = document.getElementById('statusAlert');
+            const submitBtn = document.getElementById('submitBtn');
+            const newUser = {
+                usuario: document.getElementById('regUsuario').value.trim(),
+                password: document.getElementById('regPassword').value.trim(),
+                nombre: document.getElementById('regNombre').value.trim(),
+                correo: document.getElementById('regCorreo').value.trim(),
+                ur: document.getElementById('regUr').value.trim(),
+                cargo: document.getElementById('regCargo').value.trim(),
+                suplente: document.getElementById('regSuplente').value.trim(),
+                ubicacion: document.getElementById('regUbicacion').value.trim(),
+                extension: document.getElementById('regExtension').value.trim()
+            };
+
+            submitBtn.disabled = true;
+            submitBtn.innerText = "Registrando...";
+            try {
+                const response = await fetch('/api/admin/add-user', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(newUser)
+                });
+                const result = await response.json();
+                alertBox.classList.remove('hidden');
+                if (response.ok && result.success) {
+                    alertBox.className = "p-2 rounded-lg text-xs font-semibold bg-green-100 text-green-800 border border-green-200";
+                    alertBox.innerText = "✓ Usuario registrado con éxito.";
+                    event.target.reset();
+                    loadUsersList(); loadAdminDirectory();
+                } else {
+                    alertBox.className = "p-2 rounded-lg text-xs font-semibold bg-red-100 text-red-700 border border-red-200";
+                    alertBox.innerText = "✕ " + (result.message || "Error al registrar.");
+                }
+            } catch (error) {} finally {
+                submitBtn.disabled = false;
+                submitBtn.innerText = "Registrar Usuario";
+                setTimeout(() => alertBox.classList.add('hidden'), 4000);
+            }
+        }
+
+        function openEditUserModal(username) {
+            const user = registeredUsersData.find(u => u.usuario === username);
+            if (!user) return;
+            document.getElementById('editOriginalUsuario').value = user.usuario;
+            document.getElementById('editUsuario').value = user.usuario;
+            document.getElementById('editPassword').value = user.password || '';
+            document.getElementById('editNombre').value = user.nombre || '';
+            document.getElementById('editCorreo').value = user.correo || '';
+            document.getElementById('editUr').value = user.ur || '';
+            document.getElementById('editCargo').value = user.cargo || '';
+            document.getElementById('editSuplente').value = user.suplente || '';
+            document.getElementById('editUbicacion').value = user.ubicacion || '';
+            document.getElementById('editExtension').value = user.extension || '';
+            
+            const deleteBtn = document.getElementById('modalDeleteBtn');
+            if (user.usuario === 'coordinador.uipc') { deleteBtn.classList.add('hidden'); }
+            else { deleteBtn.classList.remove('hidden'); deleteBtn.onclick = () => confirmDeleteUser(user.usuario); }
+
+            document.getElementById('editStatusAlert').classList.add('hidden');
+            document.getElementById('editUserModal').classList.remove('hidden');
+        }
+
+        function closeEditUserModal() { document.getElementById('editUserModal').classList.add('hidden'); }
+
+        async function handleUpdateUser(event) {
+            event.preventDefault();
+            const originalUsuario = document.getElementById('editOriginalUsuario').value;
+            const updatedUser = {
+                password: document.getElementById('editPassword').value.trim(),
+                nombre: document.getElementById('editNombre').value.trim(),
+                correo: document.getElementById('editCorreo').value.trim(),
+                ur: document.getElementById('editUr').value.trim(),
+                cargo: document.getElementById('editCargo').value.trim(),
+                suplente: document.getElementById('editSuplente').value.trim(),
+                ubicacion: document.getElementById('editUbicacion').value.trim(),
+                extension: document.getElementById('editExtension').value.trim()
+            };
+            const alertBox = document.getElementById('editStatusAlert');
+            const submitBtn = document.getElementById('editSubmitBtn');
+
+            submitBtn.disabled = true; submitBtn.innerText = "Guardando...";
+            try {
+                const response = await fetch(`/api/admin/update-user/${originalUsuario}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(updatedUser)
+                });
+                const result = await response.json();
+                alertBox.classList.remove('hidden');
+                if (response.ok && result.success) {
+                    alertBox.className = "p-2 rounded-lg text-xs font-semibold bg-green-100 text-green-800 border border-green-200";
+                    alertBox.innerText = "✓ Usuario actualizado con éxito.";
+                    setTimeout(() => { closeEditUserModal(); loadUsersList(); loadAdminDirectory(); }, 1000);
+                } else {
+                    alertBox.className = "p-2 rounded-lg text-xs font-semibold bg-red-100 text-red-700 border border-red-200";
+                    alertBox.innerText = "✕ " + (result.message || "Error al actualizar.");
+                }
+            } catch (error) {} finally {
+                submitBtn.disabled = false; submitBtn.innerText = "Guardar Cambios";
+            }
+        }
+
+        function confirmDeleteUser(username) {
+            closeEditUserModal();
+            showModal("Confirmación de Borrado", `¿Está seguro de eliminar de forma permanente al usuario '${username}'?`, async () => {
+                try {
+                    const res = await fetch(`/api/usuarios/${username}`, { method: 'DELETE' });
+                    const result = await res.json();
+                    if (result.success) { showModal("Éxito", "Usuario eliminado correctamente."); loadUsersList(); loadAdminDirectory(); }
+                } catch (e) {}
+            }, true);
+        }
+
+        async function loadAdminActivities() {
+            const activitiesTbody = document.getElementById('activitiesTableBody');
+            const coursesTbody = document.getElementById('coursesTableBody');
+            try {
+                const res = await fetch('/api/actividades');
+                const data = await res.json();
+                const acts = Array.isArray(data) ? data : (data.activities || []);
+                acts.sort((a, b) => Number(b.id || 0) - Number(a.id || 0));
+                globalActivities = acts;
+
+                const viewedKey = 'uipc_viewed_activities';
+                let viewedIds = JSON.parse(localStorage.getItem(viewedKey) || '[]');
+
+                const pureActivities = acts.filter(a => !a.esAdminCapacitacion && !a.esCapacitacion);
+                const adminCourses = acts.filter(a => a.esAdminCapacitacion || a.esCapacitacion);
+
+                if (pureActivities.length > 0) {
+                    activitiesTbody.innerHTML = '';
+                    pureActivities.forEach(act => {
+                        const isViewed = viewedIds.includes(String(act.id));
+                        const badgeHtml = isViewed 
+                            ? `<span class="px-2 py-0.5 bg-slate-100 text-slate-600 rounded-full text-[9px] font-bold border border-slate-200 whitespace-nowrap">VISTO</span>`
+                            : `<span class="px-2 py-0.5 bg-gradient-to-r from-amber-500 to-red-600 text-white rounded-full text-[9px] font-extrabold shadow-sm animate-pulse whitespace-nowrap">NUEVO</span>`;
+
+                        const dateText = act.fechaFin && act.fechaFin !== act.fecha ? `${act.fecha} al ${act.fechaFin}` : act.fecha;
+                        const modTag = act.modalidad ? `[${act.modalidad}]` : '';
+
+                        const tr = document.createElement('tr');
+                        tr.className = "hover:bg-slate-50 transition-colors border-b border-slate-50 last:border-none";
+                        tr.innerHTML = `
+                            <td class="p-2.5"><div class="text-xs font-mono text-slate-600">${dateText}</div><div class="text-[10px] text-blue-800 font-bold uppercase">SEDE: ${act.sede || act.mes}</div></td>
+                            <td class="p-2.5"><span class="text-[9px] bg-blue-100 text-blue-800 font-bold px-1.5 py-0.5 rounded mr-1">ACTIVIDAD</span><strong class="text-slate-800 text-xs">${act.titulo}</strong> <span class="text-[10px] text-slate-500 font-semibold">${modTag}</span><br><span class="text-[11px] text-slate-500">${act.hora}</span></td>
+                            <td class="p-2.5 text-center">${badgeHtml}</td>
+                            <td class="p-2.5 text-center space-x-1 flex justify-center">
+                                <button onclick="viewActivityDetail('${act.id}')" class="bg-blue-100 hover:bg-blue-200 text-blue-900 font-bold px-2 py-1 rounded-lg text-[10px] cursor-pointer shadow-xs">Ver</button>
+                                <button onclick="openEditActivityModalFromId('${act.id}')" class="bg-amber-100 hover:bg-amber-200 text-amber-900 font-bold px-2 py-1 rounded-lg text-[10px] cursor-pointer shadow-xs">Editar</button>
+                            </td>
+                        `;
+                        activitiesTbody.appendChild(tr);
+                    });
+                } else {
+                    activitiesTbody.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-slate-400 italic">No hay actividades registradas.</td></tr>`;
+                }
+
+                if (adminCourses.length > 0) {
+                    coursesTbody.innerHTML = '';
+                    adminCourses.forEach(act => {
+                        const isViewed = viewedIds.includes(String(act.id));
+                        const badgeHtml = isViewed 
+                            ? `<span class="px-2 py-0.5 bg-slate-100 text-slate-600 rounded-full text-[9px] font-bold border border-slate-200 whitespace-nowrap">VISTO</span>`
+                            : `<span class="px-2 py-0.5 bg-gradient-to-r from-amber-500 to-red-600 text-white rounded-full text-[9px] font-extrabold shadow-sm animate-pulse whitespace-nowrap">NUEVO</span>`;
+
+                        const dateText = act.fechaFin && act.fechaFin !== act.fecha ? `${act.fecha} al ${act.fechaFin}` : act.fecha;
+                        const modTag = act.modalidad ? `[${act.modalidad}]` : '';
+
+                        const tr = document.createElement('tr');
+                        tr.className = "hover:bg-slate-50 transition-colors border-b border-slate-50 last:border-none";
+                        tr.innerHTML = `
+                            <td class="p-2.5"><div class="text-xs font-mono text-slate-600">${dateText}</div><div class="text-[10px] text-teal-800 font-bold uppercase">SEDE: ${act.sede || act.mes}</div></td>
+                            <td class="p-2.5"><span class="text-[9px] bg-teal-100 text-teal-800 font-bold px-1.5 py-0.5 rounded mr-1">CURSO UIPC</span><strong class="text-slate-800 text-xs">${act.titulo}</strong> <span class="text-[10px] text-slate-500 font-semibold">${modTag}</span><br><span class="text-[11px] text-slate-500">${act.hora}</span></td>
+                            <td class="p-2.5 text-center">${badgeHtml}</td>
+                            <td class="p-2.5 text-center space-x-1 flex justify-center">
+                                <button onclick="viewActivityDetail('${act.id}')" class="bg-teal-100 hover:bg-teal-200 text-teal-900 font-bold px-2 py-1 rounded-lg text-[10px] cursor-pointer shadow-xs">Ver</button>
+                                <button onclick="openEditActivityModalFromId('${act.id}')" class="bg-amber-100 hover:bg-amber-200 text-amber-900 font-bold px-2 py-1 rounded-lg text-[10px] cursor-pointer shadow-xs">Editar</button>
+                            </td>
+                        `;
+                        coursesTbody.appendChild(tr);
+                    });
+                } else {
+                    coursesTbody.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-slate-400 italic">No hay cursos UIPC registrados.</td></tr>`;
+                }
+
+            } catch (e) {}
+        }
+
+        function formatTrainHora(input) {
+            let val = input.value.trim();
+            if (val && !val.toLowerCase().includes('hr') && !val.toLowerCase().includes('am') && !val.toLowerCase().includes('pm')) {
+                input.value = val + ' Hrs';
+            }
+        }
+
+        async function handleRegisterActivity(event, isCourse) {
+            event.preventDefault();
+            const prefix = isCourse ? 'course' : 'act';
+            const btn = document.getElementById(`${prefix}SubmitBtn`);
+            const alertBox = document.getElementById(`${prefix}Alert`);
+            const fecha = document.getElementById(`${prefix}Fecha`).value;
+            const fechaFin = document.getElementById(`${prefix}FechaFin`).value;
+            let hora = document.getElementById(`${prefix}Hora`).value.trim() || (isCourse ? '11:00 Hrs' : '10:00 Hrs');
+            if (hora && !hora.toLowerCase().includes('hr') && !hora.toLowerCase().includes('am') && !hora.toLowerCase().includes('pm')) {
+                hora = hora + ' Hrs';
+            }
+            const newAct = {
+                titulo: document.getElementById(`${prefix}Titulo`).value.trim(),
+                fecha: fecha,
+                fechaFin: fechaFin || fecha,
+                hora: hora,
+                sede: document.getElementById(`${prefix}Sede`).value.trim(),
+                modalidad: document.getElementById(`${prefix}Modalidad`).value,
+                descripcion: document.getElementById(`${prefix}Desc`).value.trim(),
+                esAdminCapacitacion: isCourse,
+                esCapacitacion: isCourse
+            };
+
+            btn.disabled = true; btn.innerText = "Guardando...";
+            try {
+                const res = await fetch('/api/admin/add-activity', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(newAct)
+                });
+                const result = await res.json();
+                alertBox.classList.remove('hidden');
+                if (result.success) {
+                    alertBox.className = "p-2 rounded-lg text-xs bg-green-100 text-green-800 border border-green-200 font-semibold";
+                    alertBox.innerText = isCourse ? "✓ Curso UIPC guardado correctamente." : "✓ Actividad UIPC guardada correctamente.";
+                    event.target.reset();
+                    loadAdminActivities();
+                } else {
+                    alertBox.className = "p-2 rounded-lg text-xs bg-red-100 text-red-700 border border-red-200 font-semibold";
+                    alertBox.innerText = "✕ Error al guardar.";
+                }
+            } catch (e) {} finally {
+                btn.disabled = false; btn.innerText = isCourse ? "Guardar Curso UIPC" : "Guardar Actividad UIPC";
+                setTimeout(() => alertBox.classList.add('hidden'), 3500);
+            }
+        }
+
+        function viewActivityDetail(id) {
+            const act = globalActivities.find(a => String(a.id) === String(id));
+            if (!act) return;
+            const viewedKey = 'uipc_viewed_activities';
+            let viewedIds = JSON.parse(localStorage.getItem(viewedKey) || '[]');
+            if (!viewedIds.includes(String(id))) {
+                viewedIds.push(String(id));
+                localStorage.setItem(viewedKey, JSON.stringify(viewedIds));
+                loadAdminActivities();
+            }
+            const dateText = act.fechaFin && act.fechaFin !== act.fecha ? `${act.fecha} al ${act.fechaFin}` : act.fecha;
+            showModal(`📌 ${act.titulo}`, `🕒 Horario: ${act.hora}\n📅 Fecha: ${dateText}\n📍 Sede: ${act.sede || act.mes || 'N/A'}\n💻 Modalidad: ${act.modalidad || 'Presencial'}\n\n📝 Descripción:\n${act.descripcion}`, null, false, act);
+        }
+
+        function openEditActivityModalFromId(id) {
+            const act = globalActivities.find(a => String(a.id) === String(id));
+            if (act) {
+                document.getElementById('editActId').value = act.id;
+                document.getElementById('editActTitulo').value = act.titulo;
+                document.getElementById('editActFecha').value = act.fecha;
+                document.getElementById('editActFechaFin').value = act.fechaFin || act.fecha;
+                document.getElementById('editActHora').value = act.hora;
+                document.getElementById('editActSede').value = act.sede || act.mes || '';
+                if(document.getElementById('editActModalidad')) document.getElementById('editActModalidad').value = act.modalidad || 'Presencial';
+                document.getElementById('editActDesc').value = act.descripcion;
+                document.getElementById('editActivityModal').classList.remove('hidden');
+            }
+        }
+        function closeEditActivityModal() { document.getElementById('editActivityModal').classList.add('hidden'); }
+
+        async function handleUpdateActivity(event) {
+            event.preventDefault();
+            const submitBtn = document.getElementById('editActSubmitBtn');
+            const id = document.getElementById('editActId').value;
+            const updatedAct = {
+                id: id,
+                titulo: document.getElementById('editActTitulo').value.trim(),
+                fecha: document.getElementById('editActFecha').value,
+                fechaFin: document.getElementById('editActFechaFin').value || document.getElementById('editActFecha').value,
+                hora: document.getElementById('editActHora').value.trim(),
+                sede: document.getElementById('editActSede').value.trim(),
+                modalidad: document.getElementById('editActModalidad') ? document.getElementById('editActModalidad').value : 'Presencial',
+                descripcion: document.getElementById('editActDesc').value.trim()
+            };
+
+            submitBtn.disabled = true; submitBtn.innerText = "Guardando...";
+            try {
+                const res = await fetch('/api/admin/update-activity', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(updatedAct)
+                });
+                const result = await res.json();
+                if (res.ok && result.success) {
+                    closeEditActivityModal();
+                    loadAdminActivities();
+                    showModal("Éxito", "Evento actualizado correctamente.");
+                } else {
+                    showModal("Aviso", result.message || "No se pudo actualizar el evento.");
+                }
+            } catch (e) {} finally {
+                submitBtn.disabled = false; submitBtn.innerText = "Guardar Cambios";
+            }
+        }
+
+        function deleteActivity(id) {
+            showModal("Confirmación", "¿Está seguro de eliminar este evento del calendario?", async () => {
+                try {
+                    const res = await fetch('/api/admin/delete-activity', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ id })
+                    });
+                    if (res.ok) {
+                        loadAdminActivities();
+                        showModal("Éxito", "Evento eliminado correctamente.");
+                    }
+                } catch (e) {}
+            }, true);
+        }
+
+        async function loadAdminFiles() {
+            try {
+                const res = await fetch('/api/admin/files');
+                const data = await res.json();
+                if (data.success) {
+                    globalAdminFiles = data.files;
+                    filterAdminFiles();
+                }
+            } catch (e) {}
+        }
+
+        function renderAdminFiles(files) {
+            const tbody = document.getElementById('adminFilesTableBody');
+            if (files.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" class="p-6 text-center text-slate-400 italic">No hay archivos en el servidor.</td></tr>`;
+                return;
+            }
+            tbody.innerHTML = '';
+            const viewedKey = 'uipc_admin_viewed_files';
+            let viewedFiles = JSON.parse(localStorage.getItem(viewedKey) || '[]');
+
+            files.forEach(f => {
+                const isViewed = viewedFiles.includes(f.filename);
+                const badgeHtml = isViewed 
+                    ? `<span class="px-2 py-0.5 bg-slate-100 text-slate-600 rounded-full text-[9px] font-bold border border-slate-200 whitespace-nowrap">VISTO</span>`
+                    : `<span class="px-2 py-0.5 bg-gradient-to-r from-amber-500 to-red-600 text-white rounded-full text-[9px] font-extrabold shadow-sm animate-pulse whitespace-nowrap">NUEVO</span>`;
+
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-50 transition-colors border-b border-slate-50 last:border-none";
+                tr.innerHTML = `
+                    <td class="p-3 text-center font-mono font-bold text-blue-900">${f.usuario}</td>
+                    <td class="p-3 font-semibold text-slate-800 text-center">${f.filename}</td>
+                    <td class="p-3 text-xs text-slate-500 text-center">${f.fecha}</td>
+                    <td class="p-3 text-center">${badgeHtml}</td>
+                    <td class="p-3 text-center flex justify-center items-center space-x-2">
+                        <a href="${f.path}" target="_blank" onclick="markFileAsViewed('${f.filename}')" class="bg-blue-100 hover:bg-blue-200 text-blue-800 px-3 py-1 rounded-lg text-xs font-bold transition-colors shadow-sm">Visualizar</a>
+                        <button onclick="confirmAdminDeleteFile('${f.usuario}', '${f.filename}')" class="bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 px-3 py-1 rounded-lg text-xs font-bold transition-colors cursor-pointer">Eliminar</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function filterAdminFiles() {
+            const query = document.getElementById('searchAdminFilesInput').value.toLowerCase().trim();
+            if(!query) {
+                renderAdminFiles(globalAdminFiles);
+                return;
+            }
+            const filtered = globalAdminFiles.filter(f => 
+                (f.usuario && f.usuario.toLowerCase().includes(query)) ||
+                (f.filename && f.filename.toLowerCase().includes(query))
+            );
+            renderAdminFiles(filtered);
+        }
+
+        function markFileAsViewed(filename) {
+            const viewedKey = 'uipc_admin_viewed_files';
+            let viewedFiles = JSON.parse(localStorage.getItem(viewedKey) || '[]');
+            if (!viewedFiles.includes(filename)) {
+                viewedFiles.push(filename);
+                localStorage.setItem(viewedKey, JSON.stringify(viewedFiles));
+                loadAdminFiles();
+                loadAdminMinutas();
+                loadAdminFrapcFiles();
+            }
+        }
+
+        function confirmAdminDeleteFile(userId, filename) {
+            showModal("Confirmación", `¿Está seguro de eliminar de forma permanente el archivo:\n'${filename}'?`, async () => {
+                try {
+                    const res = await fetch('/api/delete-file', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ userId, filename })
+                    });
+                    const result = await res.json();
+                    if (result.success) { loadAdminFiles(); loadAdminMinutas(); loadAdminFrapcFiles(); }
+                } catch (e) {}
+            }, true);
+        }
+
+        async function loadAdminDirectory() {
+            const tbody = document.getElementById('adminDirectoryTableBody');
+            try {
+                const res = await fetch('/api/admin/users');
+                const data = await res.json();
+                if (data.success && Array.isArray(data.users)) {
+                    globalAdminUsers = data.users;
+                    filterAdminDirectory();
+                }
+            } catch (e) {
+                tbody.innerHTML = `<tr><td colspan="4" class="p-6 text-center text-red-400">Error al cargar directorio.</td></tr>`;
+            }
+        }
+
+        function renderAdminDirectoryTable(users) {
+            const tbody = document.getElementById('adminDirectoryTableBody');
+            if (users.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" class="p-6 text-center text-slate-400">No se encontraron registros.</td></tr>`;
+                return;
+            }
+            tbody.innerHTML = '';
+            users.forEach(u => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-50 transition-colors border-b border-slate-50 last:border-none";
+                tr.innerHTML = `
+                    <td class="p-3"><div class="font-bold text-slate-900">${u.nombre}</div><div class="text-[10px] text-blue-800 font-semibold">${u.ur || 'UR N/A'}</div></td>
+                    <td class="p-3"><div class="text-slate-700 font-semibold">${u.cargo || 'N/A'}</div><div class="text-[10px] text-slate-500">Suplente: ${u.suplente || 'N/A'}</div></td>
+                    <td class="p-3"><div class="text-slate-800 font-medium">${u.ubicacion || 'N/A'}</div><div class="text-[10px] text-slate-500 font-mono">Ext: ${u.extension || 'N/A'}</div></td>
+                    <td class="p-3 text-center">
+                        <button onclick='consultarUsuario(${JSON.stringify(u)})' class="bg-blue-100 hover:bg-blue-200 text-blue-900 font-bold px-3 py-1.5 rounded-lg text-xs transition-colors cursor-pointer shadow-xs">Consultar</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function consultarUsuario(u) {
+            const content = document.getElementById('userModalContent');
+            content.innerHTML = `
+                <div class="grid grid-cols-2 gap-3">
+                    <div><span class="block text-[10px] text-slate-400 uppercase font-semibold">UR:</span><span class="font-bold text-slate-900">${u.ur || 'N/A'}</span></div>
+                    <div><span class="block text-[10px] text-slate-400 uppercase font-semibold">Usuario (ID):</span><span class="font-mono font-bold text-blue-900">${u.usuario || 'N/A'}</span></div>
+                </div>
+                <div><span class="block text-[10px] text-slate-400 uppercase font-semibold">Nombre Completo:</span><span class="font-bold text-slate-900 text-sm">${u.nombre || 'N/A'}</span></div>
+                <div><span class="block text-[10px] text-slate-400 uppercase font-semibold">Correo Electrónico:</span><span class="semibold text-blue-800">${u.correo || 'N/A'}</span></div>
+                <div class="grid grid-cols-2 gap-3 pt-2 border-t border-slate-200">
+                    <div><span class="block text-[10px] text-slate-400 uppercase font-semibold">Cargo:</span><span class="semibold text-slate-700">${u.cargo || 'N/A'}</span></div>
+                    <div><span class="block text-[10px] text-slate-400 uppercase font-semibold">Suplente:</span><span class="semibold text-slate-700">${u.suplente || 'N/A'}</span></div>
+                </div>
+                <div class="grid grid-cols-2 gap-3 pt-2 border-t border-slate-200">
+                    <div><span class="block text-[10px] text-slate-400 uppercase font-semibold">Ubicación:</span><span class="font-bold text-slate-800">${u.ubicacion || 'N/A'}</span></div>
+                    <div><span class="block text-[10px] text-slate-400 uppercase font-semibold">Extensión:</span><span class="font-bold text-slate-800 font-mono">${u.extension || 'N/A'}</span></div>
+                </div>
+            `;
+            document.getElementById('userModal').classList.remove('hidden');
+        }
+        function closeUserModal() { document.getElementById('userModal').classList.add('hidden'); }
+
+        function filterAdminDirectory() {
+            const query = document.getElementById('adminDirSearch').value.toLowerCase().trim();
+            if(!query){ renderAdminDirectoryTable(globalAdminUsers); return; }
+            const filtered = globalAdminUsers.filter(u => 
+                (u.nombre && u.nombre.toLowerCase().includes(query)) ||
+                (u.cargo && u.cargo.toLowerCase().includes(query)) ||
+                (u.ur && u.ur.toLowerCase().includes(query)) ||
+                (u.ubicacion && u.ubicacion.toLowerCase().includes(query))
+            );
+            renderAdminDirectoryTable(filtered);
+        }
+
+        function openColorCodesModal() { document.getElementById('colorCodesModal').classList.remove('hidden'); }
+        function closeColorCodesModal() { document.getElementById('colorCodesModal').classList.add('hidden'); }
+        
+        function openCalendarModal() { 
+            viewDate = new Date(); 
+            document.getElementById('calendarModal').classList.remove('hidden'); 
+            renderCalendarGrid(); 
+        }
+        function closeCalendarModal() { document.getElementById('calendarModal').classList.add('hidden'); }
+        function changeMonth(direction) { viewDate.setDate(1); viewDate.setMonth(viewDate.getMonth() + direction); renderCalendarGrid(); }
+
+        function renderCalendarGrid() {
+            const gridContainer = document.getElementById('calendarGrid');
+            const titleEl = document.getElementById('calendarMonthTitle');
+            const year = viewDate.getFullYear(); const month = viewDate.getMonth();
+            const monthsNames = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+            titleEl.innerText = `${monthsNames[month]} ${year}`;
+            const firstDayIndex = new Date(year, month, 1).getDay();
+            const totalDays = new Date(year, month + 1, 0).getDate();
+            const prevTotalDays = new Date(year, month, 0).getDate();
+            gridContainer.innerHTML = '';
+            for (let i = firstDayIndex; i > 0; i--) { gridContainer.appendChild(createDayCell(prevTotalDays - i + 1, true)); }
+            for (let day = 1; day <= totalDays; day++) {
+                const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                const dayActivities = globalActivities.filter(a => {
+                    const fInicio = a.fecha;
+                    const fFin = a.fechaFin || a.fecha;
+                    return dateStr >= fInicio && dateStr <= fFin;
+                });
+                gridContainer.appendChild(createDayCell(day, false, dayActivities));
+            }
+            const totalCells = firstDayIndex + totalDays;
+            const remaining = totalCells <= 35 ? 35 - totalCells : 42 - totalCells;
+            for (let i = 1; i <= remaining; i++) { gridContainer.appendChild(createDayCell(i, true)); }
+        }
+
+        function createDayCell(dayNum, isInactive, activities = []) {
+            const hasEvent = activities.length > 0;
+            const hasAdminTrain = activities.some(a => a.esAdminCapacitacion || a.esCapacitacion);
+            const hasMyriamTrain = activities.some(a => a.esCapacitacion && !a.esAdminCapacitacion);
+            const cell = document.createElement('div');
+            
+            const bgClass = isInactive ? 'opacity-40 bg-slate-50' : (hasAdminTrain ? 'bg-teal-50/90 border-teal-200 shadow-sm' : (hasMyriamTrain ? 'bg-orange-50/90 border-orange-200 shadow-sm' : (hasEvent ? 'bg-blue-50/90 border-blue-200 shadow-sm' : 'bg-white')));
+            cell.className = `border rounded-xl p-2 flex flex-col justify-start min-h-[90px] overflow-hidden ${bgClass}`;
+            
+            const num = document.createElement('span'); 
+            num.className = `text-xs font-bold mb-1 ${isInactive ? 'text-slate-400' : (hasAdminTrain ? 'text-teal-900' : (hasMyriamTrain ? 'text-orange-900' : (hasEvent ? 'text-blue-900' : 'text-slate-800')))}`; 
+            num.innerText = dayNum; 
+            cell.appendChild(num);
+
+            const content = document.createElement('div'); content.className = "space-y-1 overflow-y-auto";
+            if (hasEvent) {
+                activities.forEach(act => {
+                    const isAdminTrain = act.esAdminCapacitacion || act.esCapacitacion;
+                    const isMyriam = act.esCapacitacion && !act.esAdminCapacitacion;
+                    const badge = document.createElement('div');
+                    
+                    const badgeStyle = isAdminTrain 
+                        ? 'bg-teal-100 border-teal-300 text-teal-900 font-bold' 
+                        : (isMyriam ? 'bg-orange-100 border-orange-300 text-orange-900 font-bold' : 'bg-white/90 border-blue-200 text-blue-900 font-bold');
+
+                    badge.className = `p-1 border rounded text-[9px] truncate cursor-pointer transition-colors shadow-xs ${badgeStyle}`;
+                    badge.title = act.titulo; 
+                    badge.innerHTML = act.titulo;
+                    const dateText = act.fechaFin && act.fechaFin !== act.fecha ? `${act.fecha} al ${act.fechaFin}` : act.fecha;
+                    badge.onclick = () => showModal(`📌 ${act.titulo}`, `🕒 Horario: ${act.hora}\n📅 Fecha: ${dateText}\n📍 Sede: ${act.sede || act.mes || 'N/A'}\n💻 Modalidad: ${act.modalidad || 'Presencial'}\n\n${act.descripcion}`, null, false, act);
+                    content.appendChild(badge);
+                });
+            }
+            cell.appendChild(content); return cell;
+        }
+
+        function showModal(title, body, callback = null, showCancel = false, eventData = null) {
+            document.getElementById('msgTitle').innerText = title;
+            document.getElementById('msgBody').innerText = body;
+            
+            const cancelBtnFallback = document.getElementById('msgCancelBtnFallback');
+            const confirmBtn = document.getElementById('msgConfirmBtn');
+            const actionsDiv = document.getElementById('eventModalActions');
+
+            if (eventData) {
+                actionsDiv.classList.remove('hidden');
+                confirmBtn.classList.add('hidden');
+                cancelBtnFallback.classList.add('hidden');
+                document.getElementById('eventDeleteBtn').onclick = () => { closeMsgModal(); deleteActivity(eventData.id); };
+                document.getElementById('eventEditBtn').onclick = () => { closeMsgModal(); openEditActivityModalFromId(eventData.id); };
+            } else {
+                actionsDiv.classList.add('hidden');
+                confirmBtn.classList.remove('hidden');
+                if (showCancel) {
+                    cancelBtnFallback.classList.remove('hidden'); 
+                    confirmBtn.innerText = "Sí, Continuar";
+                    confirmBtn.classList.replace('bg-blue-900', 'bg-red-600');
+                } else {
+                    cancelBtnFallback.classList.add('hidden'); 
+                    confirmBtn.innerText = "Aceptar";
+                    confirmBtn.classList.replace('bg-red-600', 'bg-blue-900');
+                }
+            }
+            pendingAction = callback; 
+            document.getElementById('msgModal').classList.remove('hidden');
+        }
+
+        function closeMsgModal() { 
+            document.getElementById('msgModal').classList.add('hidden'); 
+            if (pendingAction) { pendingAction(); pendingAction = null; } 
+        }
+
+        function handleLogout() {
+            localStorage.removeItem('uipc_current_user');
+            window.location.href = 'login.html';
+        }
+    </script>
+</body>
+</html>

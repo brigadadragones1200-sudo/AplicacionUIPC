@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <script>
+        (function() {
+            try {
+                const currentUser = sessionStorage.getItem('uipc_current_user');
+                if (!currentUser) {
+                    window.location.replace('loginuipc.html');
+                }
+            } catch(e) {
+                window.location.replace('loginuipc.html');
+            }
+        })();
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Institucional UIPC - Maestro</title>
+    <link rel="icon" type="image/png" href="images/logo_UIPC.png">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        body {
+            background-color: #0b1120; /* Fondo general ultra sobrio y elegante */
+            background-image: linear-gradient(to bottom, rgba(11, 17, 32, 0.94), rgba(15, 23, 42, 0.97)), url('images/fdouipc.jpeg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            display: flex;
+            justify-content: center;
+            padding: 30px 0;
+            overflow-x: auto; 
+        }
+
+        .maqueta-container {
+            width: 1964px;
+            min-width: 1964px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 24px;
+            margin: 0 auto;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            min-height: 100%;
+            border: none;
+            background: transparent;
+        }
+
+        /* Paleta corporativa sobria: Gris pizarra profundo, acentos en azul ejecutivo y sombras sutiles */
+        .encabezado {
+            width: 1964px;
+            height: 64px;
+            background-color: #111827;
+            overflow: hidden;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            position: fixed;
+            top: 15px;
+            z-index: 1000;
+        }
+
+        .content-wrapper {
+            width: 1182px;
+            display: flex;
+            flex-direction: column;
+            gap: 22px;
+            margin-top: 65px;
+        }
+
+        .botonera {
+            width: 1182px;
+            height: 80px;
+            background-color: #111827;
+            border-radius: 14px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+        }
+
+        .avisos {
+            width: 1182px;
+            height: 75px;
+            background-color: #0b1120;
+            border-radius: 14px;
+            overflow: hidden;
+            border: 1px solid rgba(37, 99, 235, 0.35);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+        }
+
+        .perfil {
+            width: 1182px;
+            min-height: 350px;
+            background-color: #111827;
+            border-radius: 14px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+        }
+
+        .actividades {
+            width: 1182px;
+            min-height: 520px;
+            background-color: #111827;
+            border-radius: 14px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+        }
+
+        .minutas {
+            width: 1182px;
+            min-height: 500px;
+            background-color: #111827;
+            border-radius: 14px;
+            overflow: hidden;
+            border: 1px solid rgba(37, 99, 235, 0.4);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+        }
+
+        .module-large {
+            width: 1182px;
+            border-radius: 14px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+            background-color: #111827;
+        }
+
+        .frap {
+            min-height: 90px;
+            height: 90px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .formato-red {
+            min-height: 120px;
+            height: 90px;
+            display: flex;
+            align-items: center;
+        }
+
+        .poblacion {
+            min-height: 800px;
+        }
+        .documentos {
+            min-height: 700px;
+        }
+        .directorio {
+            min-height: 500px;
+        }
+        .conexiones {
+            min-height: 700px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="maqueta-container">
+        
+        <div class="encabezado">
+            <iframe src="Modulos/encabezado.html" title="Encabezado"></iframe>
+        </div>
+
+        <div class="content-wrapper">
+
+            <div class="botonera">
+                <iframe src="Modulos/botonera.html" title="Botonera"></iframe>
+            </div>
+
+            <div class="avisos">
+                <iframe src="Modulos/avisos.html" title="Avisos"></iframe>
+            </div>
+
+            <div class="perfil" id="perfilPanel">
+                <iframe src="Modulos/perfil.html" title="Perfil"></iframe>
+            </div>
+
+            <div class="actividades" id="actividadesContainerFrame">
+                <iframe id="iframeActividades" src="Modulos/actividades.html" title="Actividades"></iframe>
+            </div>
+
+            <div class="minutas" id="minutasPanel">
+                <iframe src="Modulos/minutas.html" title="Minutas"></iframe>
+            </div>
+
+            <div class="module-large frap">
+                <iframe src="Modulos/frapc.html" title="FRAP"></iframe>
+            </div>
+            
+            <div class="module-large formato-red">
+                <iframe src="Modulos/RED.html" title="Formato RED"></iframe>
+            </div>
+
+            <div class="module-large poblacion">
+                <iframe src="Modulos/poblacion_user.html" title="poblacion"></iframe>
+            </div>
+            <div class="module-large documentos">
+                <iframe src="Modulos/documentos.html" title="Documentos"></iframe>
+            </div>
+            <div class="module-large conexiones">
+                <iframe src="Modulos/conexiones.html" title="Conexiones"></iframe>
+            </div>
+            <div class="module-large directorio">
+                <iframe src="Modulos/directorio.html" title="Directorio"></iframe>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            try {
+                const userStr = sessionStorage.getItem('uipc_current_user');
+                if (userStr) {
+                    const userObj = JSON.parse(userStr);
+                    const username = (userObj.usuario || '').toLowerCase();
+                    
+                    if (username === 'myriam.rojas') {
+                        const iframeAct = document.getElementById('iframeActividades');
+                        if (iframeAct) {
+                            iframeAct.src = 'Modulos/actividades_captura_curso.html';
+                        }
+                    }
+                }
+            } catch (e) {}
+
+            enviarHeartbeat();
+            setInterval(enviarHeartbeat, 10000); 
+        });
+
+        function enviarHeartbeat() {
+            try {
+                const userStr = sessionStorage.getItem('uipc_current_user');
+                if (userStr) {
+                    const userObj = JSON.parse(userStr);
+                    if (userObj && userObj.usuario) {
+                        fetch('/api/heartbeat', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ userId: userObj.usuario })
+                        }).catch(err => {});
+                    }
+                }
+            } catch (e) {}
+        }
+    </script>
+</body>
+</html>
+```eof
+
+### Propuesta de Diseño Institucional Sobrio (Dark Executive)
+
+He rediseñado tu **`dashboard_master.html`** eliminando los tonos pasteles y coloridos anteriores por una paleta de colores **seria, ejecutiva y elegante**, ideal para entornos de alta dirección y control de protección civil:
+
+1. **Fondo General y Gradiente Ejecutivo (`#0b1120`):** Se implementó una base en tonos gris pizarra profundo y azul oscuro nocturno con un degradado sutil sobre tu fondo institucional, lo que reduce la fatiga visual y le da una presencia sumamente profesional.
+2. **Paneles y Módulos Unificados:** Todos los contenedores de los iframes (`.perfil`, `.actividades`, `.minutas`, etc.) ahora mantienen una misma línea estética de fondo oscuro (`#111827`) con bordes sutiles y sombras profesionales, eliminando el contraste estridente entre bloques.
+3. **Bordes y Destacados Institucionales:** Se conservaron acentos en azul ejecutivo (`#2563eb`) en los módulos de mayor criticidad (como Minutas y Avisos) para mantener una jerarquía visual limpia y sobria.
+
+Guarda este código actualizado como tu archivo **`dashboard_master.html`** y recarga tu navegador para ver la transformación.
