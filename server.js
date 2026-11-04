@@ -9,6 +9,7 @@ const PORT = process.env.PORT || 3000;
 const dbFile = path.join(__dirname, 'usuarios.json');
 const pobFile = path.join(__dirname, 'poblacion.json');
 const eventosFile = path.join(__dirname, 'eventos.json');
+const actFile = path.join(__dirname, 'actividades.json');
 
 // Memoria volátil para controlar usuarios en línea activos
 const activeUsers = {};
@@ -21,6 +22,7 @@ app.use(express.static(__dirname));
 // Verificar y crear archivos JSON si no existen para evitar bloqueos
 if (!fs.existsSync(dbFile)) fs.writeFileSync(dbFile, '[]', 'utf8');
 if (!fs.existsSync(pobFile)) fs.writeFileSync(pobFile, '[]', 'utf8');
+if (!fs.existsSync(actFile)) fs.writeFileSync(actFile, '[]', 'utf8');
 
 // Vistas y Rutas principales
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'loginuipc.html')));
@@ -47,8 +49,17 @@ app.post('/api/login', (req, res) => {
 app.get('/api/admin/users', (req, res) => {
     try {
         const users = JSON.parse(fs.readFileSync(dbFile, 'utf8'));
-        // Ocultar las contraseñas por seguridad al listar el directorio público/administrativo
-        const safeUsers = users.map(({ password, contrasena, ...rest }) => rest);
+        const safeUsers = users.map(u => ({
+            usuario: u.usuario,
+            nombre: u.nombre,
+            ur: u.ur,
+            cargo: u.cargo,
+            suplente: u.suplente,
+            ubicacion: u.ubicacion,
+            extension: u.extension,
+            correo: u.correo,
+            indicativo: u.indicativo
+        }));
         res.json({ success: true, users: safeUsers });
     } catch (e) {
         res.status(500).json({ success: false, users: [] });
@@ -71,7 +82,7 @@ app.get('/api/admin/online-users', (req, res) => {
         const list = users.map(u => {
             const last = activeUsers[u.usuario] || 0;
             const diff = now - last;
-            const isOnline = diff < 30000; // Activo si hubo pulso en los últimos 30 segundos
+            const isOnline = diff < 30000;
             let lastActiveStr = "Desconectado";
             if (last > 0) {
                 const seconds = Math.floor(diff / 1000);
@@ -186,6 +197,52 @@ app.post('/api/eventos/borrar', (req, res) => {
         res.json({ success: true });
     } catch (e) {
         res.status(500).json({ success: false });
+    }
+});
+
+// 6. API DE ACTIVIDADES Y CALENDARIO (actividades.json)
+app.get('/api/actividades', (req, res) => {
+    try {
+        if (!fs.existsSync(actFile)) fs.writeFileSync(actFile, '[]', 'utf8');
+        const acts = JSON.parse(fs.readFileSync(actFile, 'utf8'));
+        res.json({ success: true, activities: acts });
+    } catch (e) {
+        res.status(500).json({ success: false, activities: [] });
+    }
+});
+
+app.post('/api/admin/add-activity', (req, res) => {
+    const newAct = req.body;
+    let acts = [];
+    try {
+        if (fs.existsSync(actFile)) acts = JSON.parse(fs.readFileSync(actFile, 'utf8'));
+    } catch (e) {}
+
+    newAct.id = newAct.id || Date.now().toString();
+    acts.push(newAct);
+
+    try {
+        fs.writeFileSync(actFile, JSON.stringify(acts, null, 2), 'utf8');
+        res.json({ success: true, activity: newAct });
+    } catch (e) {
+        res.status(500).json({ success: false, message: 'Error al guardar la actividad.' });
+    }
+});
+
+app.post('/api/admin/delete-activity', (req, res) => {
+    const { id } = req.body;
+    let acts = [];
+    try {
+        if (fs.existsSync(actFile)) acts = JSON.parse(fs.readFileSync(actFile, 'utf8'));
+    } catch (e) {}
+
+    acts = acts.filter(a => String(a.id) !== String(id));
+
+    try {
+        fs.writeFileSync(actFile, JSON.stringify(acts, null, 2), 'utf8');
+        res.json({ success: true });
+    } catch (e) {
+        res.status(500).json({ success: false, message: 'Error al eliminar la actividad.' });
     }
 });
 
