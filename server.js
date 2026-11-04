@@ -10,6 +10,9 @@ const dbFile = path.join(__dirname, 'usuarios.json');
 const pobFile = path.join(__dirname, 'poblacion.json');
 const eventosFile = path.join(__dirname, 'eventos.json');
 
+// Memoria volátil para controlar usuarios en línea activos
+const activeUsers = {};
+
 // Middlewares esenciales
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -40,7 +43,59 @@ app.post('/api/login', (req, res) => {
     }
 });
 
-// 2. API DE POBLACIÓN
+// 2. API DIRECTORIO DE USUARIOS (usuarios.json)
+app.get('/api/admin/users', (req, res) => {
+    try {
+        const users = JSON.parse(fs.readFileSync(dbFile, 'utf8'));
+        // Ocultar las contraseñas por seguridad al listar el directorio público/administrativo
+        const safeUsers = users.map(({ password, contrasena, ...rest }) => rest);
+        res.json({ success: true, users: safeUsers });
+    } catch (e) {
+        res.status(500).json({ success: false, users: [] });
+    }
+});
+
+// 3. API MONITOR DE USUARIOS EN LÍNEA
+app.post('/api/heartbeat', (req, res) => {
+    const { userId } = req.body;
+    if (userId) {
+        activeUsers[userId] = Date.now();
+    }
+    res.json({ success: true });
+});
+
+app.get('/api/admin/online-users', (req, res) => {
+    try {
+        const users = JSON.parse(fs.readFileSync(dbFile, 'utf8'));
+        const now = Date.now();
+        const list = users.map(u => {
+            const last = activeUsers[u.usuario] || 0;
+            const diff = now - last;
+            const isOnline = diff < 30000; // Activo si hubo pulso en los últimos 30 segundos
+            let lastActiveStr = "Desconectado";
+            if (last > 0) {
+                const seconds = Math.floor(diff / 1000);
+                if (seconds < 60) lastActiveStr = `Hace ${seconds}s`;
+                else lastActiveStr = `Hace ${Math.floor(seconds/60)}m`;
+            }
+            return {
+                usuario: u.usuario,
+                nombre: u.nombre,
+                ur: u.ur,
+                cargo: u.cargo,
+                ubicacion: u.ubicacion,
+                extension: u.extension,
+                isOnline,
+                lastActive: lastActiveStr
+            };
+        });
+        res.json({ success: true, users: list });
+    } catch (e) {
+        res.status(500).json({ success: false, users: [] });
+    }
+});
+
+// 4. API DE POBLACIÓN
 app.get('/api/poblacion', (req, res) => {
     try {
         const records = JSON.parse(fs.readFileSync(pobFile, 'utf8'));
@@ -81,7 +136,7 @@ app.post('/api/poblacion/delete', (req, res) => {
     res.json({ success: true });
 });
 
-// 3. API DE EVENTOS Y AGENDA
+// 5. API DE EVENTOS Y AGENDA
 const obtenerAgendaAlDia = () => {
     const hoy = new Date().toLocaleDateString('es-MX', { timeZone: 'America/Mexico_City' });
     let data = { fecha_creacion: hoy, lista: [] };
