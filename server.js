@@ -10,6 +10,7 @@ const dbFile = path.join(__dirname, 'usuarios.json');
 const pobFile = path.join(__dirname, 'poblacion.json');
 const eventosFile = path.join(__dirname, 'eventos.json');
 const actFile = path.join(__dirname, 'actividades.json');
+const asisFile = path.join(__dirname, 'asistencia.json');
 
 // Memoria volátil para controlar usuarios en línea activos
 const activeUsers = {};
@@ -23,6 +24,7 @@ app.use(express.static(__dirname));
 if (!fs.existsSync(dbFile)) fs.writeFileSync(dbFile, '[]', 'utf8');
 if (!fs.existsSync(pobFile)) fs.writeFileSync(pobFile, '[]', 'utf8');
 if (!fs.existsSync(actFile)) fs.writeFileSync(actFile, '[]', 'utf8');
+if (!fs.existsSync(asisFile)) fs.writeFileSync(asisFile, '{}', 'utf8');
 
 // Vistas y Rutas principales
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'loginuipc.html')));
@@ -244,6 +246,53 @@ app.post('/api/admin/delete-activity', (req, res) => {
     } catch (e) {
         res.status(500).json({ success: false, message: 'Error al eliminar la actividad.' });
     }
+});
+
+// 7. API DE CONTROL DE ASISTENCIA DIARIA (asistencia.json)
+app.get('/api/asistencia', (req, res) => {
+    try {
+        if (!fs.existsSync(asisFile)) fs.writeFileSync(asisFile, '{}', 'utf8');
+        let registros = JSON.parse(fs.readFileSync(asisFile, 'utf8'));
+        const hoyFechaStr = new Date().toLocaleDateString('es-MX', { timeZone: 'America/Mexico_City' });
+
+        let registrosHoy = {};
+        let huboCambios = false;
+
+        for (let usuario in registros) {
+            if (registros[usuario].fechaDia === hoyFechaStr) {
+                registrosHoy[usuario] = registros[usuario];
+            } else {
+                huboCambios = true;
+            }
+        }
+
+        if (huboCambios) fs.writeFileSync(asisFile, JSON.stringify(registrosHoy, null, 2), 'utf8');
+        res.json({ success: true, registros: registrosHoy });
+    } catch (e) {
+        res.status(500).json({ success: false, message: 'Error al leer la asistencia.' });
+    }
+});
+
+app.post('/api/asistencia', (req, res) => {
+    const { usuario, estatus, hora, observaciones } = req.body;
+    if (!usuario) return res.status(400).json({ success: false, message: 'Usuario requerido.' });
+    
+    let registros = {};
+    try {
+        if (fs.existsSync(asisFile)) registros = JSON.parse(fs.readFileSync(asisFile, 'utf8'));
+    } catch (e) {}
+
+    const hoyFechaStr = new Date().toLocaleDateString('es-MX', { timeZone: 'America/Mexico_City' });
+
+    registros[usuario] = {
+        estatus,
+        hora,
+        fechaDia: hoyFechaStr,
+        observaciones: observaciones || 'Sin observaciones'
+    };
+
+    fs.writeFileSync(asisFile, JSON.stringify(registros, null, 2), 'utf8');
+    res.json({ success: true });
 });
 
 // Iniciar servidor usando estrictamente el puerto dinámico
