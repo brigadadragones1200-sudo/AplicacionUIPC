@@ -3,17 +3,19 @@ const httpMod = require('http');
 const path = require('path');
 const fs = require('fs');
 const multer = require('multer');
-const pdfParse = require('pdf-parse');
+const { exec } = require('child_process');
+const util = require('util');
+const execPromise = util.promisify(exec);
 
 const app = express();
 const server = httpMod.createServer(app);
 const PORT = process.env.PORT || 3000;
 
-// Directorios principales
+// Directorios principales en el servidor Linux (Usuario: dgdysnem1)
 const uploadDir = path.join(__dirname, 'uploads');
 const frapcUploadDir = path.join(uploadDir, 'frapc');
-const minutasUploadDir = '/home/sirver/Master_servidor_UIPC/uploads/minutas/';
-const rutaRedFormato = '/home/sirver/Master_servidor_UIPC/uploads/RED_Formato/';
+const minutasUploadDir = '/home/dgdysnem1/Master_servidor_UIPC/uploads/minutas/';
+const rutaRedFormato = '/home/dgdysnem1/Master_servidor_UIPC/uploads/RED_Formato/';
 
 // Archivos de base de datos JSON
 const dbFile = path.join(__dirname, 'usuarios.json');
@@ -73,6 +75,9 @@ const uploadRED = multer({ storage: storageRED });
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname));
+
+// NUEVO: Exponer carpeta uploads de forma pública para visualizar PDFs y FRAPCs
+app.use('/uploads', express.static(uploadDir));
 
 // RUTA INICIAL
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'loginuipc.html')));
@@ -135,7 +140,7 @@ app.post('/api/admin/delete-user', (req, res) => {
     res.json({ success: true });
 });
 
-// MONITOR DE USUARIOS EN LÍNEA (HEARTBEAT)
+// MONITOR DE USUARIOS EN LÍNEA
 app.post('/api/heartbeat', (req, res) => {
     const { userId } = req.body;
     if (userId) activeUsers[userId] = Date.now();
@@ -350,6 +355,35 @@ app.get('/api/file/red', (req, res) => {
     else res.status(404).send('Archivo no encontrado.');
 });
 
+// NUEVO ENDPOINT: API FRAPC para leer automáticamente la carpeta física uploads/frapc
+app.get('/api/frapcs', (req, res) => {
+    if (!fs.existsSync(frapcUploadDir)) {
+        fs.mkdirSync(frapcUploadDir, { recursive: true });
+    }
+
+    fs.readdir(frapcUploadDir, (err, files) => {
+        if (err) {
+            console.error("Error al leer la carpeta frapc:", err);
+            return res.status(500).json({ frapcs: [] });
+        }
+
+        const listaFrapcs = files
+            .filter(file => fs.statSync(path.join(frapcUploadDir, file)).isFile())
+            .map((file, index) => {
+                const filePath = path.join(frapcUploadDir, file);
+                const stats = fs.statSync(filePath);
+                return {
+                    id: index + 1,
+                    folio: file,
+                    fecha: stats.mtime.toLocaleString('es-MX'),
+                    url: `/uploads/frapc/${file}`
+                };
+            });
+
+        res.json({ frapcs: listaFrapcs });
+    });
+});
+
 // SUBIDA FRAPC
 app.post('/api/upload-frapc', upload.single('pdfFile'), (req, res) => {
     if (!req.file) return res.status(400).json({ success: false, message: 'No se adjuntó archivo.' });
@@ -376,194 +410,4 @@ app.post('/api/upload-frapc', upload.single('pdfFile'), (req, res) => {
     res.json({ success: true, file: newFile });
 });
 
-// SUBIDA GENERAL CON LECTURA/PARSEO AUTOMÁTICO DE PDF
-app.post('/api/upload', upload.single('pdfFile'), async (req, res) => {
-    if (!req.file) return res.status(400).json({ success: false, message: 'No se adjuntó archivo.' });
-    
-    let files = JSON.parse(fs.readFileSync(filesFile, 'utf8'));
-    const hoyStr = new Date().toLocaleDateString();
-    const horaStr = new Date().toLocaleTimeString();
-    
-    const isMinuta = (req.headers['x-target-folder'] === 'Minutas') || 
-                     (req.body && req.body.tipoCarpeta === 'Minutas') ||
-                     (req.file.originalname.toLowerCase().includes('min'));
-
-    let finalPath = '';
-    const rawUser = req.query.userId || (req.body ? req.body.usuario : 'general');
-    const userIdClean = String(rawUser).toLowerCase().replace(/[^a-z0-9_.-]/g, '_');
-
-    if (isMinuta) {
-        finalPath = `/uploads/minutas/${req.file.originalname}`;
-        const tempPath = req.file.path;
-        const targetPath = path.join(minutasUploadDir, req.file.originalname);
-        if (tempPath !== targetPath) {
-            fs.copyFileSync(tempPath, targetPath);
-            try { fs.unlinkSync(tempPath); } catch(e) {}
-        }
-    } else {
-        const userFolder = path.join(uploadDir, userIdClean);
-        if (!fs.existsSync(userFolder)) fs.mkdirSync(userFolder, { recursive: true });
-        
-        const tempPath = req.file.path;
-        const targetPath = path.join(userFolder, req.file.originalname);
-        if (tempPath !== targetPath) {
-            if (fs.existsSync(targetPath)) fs.unlinkSync(targetPath);
-            fs.renameSync(tempPath, targetPath);
-        }
-
-        finalPath = `/uploads/${userIdClean}/${req.file.originalname}`;
-    }
-
-    // LECTURA INTELIGENTE DEL PDF
-    try {
-        const absoluteTargetPath = path.join(__dirname, finalPath.replace(/^\//, ''));
-        if (fs.existsSync(absoluteTargetPath) && req.file.originalname.toLowerCase().endsWith('.pdf')) {
-            const dataBuffer = fs.readFileSync(absoluteTargetPath);
-            const pdfData = await pdfParse(dataBuffer);
-            console.log(`[PDF Lector] Archivo procesado '${req.file.originalname}'. Páginas: ${pdfData.numpages}. Datos privados omitidos.`);
-        }
-    } catch (error) {
-        console.log("[PDF Lector] Se guardó el archivo correctamente.");
-    }
-
-    const newFile = {
-        filename: req.file.originalname,
-        path: finalPath,
-        usuario: isMinuta ? 'Área de Comunicación' : rawUser,
-        fecha: `${hoyStr} ${horaStr}`,
-        comentarios: req.body.comentarios || 'Documento procesado'
-    };
-    
-    files = files.filter(f => f.filename !== req.file.originalname);
-    files.push(newFile);
-    fs.writeFileSync(filesFile, JSON.stringify(files, null, 2));
-    res.json({ success: true, file: newFile });
-});
-
-// BORRADO DE ARCHIVOS
-app.post('/api/delete-file', (req, res) => {
-    const { filename } = req.body;
-    let files = JSON.parse(fs.readFileSync(filesFile, 'utf8'));
-    const fileToDelete = files.find(f => f.filename === filename);
-    if (!fileToDelete) return res.status(404).json({ success: false });
-
-    files = files.filter(f => f.filename !== filename);
-    fs.writeFileSync(filesFile, JSON.stringify(files, null, 2));
-    
-    let absolutePath = '';
-    if (fileToDelete.path && fileToDelete.path.includes('/minutas/')) {
-        absolutePath = path.join(minutasUploadDir, filename);
-    } else {
-        const safePath = fileToDelete.path.replace(/^\/uploads\//, '').replace(/\.\.\//g, ''); 
-        absolutePath = path.join(uploadDir, safePath);
-    }
-
-    if (fs.existsSync(absolutePath)) fs.unlinkSync(absolutePath);
-    res.json({ success: true });
-});
-
-// AGENDA Y EVENTOS
-const obtenerAgendaAlDia = () => {
-    const hoy = new Date().toLocaleDateString('es-MX', { timeZone: 'America/Mexico_City' });
-    let data = { fecha_creacion: hoy, lista: [] };
-    
-    if (fs.existsSync(eventosFile)) {
-        try {
-            const archivoGuardado = JSON.parse(fs.readFileSync(eventosFile, 'utf8'));
-            if (archivoGuardado.fecha_creacion === hoy) {
-                data = archivoGuardado;
-            } else {
-                fs.writeFileSync(eventosFile, JSON.stringify(data, null, 2), 'utf8');
-            }
-        } catch (e) {}
-    } else {
-        fs.writeFileSync(eventosFile, JSON.stringify(data, null, 2), 'utf8');
-    }
-    return data;
-};
-
-app.get('/api/eventos', (req, res) => {
-    try {
-        const data = obtenerAgendaAlDia();
-        res.json({ success: true, eventos: data.lista });
-    } catch (error) {
-        res.status(500).json({ success: false, eventos: [] });
-    }
-});
-
-app.post('/api/eventos/lote', (req, res) => {
-    const nuevosEventos = req.body.eventos;
-    if (!nuevosEventos || !Array.isArray(nuevosEventos) || nuevosEventos.length === 0) {
-        return res.status(400).json({ success: false, error: 'No se recibieron eventos válidos.' });
-    }
-
-    try {
-        const data = obtenerAgendaAlDia();
-        const horaActual = new Date().toLocaleTimeString('es-MX', { timeZone: 'America/Mexico_City', hour: '2-digit', minute: '2-digit' });
-
-        nuevosEventos.forEach(evento => {
-            const id = Date.now() + Math.random();
-            const horaReg = evento.hora_registro || horaActual;
-            const textoCompleto = `
-${evento.Sede || 'No especificada'}
-Fecha: ${evento.fecha || 'No especificada'}
-Horario: ${evento.horario || 'No especificado'}
-Asistentes: ${evento['total de asistentes'] || 'No especificados'}
-Tema: ${evento['tema del evento'] || 'No especificado'}
-UR: ${evento['UR responsable'] || 'No especificada'}
-`.trim();
-            
-            data.lista.push({ id, texto_completo: textoCompleto, hora_registro: horaReg });
-        });
-
-        fs.writeFileSync(eventosFile, JSON.stringify(data, null, 2), 'utf8');
-        res.status(200).json({ success: true, mensaje: 'Eventos guardados exitosamente.' });
-    } catch (error) {
-        res.status(500).json({ success: false, error: 'Error interno del servidor.' });
-    }
-});
-
-app.post('/api/eventos/rapido', (req, res) => {
-    try {
-        const { contenido_whatsapp } = req.body;
-        if (!contenido_whatsapp) return res.status(400).json({ success: false, message: 'El texto está vacío' });
-
-        const data = obtenerAgendaAlDia();
-        const horaActual = new Date().toLocaleTimeString('es-MX', { timeZone: 'America/Mexico_City', hour: '2-digit', minute: '2-digit' });
-        const bloquesCrudos = contenido_whatsapp.split(/(?=\[.*?\]\s*[^:]+:\s*)/g);
-        let eventosAgregados = 0;
-
-        bloquesCrudos.forEach(bloque => {
-            const textoLimpio = bloque.trim();
-            if (textoLimpio.length > 10) {
-                data.lista.push({ id: Date.now() + Math.random(), texto_completo: textoLimpio, hora_registro: horaActual });
-                eventosAgregados++;
-            }
-        });
-
-        if (eventosAgregados === 0) {
-            data.lista.push({ id: Date.now(), texto_completo: contenido_whatsapp.trim(), hora_registro: horaActual });
-        }
-
-        fs.writeFileSync(eventosFile, JSON.stringify(data, null, 2), 'utf8');
-        res.json({ success: true, message: 'Eventos analizados correctamente' });
-    } catch (error) {
-        res.status(500).json({ success: false, message: 'Error interno del servidor' });
-    }
-});
-
-app.post('/api/eventos/borrar', (req, res) => {
-    try {
-        const hoy = new Date().toLocaleDateString('es-MX', { timeZone: 'America/Mexico_City' });
-        const data = { fecha_creacion: hoy, lista: [] };
-        fs.writeFileSync(eventosFile, JSON.stringify(data, null, 2), 'utf8');
-        res.json({ success: true, message: 'Agenda borrada correctamente' });
-    } catch (error) {
-        res.status(500).json({ success: false, message: 'Error al limpiar el muro' });
-    }
-});
-
-// INICIO DEL SERVIDOR
-server.listen(PORT, '0.0.0.0', () => {
-    console.log(`Servidor Maestro UIPC operando en http://localhost:${PORT}`);
-});
+// SUBIDA GENERAL Y PROCESO DE ESCANEOS (EXTRACCIÓN SAN
