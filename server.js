@@ -11,11 +11,11 @@ const app = express();
 const server = httpMod.createServer(app);
 const PORT = process.env.PORT || 3000;
 
-// Directorios principales adaptados de forma segura y portable para cPanel/GoDaddy
+// Directorios principales en el servidor Linux (Usuario: dgdysnem1)
 const uploadDir = path.join(__dirname, 'uploads');
 const frapcUploadDir = path.join(uploadDir, 'frapc');
-const minutasUploadDir = path.join(uploadDir, 'minutas');
-const rutaRedFormato = path.join(uploadDir, 'RED_Formato');
+const minutasUploadDir = '/home/dgdysnem1/Master_servidor_UIPC/uploads/minutas/';
+const rutaRedFormato = '/home/dgdysnem1/Master_servidor_UIPC/uploads/RED_Formato/';
 
 // Archivos de base de datos JSON
 const dbFile = path.join(__dirname, 'usuarios.json');
@@ -27,7 +27,7 @@ const eventosFile = path.join(__dirname, 'eventos.json');
 
 const activeUsers = {};
 
-// Crear carpetas físicas si no existen de forma segura
+// Crear carpetas si no existen
 if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
 if (!fs.existsSync(frapcUploadDir)) fs.mkdirSync(frapcUploadDir, { recursive: true });
 if (!fs.existsSync(minutasUploadDir)) fs.mkdirSync(minutasUploadDir, { recursive: true });
@@ -76,53 +76,40 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname));
 
-// Exponer carpeta uploads de forma pública para visualizar PDFs y FRAPCs
+// NUEVO: Exponer carpeta uploads de forma pública para visualizar PDFs y FRAPCs
 app.use('/uploads', express.static(uploadDir));
 
-// RUTAS INICIALES Y VISTAS PRINCIPALES
-app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'home.html')));
+// RUTA INICIAL
+app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'loginuipc.html')));
 app.get('/login.html', (req, res) => res.sendFile(path.join(__dirname, 'loginuipc.html')));
-app.get('/dashboard_mobile.html', (req, res) => res.sendFile(path.join(__dirname, 'dashboard_mobile.html')));
 
 // API AUTENTICACIÓN
 app.post('/api/login', (req, res) => {
     const { username, password } = req.body;
-    try {
-        const users = JSON.parse(fs.readFileSync(dbFile, 'utf8'));
-        const found = users.find(u => u.usuario === username && (u.password === password || u.contrasena === password));
-        if (found) {
-            res.json({ success: true, user: found });
-        } else {
-            res.status(401).json({ success: false, message: 'Credenciales inválidas.' });
-        }
-    } catch (err) {
-        res.status(500).json({ success: false, message: 'Error al leer la base de datos de usuarios.' });
+    const users = JSON.parse(fs.readFileSync(dbFile, 'utf8'));
+    const found = users.find(u => u.usuario === username && (u.password === password || u.contrasena === password));
+    if (found) {
+        res.json({ success: true, user: found });
+    } else {
+        res.status(401).json({ success: false, message: 'Credenciales inválidas.' });
     }
 });
 
 app.post('/api/recover-password', (req, res) => {
     const { usuario, extension } = req.body;
-    try {
-        const users = JSON.parse(fs.readFileSync(dbFile, 'utf8'));
-        const found = users.find(u => u.usuario === usuario && String(u.extension) === String(extension));
-        if (found) {
-            res.json({ success: true, password: found.password || found.contrasena });
-        } else {
-            res.status(404).json({ success: false, message: 'Usuario o extensión no coinciden.' });
-        }
-    } catch (err) {
-        res.status(500).json({ success: false, message: 'Error al procesar la solicitud.' });
+    const users = JSON.parse(fs.readFileSync(dbFile, 'utf8'));
+    const found = users.find(u => u.usuario === usuario && String(u.extension) === String(extension));
+    if (found) {
+        res.json({ success: true, password: found.password || found.contrasena });
+    } else {
+        res.status(404).json({ success: false, message: 'Usuario o extensión no coinciden.' });
     }
 });
 
 // ADMINISTRACIÓN DE USUARIOS
 app.get('/api/admin/users', (req, res) => {
-    try {
-        const users = JSON.parse(fs.readFileSync(dbFile, 'utf8'));
-        res.json({ success: true, users });
-    } catch (err) {
-        res.status(500).json({ success: false, users: [] });
-    }
+    const users = JSON.parse(fs.readFileSync(dbFile, 'utf8'));
+    res.json({ success: true, users });
 });
 
 app.post('/api/admin/add-user', (req, res) => {
@@ -368,7 +355,7 @@ app.get('/api/file/red', (req, res) => {
     else res.status(404).send('Archivo no encontrado.');
 });
 
-// API FRAPC
+// NUEVO ENDPOINT: API FRAPC para leer automáticamente la carpeta física uploads/frapc
 app.get('/api/frapcs', (req, res) => {
     if (!fs.existsSync(frapcUploadDir)) {
         fs.mkdirSync(frapcUploadDir, { recursive: true });
@@ -423,7 +410,7 @@ app.post('/api/upload-frapc', upload.single('pdfFile'), (req, res) => {
     res.json({ success: true, file: newFile });
 });
 
-// SUBIDA GENERAL Y PROCESO DE ESCANEOS
+// SUBIDA GENERAL Y PROCESO DE ESCANEOS (EXTRACCIÓN SANITIZADA)
 app.post('/api/upload', upload.single('pdfFile'), async (req, res) => {
     if (!req.file) return res.status(400).json({ success: false, message: 'No se adjuntó archivo.' });
     
@@ -463,7 +450,7 @@ app.post('/api/upload', upload.single('pdfFile'), async (req, res) => {
         finalPath = `/uploads/${userIdClean}/${req.file.originalname}`;
     }
 
-    // OCR EN SEGUNDO PLANO
+    // PROCESAMIENTO OCR EN SEGUNDO PLANO PARA ESCANEOS
     const absolutePdfPath = path.join(__dirname, finalPath.replace(/^\//, ''));
     if (fs.existsSync(absolutePdfPath) && req.file.originalname.toLowerCase().endsWith('.pdf') && !isMinuta) {
         const baseDir = path.dirname(absolutePdfPath);
@@ -543,3 +530,118 @@ app.post('/api/delete-file', (req, res) => {
 
     if (fs.existsSync(absolutePath)) {
         try { fs.unlinkSync(absolutePath); } catch (e) {}
+    }
+
+    const csvPath = absolutePath.replace(/\.pdf$/i, '_sanitizado.csv');
+    if (fs.existsSync(csvPath)) {
+        try { fs.unlinkSync(csvPath); } catch (e) {}
+    }
+
+    res.json({ success: true });
+});
+
+// AGENDA Y EVENTOS
+const obtenerAgendaAlDia = () => {
+    const hoy = new Date().toLocaleDateString('es-MX', { timeZone: 'America/Mexico_City' });
+    let data = { fecha_creacion: hoy, lista: [] };
+    
+    if (fs.existsSync(eventosFile)) {
+        try {
+            const archivoGuardado = JSON.parse(fs.readFileSync(eventosFile, 'utf8'));
+            if (archivoGuardado.fecha_creacion === hoy) {
+                data = archivoGuardado;
+            } else {
+                fs.writeFileSync(eventosFile, JSON.stringify(data, null, 2), 'utf8');
+            }
+        } catch (e) {}
+    } else {
+        fs.writeFileSync(eventosFile, JSON.stringify(data, null, 2), 'utf8');
+    }
+    return data;
+};
+
+app.get('/api/eventos', (req, res) => {
+    try {
+        const data = obtenerAgendaAlDia();
+        res.json({ success: true, eventos: data.lista });
+    } catch (error) {
+        res.status(500).json({ success: false, eventos: [] });
+    }
+});
+
+app.post('/api/eventos/lote', (req, res) => {
+    const nuevosEventos = req.body.eventos;
+    if (!nuevosEventos || !Array.isArray(nuevosEventos) || nuevosEventos.length === 0) {
+        return res.status(400).json({ success: false, error: 'No se recibieron eventos válidos.' });
+    }
+
+    try {
+        const data = obtenerAgendaAlDia();
+        const horaActual = new Date().toLocaleTimeString('es-MX', { timeZone: 'America/Mexico_City', hour: '2-digit', minute: '2-digit' });
+
+        nuevosEventos.forEach(evento => {
+            const id = Date.now() + Math.random();
+            const horaReg = evento.hora_registro || horaActual;
+            const textoCompleto = `
+${evento.Sede || 'No especificada'}
+Fecha: ${evento.fecha || 'No especificada'}
+Horario: ${evento.horario || 'No especificado'}
+Asistentes: ${evento['total de asistentes'] || 'No especificados'}
+Tema: ${evento['tema del evento'] || 'No especificado'}
+UR: ${evento['UR responsable'] || 'No especificada'}
+`.trim();
+            
+            data.lista.push({ id, texto_completo: textoCompleto, hora_registro: horaReg });
+        });
+
+        fs.writeFileSync(eventosFile, JSON.stringify(data, null, 2), 'utf8');
+        res.status(200).json({ success: true, mensaje: 'Eventos guardados exitosamente.' });
+    } catch (error) {
+        res.status(500).json({ success: false, error: 'Error interno del servidor.' });
+    }
+});
+
+app.post('/api/eventos/rapido', (req, res) => {
+    try {
+        const { contenido_whatsapp } = req.body;
+        if (!contenido_whatsapp) return res.status(400).json({ success: false, message: 'El texto está vacío' });
+
+        const data = obtenerAgendaAlDia();
+        const horaActual = new Date().toLocaleTimeString('es-MX', { timeZone: 'America/Mexico_City', hour: '2-digit', minute: '2-digit' });
+        const bloquesCrudos = contenido_whatsapp.split(/(?=\[.*?\]\s*[^:]+:\s*)/g);
+        let eventosAgregados = 0;
+
+        bloquesCrudos.forEach(bloque => {
+            const textoLimpio = bloque.trim();
+            if (textoLimpio.length > 10) {
+                data.lista.push({ id: Date.now() + Math.random(), texto_completo: textoLimpio, hora_registro: horaActual });
+                eventosAgregados++;
+            }
+        });
+
+        if (eventosAgregados === 0) {
+            data.lista.push({ id: Date.now(), texto_completo: contenido_whatsapp.trim(), hora_registro: horaActual });
+        }
+
+        fs.writeFileSync(eventosFile, JSON.stringify(data, null, 2), 'utf8');
+        res.json({ success: true, message: 'Eventos analizados correctamente' });
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Error interno del servidor' });
+    }
+});
+
+app.post('/api/eventos/borrar', (req, res) => {
+    try {
+        const hoy = new Date().toLocaleDateString('es-MX', { timeZone: 'America/Mexico_City' });
+        const data = { fecha_creacion: hoy, lista: [] };
+        fs.writeFileSync(eventosFile, JSON.stringify(data, null, 2), 'utf8');
+        res.json({ success: true, message: 'Agenda borrada correctamente' });
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Error al limpiar el muro' });
+    }
+});
+
+// INICIO DEL SERVIDOR
+server.listen(PORT, '0.0.0.0', () => {
+    console.log(`Servidor Maestro UIPC operando en http://localhost:${PORT}`);
+});
