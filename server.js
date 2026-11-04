@@ -20,7 +20,6 @@ const uploadDir = path.join(__dirname, 'uploads');
 const frapcUploadDir = path.join(uploadDir, 'frapc');
 const minutasUploadDir = path.join(uploadDir, 'minutas');
 
-// Memoria volátil para controlar el estado de usuarios en línea
 const activeUsers = {};
 
 // ==========================================
@@ -59,7 +58,6 @@ app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 app.use(express.static(__dirname));
 
-// Exponer carpetas de subidas de forma pública
 app.use('/uploads', express.static(uploadDir));
 app.use('/uploads/minutas', express.static(minutasUploadDir));
 
@@ -123,9 +121,12 @@ app.get('/api/admin/all-users', (req, res) => {
     }
 });
 
-app.post('/api/admin/save-user', (req, res) => {
+// Procesador centralizado para guardar o actualizar usuarios compatible con POST y PUT
+const procesarGuardadoUsuario = (req, res) => {
     const userData = req.body;
-    if (!userData.usuario) {
+    const identificador = userData.usuario || userData.id;
+
+    if (!identificador) {
         return res.status(400).json({ success: false, message: 'El ID de usuario es obligatorio.' });
     }
 
@@ -136,18 +137,19 @@ app.post('/api/admin/save-user', (req, res) => {
         }
     } catch (e) {}
 
-    const index = users.findIndex(u => u.usuario === userData.usuario);
+    const index = users.findIndex(u => u.usuario === identificador || u.id === identificador);
     
     if (index >= 0) {
         users[index] = {
             ...users[index],
             ...userData,
-            password: userData.password || users[index].password || users[index].contrasena,
-            contrasena: userData.contrasena || users[index].contrasena || users[index].password
+            usuario: identificador,
+            password: userData.password || userData.contrasena || users[index].password || users[index].contrasena || '',
+            contrasena: userData.contrasena || userData.password || users[index].contrasena || users[index].password || ''
         };
     } else {
         users.push({
-            usuario: userData.usuario,
+            usuario: identificador,
             password: userData.password || userData.contrasena || '123456',
             contrasena: userData.contrasena || userData.password || '123456',
             nombre: userData.nombre || '',
@@ -163,11 +165,21 @@ app.post('/api/admin/save-user', (req, res) => {
 
     try {
         fs.writeFileSync(dbFile, JSON.stringify(users, null, 2), 'utf8');
-        res.json({ success: true, message: 'Usuario guardado correctamente.' });
+        return res.json({ success: true, message: 'Usuario guardado correctamente.' });
     } catch (e) {
-        res.status(500).json({ success: false, message: 'Error al guardar en el servidor.' });
+        return res.status(500).json({ success: false, message: 'Error al escribir en el servidor.' });
     }
-});
+};
+
+// Registro de múltiples rutas y métodos (POST y PUT) para evitar errores de conexión del frontend
+app.post('/api/admin/save-user', procesarGuardadoUsuario);
+app.put('/api/admin/save-user', procesarGuardadoUsuario);
+app.post('/api/admin/update-user', procesarGuardadoUsuario);
+app.put('/api/admin/update-user', procesarGuardadoUsuario);
+app.post('/api/admin/user/update', procesarGuardadoUsuario);
+app.put('/api/admin/user/update', procesarGuardadoUsuario);
+app.post('/api/admin/users', procesarGuardadoUsuario);
+app.put('/api/admin/users', procesarGuardadoUsuario);
 
 app.post('/api/admin/delete-user', (req, res) => {
     const { usuario } = req.body;
