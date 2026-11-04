@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acceso Seguro - Plataforma UIPC</title>
+    <link rel="icon" type="image/png" href="images/logo_UIPC.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            background-image: url('images/fdo2uipc.jpeg');
+            font-family: 'Inter', sans-serif; 
+            background-color: #f8fafc;
+            
+            
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4">
+
+    <!-- VENTANA EMERGENTE DE AVISO DE PRIVACIDAD AL ENTRAR -->
+    <div id="welcomePrivacyModal" class="fixed inset-0 bg-slate-900 bg-opacity-75 flex items-center justify-center p-4 z-50">
+        <div class="bg-white w-full max-w-lg p-6 sm:p-8 rounded-2xl shadow-2xl border border-slate-200 space-y-5 animate-bounce-short">
+            <div class="flex items-center space-x-3 border-b border-slate-100 pb-3">
+                <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center p-1 shadow-md border-2 border-amber-400 overflow-hidden flex-shrink-0">
+                    <img src="images/bd_UIPC.png" alt="Logo UIPC" class="w-full h-full object-contain" onerror="this.src='https://placehold.co/48x48/1e3a8a/ffffff?text=UIPC'">
+                </div>
+                <div>
+                    <h3 class="text-base font-extrabold text-slate-900 uppercase tracking-tight">Aviso de Privacidad y Confidencialidad UIPC</h3>
+                    <p class="text-xs text-blue-800 font-semibold">Términos de uso de la plataforma digital</p>
+                </div>
+            </div>
+            <div class="text-slate-800 text-sm leading-relaxed text-justify bg-slate-50 p-4 rounded-xl border border-slate-200 font-medium space-y-2">
+                <p>
+                    La información que usted como usuario suba a la plataforma <strong>sólo podrá ser vista por el administrador del sitio (en este caso la Coordinación Operativa)</strong> para fines de integración en el Programa Interno de Protección Civil.
+                </p>
+                <p>
+                    De ninguna manera otro usuario podrá observar la información de otro usuario; es por ello que esta plataforma se rige por lo contenido en el <strong>aviso de privacidad de la UIPC vigente</strong>.
+                </p>
+            </div>
+            <div class="flex justify-end pt-2">
+                <button type="button" onclick="closeWelcomePrivacyModal()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-extrabold py-3 px-6 rounded-xl shadow-md text-sm transition-all cursor-pointer">
+                    Entendido, Iniciar Sesión
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contenedor Principal del Login -->
+    <main class="max-w-md w-full bg-white/95 backdrop-blur-xl p-8 rounded-3xl shadow-2xl border border-slate-200">
+        
+        <!-- Encabezado Institucional -->
+        <div class="text-center mb-8">
+            <div class="mx-auto w-20 h-20 bg-white rounded-full flex items-center justify-center overflow-hidden shadow-md p-1 border-4 border-amber-400 mb-4">
+                <img src="images/bd_UIPC.png" alt="Escudo UIPC" class="w-full h-full object-contain" onerror="this.src='https://placehold.co/80x80/1e3a8a/ffffff?text=UIPC'">
+            </div>
+            <h1 class="text-2xl font-black text-red-600 tracking-tight">Bienvenida/o a la</h1>
+            <h1 class="text-2xl font-black text-blue-950 tracking-tight">Plataforma de la Brigada Digital</h1>
+            <p class="text-sm font-semibold text-slate-500 mt-1">Unidad Interna de Protección Civil</p>
+        </div>
+
+        <!-- Formulario de Acceso -->
+        <form id="loginForm" onsubmit="handleLogin(event)" class="space-y-5">
+            
+            <!-- Campo Usuario -->
+            <div>
+                <label for="username" class="block text-xs font-bold text-slate-700 mb-1.5 uppercase tracking-wide">Identificador de Usuario</label>
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                        <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                    </div>
+                    <input type="text" id="username" required autocomplete="username" placeholder="Ej. carlos.pimentel" 
+                           class="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-all placeholder-slate-400">
+                </div>
+            </div>
+
+            <!-- Campo Contraseña -->
+            <div>
+                <label for="password" class="block text-xs font-bold text-slate-700 mb-1.5 uppercase tracking-wide">Clave de Acceso</label>
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                        <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                    </div>
+                    <input type="password" id="password" required autocomplete="current-password" placeholder="••••••••" 
+                           class="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-all placeholder-slate-400 font-mono tracking-widest">
+                </div>
+            </div>
+
+            <!-- Alerta de Error -->
+            <div id="loginAlert" class="hidden flex items-center p-3 text-xs font-bold text-red-800 bg-red-100 rounded-xl border border-red-200">
+                <svg class="w-4 h-4 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <span id="loginAlertText">Credenciales inválidas. Verifique sus datos.</span>
+            </div>
+
+            <!-- Botón Ingresar -->
+            <button type="submit" id="submitBtn" class="w-full bg-blue-900 hover:bg-blue-800 text-white font-black py-3.5 rounded-xl text-sm shadow-xl shadow-blue-900/20 transition-all active:scale-95 cursor-pointer flex justify-center items-center">
+                <span id="btnText">Ingresar al Sistema</span>
+                <svg id="btnSpinner" class="hidden animate-spin ml-2 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+            </button>
+
+        </form>
+
+        <div class="mt-8 pt-6 border-t border-slate-100 text-center">
+            <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Secretaría de Educación Pública</p>
+            <p class="text-[10px] text-slate-400">Acceso restringido a personal operativo autorizado.</p>
+        </div>
+    </main>
+
+    <script>
+
+         function closeWelcomePrivacyModal() {
+            document.getElementById('welcomePrivacyModal').classList.add('hidden');
+        }
+        window.addEventListener('DOMContentLoaded', () => {
+            localStorage.removeItem('uipc_current_user');
+        });
+
+        async function handleLogin(event) {
+            event.preventDefault();
+
+            const usernameInput = document.getElementById('username').value.trim();
+            const passwordInput = document.getElementById('password').value.trim();
+            const submitBtn = document.getElementById('submitBtn');
+            const btnText = document.getElementById('btnText');
+            const btnSpinner = document.getElementById('btnSpinner');
+            const alertBox = document.getElementById('loginAlert');
+            const alertText = document.getElementById('loginAlertText');
+
+            alertBox.classList.add('hidden');
+            submitBtn.disabled = true;
+            submitBtn.classList.add('opacity-80', 'cursor-not-allowed');
+            btnText.innerText = "Verificando identidad...";
+            btnSpinner.classList.remove('hidden');
+
+            try {
+                const response = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: usernameInput, password: passwordInput })
+                });
+
+                const data = await response.json();
+
+                if (data.success && data.user) {
+                    delete data.user.password; 
+                    sessionStorage.setItem('uipc_current_user', JSON.stringify(data.user));
+
+                    fetch('/api/heartbeat', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ userId: data.user.usuario })
+                    }).catch(e => {});
+
+                    btnText.innerText = "Acceso Concedido";
+                    btnSpinner.classList.add('hidden');
+                    submitBtn.classList.remove('bg-blue-900', 'hover:bg-blue-800');
+                    submitBtn.classList.add('bg-emerald-600');
+                    
+                    setTimeout(() => {
+                        // REQUISITO: Redirección diferenciada para el Super Administrador
+                        if (data.user.usuario === 'coordinador.uipc') {
+                            window.location.href = 'adminMaster.html';
+                        } else {
+                            window.location.href = 'dashboard_master.html';
+                        }
+                    }, 800);
+
+                } else {
+                    mostrarError(data.message || "Credenciales inválidas. Verifique sus datos.");
+                }
+
+            } catch (error) {
+                mostrarError("Fallo de conexión con el servidor. Intente más tarde.");
+            } finally {
+                if(!alertBox.classList.contains('hidden')) {
+                    submitBtn.disabled = false;
+                    submitBtn.classList.remove('opacity-80', 'cursor-not-allowed');
+                    btnText.innerText = "Ingresar al Sistema";
+                    btnSpinner.classList.add('hidden');
+                }
+            }
+        }
+
+        function mostrarError(mensaje) {
+            const alertBox = document.getElementById('loginAlert');
+            const alertText = document.getElementById('loginAlertText');
+            alertText.innerText = mensaje;
+            alertBox.classList.remove('hidden');
+            
+            const form = document.getElementById('loginForm');
+            form.classList.add('animate-pulse');
+            setTimeout(() => form.classList.remove('animate-pulse'), 500);
+        }
+    </script>
+</body>
+</html>
