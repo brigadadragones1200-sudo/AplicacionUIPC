@@ -9,13 +9,15 @@ const execPromise = util.promisify(exec);
 
 const app = express();
 const server = httpMod.createServer(app);
+
+// IMPORTANTE: cPanel / Phusion Passenger asigna dinámicamente el puerto
 const PORT = process.env.PORT || 3000;
 
-// Directorios principales en el servidor Linux (Usuario: dgdysnem1)
+// Directorios principales adaptados de forma segura y portable para la nube (cPanel / GoDaddy)
 const uploadDir = path.join(__dirname, 'uploads');
 const frapcUploadDir = path.join(uploadDir, 'frapc');
-const minutasUploadDir = '/home/dgdysnem1/Master_servidor_UIPC/uploads/minutas/';
-const rutaRedFormato = '/home/dgdysnem1/Master_servidor_UIPC/uploads/RED_Formato/';
+const minutasUploadDir = path.join(uploadDir, 'minutas');
+const rutaRedFormato = path.join(uploadDir, 'RED_Formato');
 
 // Archivos de base de datos JSON
 const dbFile = path.join(__dirname, 'usuarios.json');
@@ -27,7 +29,7 @@ const eventosFile = path.join(__dirname, 'eventos.json');
 
 const activeUsers = {};
 
-// Crear carpetas si no existen
+// Crear carpetas físicas si no existen de forma segura
 if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
 if (!fs.existsSync(frapcUploadDir)) fs.mkdirSync(frapcUploadDir, { recursive: true });
 if (!fs.existsSync(minutasUploadDir)) fs.mkdirSync(minutasUploadDir, { recursive: true });
@@ -76,40 +78,53 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname));
 
-// NUEVO: Exponer carpeta uploads de forma pública para visualizar PDFs y FRAPCs
+// Exponer carpeta uploads de forma pública para visualizar PDFs y FRAPCs
 app.use('/uploads', express.static(uploadDir));
 
-// RUTA INICIAL
-app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'loginuipc.html')));
+// RUTAS INICIALES Y VISTAS PRINCIPALES
+app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'home.html')));
 app.get('/login.html', (req, res) => res.sendFile(path.join(__dirname, 'loginuipc.html')));
+app.get('/dashboard_mobile.html', (req, res) => res.sendFile(path.join(__dirname, 'dashboard_mobile.html')));
 
 // API AUTENTICACIÓN
 app.post('/api/login', (req, res) => {
     const { username, password } = req.body;
-    const users = JSON.parse(fs.readFileSync(dbFile, 'utf8'));
-    const found = users.find(u => u.usuario === username && (u.password === password || u.contrasena === password));
-    if (found) {
-        res.json({ success: true, user: found });
-    } else {
-        res.status(401).json({ success: false, message: 'Credenciales inválidas.' });
+    try {
+        const users = JSON.parse(fs.readFileSync(dbFile, 'utf8'));
+        const found = users.find(u => u.usuario === username && (u.password === password || u.contrasena === password));
+        if (found) {
+            res.json({ success: true, user: found });
+        } else {
+            res.status(401).json({ success: false, message: 'Credenciales inválidas.' });
+        }
+    } catch (err) {
+        res.status(500).json({ success: false, message: 'Error al leer la base de datos de usuarios.' });
     }
 });
 
 app.post('/api/recover-password', (req, res) => {
     const { usuario, extension } = req.body;
-    const users = JSON.parse(fs.readFileSync(dbFile, 'utf8'));
-    const found = users.find(u => u.usuario === usuario && String(u.extension) === String(extension));
-    if (found) {
-        res.json({ success: true, password: found.password || found.contrasena });
-    } else {
-        res.status(404).json({ success: false, message: 'Usuario o extensión no coinciden.' });
+    try {
+        const users = JSON.parse(fs.readFileSync(dbFile, 'utf8'));
+        const found = users.find(u => u.usuario === usuario && String(u.extension) === String(extension));
+        if (found) {
+            res.json({ success: true, password: found.password || found.contrasena });
+        } else {
+            res.status(404).json({ success: false, message: 'Usuario o extensión no coinciden.' });
+        }
+    } catch (err) {
+        res.status(500).json({ success: false, message: 'Error al procesar la solicitud.' });
     }
 });
 
 // ADMINISTRACIÓN DE USUARIOS
 app.get('/api/admin/users', (req, res) => {
-    const users = JSON.parse(fs.readFileSync(dbFile, 'utf8'));
-    res.json({ success: true, users });
+    try {
+        const users = JSON.parse(fs.readFileSync(dbFile, 'utf8'));
+        res.json({ success: true, users });
+    } catch (err) {
+        res.status(500).json({ success: false, users: [] });
+    }
 });
 
 app.post('/api/admin/add-user', (req, res) => {
@@ -355,7 +370,7 @@ app.get('/api/file/red', (req, res) => {
     else res.status(404).send('Archivo no encontrado.');
 });
 
-// NUEVO ENDPOINT: API FRAPC para leer automáticamente la carpeta física uploads/frapc
+// API FRAPC
 app.get('/api/frapcs', (req, res) => {
     if (!fs.existsSync(frapcUploadDir)) {
         fs.mkdirSync(frapcUploadDir, { recursive: true });
@@ -410,7 +425,7 @@ app.post('/api/upload-frapc', upload.single('pdfFile'), (req, res) => {
     res.json({ success: true, file: newFile });
 });
 
-// SUBIDA GENERAL Y PROCESO DE ESCANEOS (EXTRACCIÓN SANITIZADA)
+// SUBIDA GENERAL Y PROCESO DE ESCANEOS (CON MANEJO SEGURO DE ERRORES)
 app.post('/api/upload', upload.single('pdfFile'), async (req, res) => {
     if (!req.file) return res.status(400).json({ success: false, message: 'No se adjuntó archivo.' });
     
@@ -450,7 +465,7 @@ app.post('/api/upload', upload.single('pdfFile'), async (req, res) => {
         finalPath = `/uploads/${userIdClean}/${req.file.originalname}`;
     }
 
-    // PROCESAMIENTO OCR EN SEGUNDO PLANO PARA ESCANEOS
+    // OCR EN SEGUNDO PLANO (PROTEGIDO PARA EVITAR QUE EL SERVIDOR FALLE SI NO EXISTE TESSERACT/PDFTOPPM)
     const absolutePdfPath = path.join(__dirname, finalPath.replace(/^\//, ''));
     if (fs.existsSync(absolutePdfPath) && req.file.originalname.toLowerCase().endsWith('.pdf') && !isMinuta) {
         const baseDir = path.dirname(absolutePdfPath);
@@ -470,7 +485,8 @@ app.post('/api/upload', upload.single('pdfFile'), async (req, res) => {
 
                     if (fs.existsSync(ocrTxtPath)) {
                         const rawText = fs.readFileSync(ocrTxtPath, 'utf8');
-                        const lineas = rawText.split('\n');
+                        const lineas = rawText.split('
+');
 
                         let csvContent = 'Num,Nombre,Apellido Paterno,Apellido Materno,Brigada,Piso,Sector,Escalera,Punto de Reunión\n';
 
@@ -491,7 +507,7 @@ app.post('/api/upload', upload.single('pdfFile'), async (req, res) => {
                     }
                 }
             } catch (ocrErr) {
-                console.log(`[Aviso OCR] Archivo guardado de forma segura.`);
+                console.log(`[Aviso OCR] Procesamiento no disponible en el entorno o archivo guardado de forma directa.`);
             }
         })();
     }
@@ -583,12 +599,12 @@ app.post('/api/eventos/lote', (req, res) => {
             const id = Date.now() + Math.random();
             const horaReg = evento.hora_registro || horaActual;
             const textoCompleto = `
-${evento.Sede || 'No especificada'}
-Fecha: ${evento.fecha || 'No especificada'}
-Horario: ${evento.horario || 'No especificado'}
-Asistentes: ${evento['total de asistentes'] || 'No especificados'}
-Tema: ${evento['tema del evento'] || 'No especificado'}
-UR: ${evento['UR responsable'] || 'No especificada'}
+\${evento.Sede || 'No especificada'}
+Fecha: \${evento.fecha || 'No especificada'}
+Horario: \${evento.horario || 'No especificado'}
+Asistentes: \${evento['total de asistentes'] || 'No especificados'}
+Tema: \${evento['tema del evento'] || 'No especificado'}
+UR: \${evento['UR responsable'] || 'No especificada'}
 `.trim();
             
             data.lista.push({ id, texto_completo: textoCompleto, hora_registro: horaReg });
@@ -641,7 +657,8 @@ app.post('/api/eventos/borrar', (req, res) => {
     }
 });
 
-// INICIO DEL SERVIDOR
-server.listen(PORT, '0.0.0.0', () => {
-    console.log(`Servidor Maestro UIPC operando en http://localhost:${PORT}`);
+// INICIO DEL SERVIDOR COMPATIBLE CON GODADDY / PHUSION PASSENGER
+// No forzamos la IP '0.0.0.0' para evitar fallos de inicialización (Process exited before becoming ready)
+server.listen(PORT, () => {
+    console.log(`Servidor Maestro UIPC operando correctamente en el puerto ${PORT}`);
 });
