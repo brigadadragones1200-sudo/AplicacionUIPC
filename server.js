@@ -18,6 +18,7 @@ const filesFile = path.join(__dirname, 'files.json');
 
 const uploadDir = path.join(__dirname, 'uploads');
 const frapcUploadDir = path.join(uploadDir, 'frapc');
+const minutasUploadDir = path.join(uploadDir, 'minutas');
 
 // Memoria volátil para controlar el estado de usuarios en línea
 const activeUsers = {};
@@ -27,6 +28,7 @@ const activeUsers = {};
 // ==========================================
 if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
 if (!fs.existsSync(frapcUploadDir)) fs.mkdirSync(frapcUploadDir, { recursive: true });
+if (!fs.existsSync(minutasUploadDir)) fs.mkdirSync(minutasUploadDir, { recursive: true });
 
 if (!fs.existsSync(dbFile)) fs.writeFileSync(dbFile, '[]', 'utf8');
 if (!fs.existsSync(pobFile)) fs.writeFileSync(pobFile, '[]', 'utf8');
@@ -35,12 +37,14 @@ if (!fs.existsSync(asisFile)) fs.writeFileSync(asisFile, '{}', 'utf8');
 if (!fs.existsSync(filesFile)) fs.writeFileSync(filesFile, '[]', 'utf8');
 
 // ==========================================
-// 3. CONFIGURACIÓN DE ALMACENAMIENTO (MULTER FOR FRAPC)
+// 3. CONFIGURACIÓN DE ALMACENAMIENTO (MULTER)
 // ==========================================
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        if (!fs.existsSync(frapcUploadDir)) fs.mkdirSync(frapcUploadDir, { recursive: true });
-        cb(null, frapcUploadDir);
+        const targetFolder = req.headers['x-target-folder'] || 'frapc';
+        const destDir = targetFolder.toLowerCase() === 'minutas' ? minutasUploadDir : frapcUploadDir;
+        if (!fs.existsSync(destDir)) fs.mkdirSync(destDir, { recursive: true });
+        cb(null, destDir);
     },
     filename: (req, file, cb) => {
         cb(null, file.originalname);
@@ -55,8 +59,9 @@ app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 app.use(express.static(__dirname));
 
-// Servir la carpeta de subidas de forma pública para visualizar los FRAPCs
+// Exponer carpetas de subidas de forma pública
 app.use('/uploads', express.static(uploadDir));
+app.use('/uploads/minutas', express.static(minutasUploadDir));
 
 // ==========================================
 // 5. RUTAS DE VISTAS PRINCIPALES
@@ -66,6 +71,7 @@ app.get('/login.html', (req, res) => res.sendFile(path.join(__dirname, 'loginuip
 app.get('/dashboard_mobile.html', (req, res) => res.sendFile(path.join(__dirname, 'dashboard_mobile.html')));
 app.get('/frapc.html', (req, res) => res.sendFile(path.join(__dirname, 'frapc.html')));
 app.get('/formato_frapc.html', (req, res) => res.sendFile(path.join(__dirname, 'formato_frapc.html')));
+app.get('/minutas.html', (req, res) => res.sendFile(path.join(__dirname, 'minutas.html')));
 
 // ==========================================
 // 6. API DE AUTENTICACIÓN (usuarios.json)
@@ -346,7 +352,7 @@ app.post('/api/asistencia', (req, res) => {
 });
 
 // ==========================================
-// 13. API DE FRAPCS Y REPOSITORIO DE ARCHIVOS
+// 13. API DE FRAPCS
 // ==========================================
 app.get('/api/frapcs', (req, res) => {
     if (!fs.existsSync(frapcUploadDir)) {
@@ -377,28 +383,61 @@ app.get('/api/frapcs', (req, res) => {
 
 app.post('/api/upload-frapc', upload.single('pdfFile'), (req, res) => {
     if (!req.file) return res.status(400).json({ success: false, message: 'No se adjuntó archivo.' });
-    
-    let files = [];
-    try { files = JSON.parse(fs.readFileSync(filesFile, 'utf8')); } catch(e) {}
-    const hoyStr = new Date().toLocaleDateString('es-MX', { timeZone: 'America/Mexico_City' });
-    const horaStr = new Date().toLocaleTimeString('es-MX', { timeZone: 'America/Mexico_City' });
-    
-    const newFile = {
-        filename: req.file.originalname,
-        path: `/uploads/frapc/${req.file.originalname}`,
-        usuario: req.body.usuario || 'general',
-        fecha: `${hoyStr} ${horaStr}`,
-        comentarios: req.body.comentarios || 'Formato FRAPC oficial'
-    };
-    
-    files = files.filter(f => f.filename !== req.file.originalname);
-    files.push(newFile);
-    fs.writeFileSync(filesFile, JSON.stringify(files, null, 2), 'utf8');
-    res.json({ success: true, file: newFile });
+    res.json({ success: true, file: { filename: req.file.originalname, path: `/uploads/frapc/${req.file.originalname}` } });
 });
 
 // ==========================================
-// 14. INICIALIZACIÓN DEL SERVIDOR
+// 14. API DE MINUTAS Y ARCHIVOS INSTITUCIONALES
+// ==========================================
+app.get('/api/admin/files', (req, res) => {
+    try {
+        let allFiles = [];
+        if (fs.existsSync(minutasUploadDir)) {
+            const files = fs.readdirSync(minutasUploadDir);
+            files.forEach((file, index) => {
+                const filePath = path.join(minutasUploadDir, file);
+                if (fs.statSync(filePath).isFile()) {
+                    const stats = fs.statSync(filePath);
+                    allFiles.push({
+                        id: `minuta_${index}`,
+                        filename: file,
+                        path: `/uploads/minutas/${file}`,
+                        fecha: stats.mtime.toLocaleString('es-MX', { timeZone: 'America/Mexico_City' }),
+                        comentarios: 'Minuta oficial institucional'
+                    });
+                }
+            });
+        }
+        res.json({ success: true, files: allFiles });
+    } catch (e) {
+        res.status(500).json({ success: false, files: [] });
+    }
+});
+
+app.post('/api/upload', upload.single('pdfFile'), (req, res) => {
+    if (!req.file) return res.status(400).json({ success: false, message: 'No se adjuntó archivo PDF.' });
+    const targetFolder = req.headers['x-target-folder'] || 'minutas';
+    res.json({ success: true, filename: req.file.originalname, path: `/uploads/${targetFolder.toLowerCase()}/${req.file.originalname}` });
+});
+
+app.post('/api/delete-file', (req, res) => {
+    const { filename } = req.body;
+    if (!filename) return res.status(400).json({ success: false, message: 'Nombre de archivo requerido.' });
+
+    try {
+        const filePath = path.join(minutasUploadDir, filename);
+        if (fs.existsSync(filePath)) {
+            fs.unlinkSync(filePath);
+            return res.json({ success: true });
+        }
+        res.status(404).json({ success: false, message: 'Archivo no encontrado.' });
+    } catch (e) {
+        res.status(500).json({ success: false, message: 'Error al eliminar el archivo.' });
+    }
+});
+
+// ==========================================
+// 15. INICIALIZACIÓN DEL SERVIDOR
 // ==========================================
 app.listen(PORT, () => {
     console.log(`Servidor UIPC operando dinámicamente en el puerto ${PORT}`);
