@@ -1,7 +1,7 @@
 {
-  "name": "uipc-servidor",
+  "name": "aplicacion-uipc",
   "version": "1.0.0",
-  "description": "Servidor Maestro UIPC",
+  "description": "Plataforma Institucional UIPC",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
