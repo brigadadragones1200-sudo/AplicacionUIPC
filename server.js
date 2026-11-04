@@ -92,7 +92,7 @@ app.post('/api/login', (req, res) => {
 });
 
 // ==========================================
-// 7. API DIRECTORIO DE USUARIOS
+// 7. API DIRECTORIO Y GESTIÓN DE USUARIOS
 // ==========================================
 app.get('/api/admin/users', (req, res) => {
     try {
@@ -114,7 +114,6 @@ app.get('/api/admin/users', (req, res) => {
     }
 });
 
-// GESTIÓN COMPLETA DE USUARIOS (ALTAS, EDICIÓN Y ELIMINACIÓN)
 app.get('/api/admin/all-users', (req, res) => {
     try {
         const users = JSON.parse(fs.readFileSync(dbFile, 'utf8'));
