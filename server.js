@@ -95,18 +95,8 @@ app.post('/api/login', (req, res) => {
 app.get('/api/admin/users', (req, res) => {
     try {
         const users = JSON.parse(fs.readFileSync(dbFile, 'utf8'));
-        const safeUsers = users.map(u => ({
-            usuario: u.usuario,
-            nombre: u.nombre,
-            ur: u.ur,
-            cargo: u.cargo,
-            suplente: u.suplente,
-            ubicacion: u.ubicacion,
-            extension: u.extension,
-            correo: u.correo,
-            indicativo: u.indicativo
-        }));
-        res.json({ success: true, users: safeUsers });
+        // Devuelve la lista completa con todas las propiedades (incluyendo password y contrasena)
+        res.json({ success: true, users: users });
     } catch (e) {
         res.status(500).json({ success: false, users: [] });
     }
@@ -121,13 +111,20 @@ app.get('/api/admin/all-users', (req, res) => {
     }
 });
 
-// Procesador centralizado para guardar o actualizar usuarios compatible con POST y PUT
+// Procesador centralizado para guardar, crear o actualizar usuarios (compatible con POST y PUT)
 const procesarGuardadoUsuario = (req, res) => {
     const userData = req.body;
     const identificador = userData.usuario || userData.id;
 
     if (!identificador) {
         return res.status(400).json({ success: false, message: 'El ID de usuario es obligatorio.' });
+    }
+
+    // Normalizar claves de contraseña para asegurar compatibilidad total
+    if (userData.contrasena && !userData.password) {
+        userData.password = userData.contrasena;
+    } else if (userData.password && !userData.contrasena) {
+        userData.contrasena = userData.password;
     }
 
     let users = [];
@@ -144,8 +141,8 @@ const procesarGuardadoUsuario = (req, res) => {
             ...users[index],
             ...userData,
             usuario: identificador,
-            password: userData.password || userData.contrasena || users[index].password || users[index].contrasena || '',
-            contrasena: userData.contrasena || userData.password || users[index].contrasena || users[index].password || ''
+            password: userData.password || users[index].password || users[index].contrasena || '',
+            contrasena: userData.contrasena || users[index].contrasena || users[index].password || ''
         };
     } else {
         users.push({
@@ -171,9 +168,11 @@ const procesarGuardadoUsuario = (req, res) => {
     }
 };
 
-// Registro de múltiples rutas y métodos (POST y PUT) para evitar errores de conexión del frontend
+// Registro de múltiples rutas y métodos (POST y PUT) para evitar errores del frontend
 app.post('/api/admin/save-user', procesarGuardadoUsuario);
 app.put('/api/admin/save-user', procesarGuardadoUsuario);
+app.post('/api/admin/add-user', procesarGuardadoUsuario);
+app.put('/api/admin/add-user', procesarGuardadoUsuario);
 app.post('/api/admin/update-user', procesarGuardadoUsuario);
 app.put('/api/admin/update-user', procesarGuardadoUsuario);
 app.post('/api/admin/user/update', procesarGuardadoUsuario);
