@@ -114,6 +114,83 @@ app.get('/api/admin/users', (req, res) => {
     }
 });
 
+// GESTIÓN COMPLETA DE USUARIOS (ALTAS, EDICIÓN Y ELIMINACIÓN)
+app.get('/api/admin/all-users', (req, res) => {
+    try {
+        const users = JSON.parse(fs.readFileSync(dbFile, 'utf8'));
+        res.json({ success: true, users: users });
+    } catch (e) {
+        res.status(500).json({ success: false, users: [] });
+    }
+});
+
+app.post('/api/admin/save-user', (req, res) => {
+    const userData = req.body;
+    if (!userData.usuario) {
+        return res.status(400).json({ success: false, message: 'El ID de usuario es obligatorio.' });
+    }
+
+    let users = [];
+    try {
+        if (fs.existsSync(dbFile)) {
+            users = JSON.parse(fs.readFileSync(dbFile, 'utf8'));
+        }
+    } catch (e) {}
+
+    const index = users.findIndex(u => u.usuario === userData.usuario);
+    
+    if (index >= 0) {
+        users[index] = {
+            ...users[index],
+            ...userData,
+            password: userData.password || users[index].password || users[index].contrasena,
+            contrasena: userData.contrasena || users[index].contrasena || users[index].password
+        };
+    } else {
+        users.push({
+            usuario: userData.usuario,
+            password: userData.password || userData.contrasena || '123456',
+            contrasena: userData.contrasena || userData.password || '123456',
+            nombre: userData.nombre || '',
+            correo: userData.correo || '',
+            indicativo: userData.indicativo || 'N/A',
+            ur: userData.ur || '',
+            cargo: userData.cargo || '',
+            suplente: userData.suplente || 'N/A',
+            ubicacion: userData.ubicacion || '',
+            extension: userData.extension || 'N/A'
+        });
+    }
+
+    try {
+        fs.writeFileSync(dbFile, JSON.stringify(users, null, 2), 'utf8');
+        res.json({ success: true, message: 'Usuario guardado correctamente.' });
+    } catch (e) {
+        res.status(500).json({ success: false, message: 'Error al guardar en el servidor.' });
+    }
+});
+
+app.post('/api/admin/delete-user', (req, res) => {
+    const { usuario } = req.body;
+    if (!usuario) return res.status(400).json({ success: false, message: 'Usuario requerido.' });
+
+    let users = [];
+    try {
+        if (fs.existsSync(dbFile)) {
+            users = JSON.parse(fs.readFileSync(dbFile, 'utf8'));
+        }
+    } catch (e) {}
+
+    users = users.filter(u => u.usuario !== usuario);
+
+    try {
+        fs.writeFileSync(dbFile, JSON.stringify(users, null, 2), 'utf8');
+        res.json({ success: true, message: 'Usuario eliminado correctamente.' });
+    } catch (e) {
+        res.status(500).json({ success: false, message: 'Error al eliminar en el servidor.' });
+    }
+});
+
 // ==========================================
 // 8. API MONITOR DE USUARIOS EN LÍNEA
 // ==========================================
