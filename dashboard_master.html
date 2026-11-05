@@ -92,7 +92,6 @@
             overflow: hidden;
         }
 
-        /* Se adaptan perfil y actividades como módulos independientes a lo ancho */
         .perfil {
             width: 1182px;
             min-height: 350px;
@@ -175,6 +174,33 @@
             border-radius: 25px;
             overflow: hidden;
         }
+
+        /* ESTILOS Y ANIMACIÓN AISLADOS PARA EL TOAST */
+        @keyframes toastEntrada {
+            0% {
+                transform: translateY(60px) scale(0.92);
+                opacity: 0;
+            }
+            70% {
+                transform: translateY(-8px) scale(1.02);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(0) scale(1);
+                opacity: 1;
+            }
+        }
+        .toast-animado {
+            animation: toastEntrada 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+        .toast-card-uipc {
+            background-color: #f7efda;
+            border: 2px solid #77af9c;
+            width: 390px;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.25);
+        }
     </style>
 </head>
 <body>
@@ -195,7 +221,6 @@
                 <iframe src="Modulos/avisos.html" title="Avisos"></iframe>
             </div>
 
-            <!-- Módulos organizados verticalmente a lo ancho de 1182px -->
             <div class="perfil" id="perfilPanel">
                 <iframe src="Modulos/perfil.html" title="Perfil"></iframe>
             </div>
@@ -218,7 +243,6 @@
                 <iframe src="Modulos/RED.html" title="Formato RED"></iframe>
             </div>
 
-            
             <div class="module-large documentos">
                 <iframe src="Modulos/documentos.html" title="Documentos"></iframe>
             </div>
@@ -232,65 +256,11 @@
         </div>
     </div>
 
+    <!-- SCRIPT GENERAL Y DE CONTROL DEL TOAST CON SOPORTE MULTI-EVENTO Y DESCARTAR TODO -->
     <script>
-
-            let eventoPendienteId = null;
-
-window.addEventListener('DOMContentLoaded', () => {
-    verificarNuevoEventoUsuario();
-});
-
-async function verificarNuevoEventoUsuario() {
-    try {
-        const response = await fetch('/api/actividades');
-        const data = await response.json();
-        const acts = Array.isArray(data) ? data : (data.activities || []);
-        
-        if (acts.length === 0) return;
-
-        // Ordenar para obtener el evento más reciente
-        acts.sort((a, b) => Number(b.id || 0) - Number(a.id || 0));
-        const masReciente = acts[0];
-
-        // Obtener el último ID que el usuario vio/cerró
-        const ultimoVisto = localStorage.getItem('uipc_ultimo_evento_visto');
-
-        // Si el ID más reciente es diferente al guardado, se muestra la alerta
-        if (ultimoVisto !== String(masReciente.id)) {
-            eventoPendienteId = masReciente.id;
-            document.getElementById('modalEventoTexto').innerHTML = `<b>${masReciente.titulo}</b><br><span class="text-slate-400 text-[11px]">Fecha: ${masReciente.fecha} | Sede: ${masReciente.sede}</span>`;
-            document.getElementById('modalNuevoEvento').classList.remove('hidden');
-        }
-    } catch (e) {
-        console.error("Error al comprobar nuevos eventos:", e);
-    }
-}
-
-function cerrarModalEvento() {
-    if (eventoPendienteId) {
-        // Guardamos en localStorage para que no vuelva a salir este mismo evento
-        localStorage.setItem('uipc_ultimo_evento_visto', eventoPendienteId);
-    }
-    document.getElementById('modalNuevoEvento').classList.add('hidden');
-}
-
-function irAlCalendario() {
-    if (eventoPendienteId) {
-        // Registramos como visto también al redirigir
-        localStorage.setItem('uipc_ultimo_evento_visto', eventoPendienteId);
-    }
-    // Abre el módulo en una pestaña nueva
-    window.open('Modulos/calendario_actividades.html', '_blank');
-    
-    // Oculta la ventana flotante actual
-    document.getElementById('modalNuevoEvento').classList.add('hidden');
-}
-
-
-
-
-
         window.addEventListener('DOMContentLoaded', () => {
+            verificarNuevosEventosUsuario();
+
             try {
                 const userStr = sessionStorage.getItem('uipc_current_user');
                 if (userStr) {
@@ -310,6 +280,113 @@ function irAlCalendario() {
             setInterval(enviarHeartbeat, 10000); 
         });
 
+        let eventosPendientes = [];
+        let eventoActualIndex = 0;
+        let listaCompletaActividades = [];
+
+        async function verificarNuevosEventosUsuario() {
+            try {
+                const response = await fetch('/api/actividades');
+                const data = await response.json();
+                listaCompletaActividades = Array.isArray(data) ? data : (data.activities || []);
+                
+                if (listaCompletaActividades.length === 0) return;
+
+                listaCompletaActividades.sort((a, b) => Number(b.id || 0) - Number(a.id || 0));
+
+                const ultimoVisto = localStorage.getItem('uipc_ultimo_evento_visto');
+
+                if (ultimoVisto) {
+                    eventosPendientes = listaCompletaActividades.filter(ev => Number(ev.id) > Number(ultimoVisto));
+                } else {
+                    eventosPendientes = listaCompletaActividades;
+                }
+
+                if (eventosPendientes.length > 0) {
+                    eventoActualIndex = 0;
+                    mostrarEventoActualToast();
+                }
+            } catch (e) {
+                console.error("Error al comprobar nuevos eventos:", e);
+            }
+        }
+
+        function mostrarEventoActualToast() {
+            if (eventosPendientes.length === 0) return;
+
+            const evento = eventosPendientes[eventoActualIndex];
+            const textoElemento = document.getElementById('toastEventoTexto');
+            
+            if (textoElemento) {
+                let badgeConteo = eventosPendientes.length > 1 
+                    ? `<span class="bg-[#77af9c] text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full mb-1 inline-block">Evento ${eventoActualIndex + 1} de ${eventosPendientes.length} nuevos</span><br>` 
+                    : '';
+
+                textoElemento.innerHTML = `${badgeConteo}<b>${evento.titulo}</b><br><span class="text-slate-500 text-[11px] block mt-0.5">Fecha: ${evento.fecha} | Sede: ${evento.sede}</span>`;
+            }
+            mostrarToast();
+        }
+
+        function mostrarToast() {
+            const toast = document.getElementById('toastNuevoEvento');
+            if (toast) {
+                toast.classList.remove('hidden');
+                toast.classList.add('toast-animado');
+            }
+        }
+
+        function cerrarToastEvento() {
+            const eventoActual = eventosPendientes[eventoActualIndex];
+            if (eventoActual) {
+                localStorage.setItem('uipc_ultimo_evento_visto', eventoActual.id);
+            }
+
+            eventoActualIndex++;
+            if (eventoActualIndex < eventosPendientes.length) {
+                const toast = document.getElementById('toastNuevoEvento');
+                if (toast) {
+                    toast.style.opacity = '0';
+                    setTimeout(() => {
+                        toast.style.opacity = '1';
+                        mostrarEventoActualToast();
+                    }, 250);
+                }
+            } else {
+                ocultarToastUI();
+            }
+        }
+
+        function descartarTodo() {
+            if (listaCompletaActividades.length > 0) {
+                const maxId = listaCompletaActividades[0].id;
+                localStorage.setItem('uipc_ultimo_evento_visto', maxId);
+            }
+            ocultarToastUI();
+        }
+
+        function ocultarToastUI() {
+            const toast = document.getElementById('toastNuevoEvento');
+            if (toast) {
+                toast.style.transition = 'all 0.3s ease-in';
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(30px)';
+                setTimeout(() => {
+                    toast.classList.add('hidden');
+                    toast.style.opacity = '1';
+                    toast.style.transform = 'translateY(0)';
+                }, 300);
+            }
+        }
+
+        function irAlCalendario() {
+            const eventoActual = eventosPendientes[eventoActualIndex];
+            if (eventoActual) {
+                localStorage.setItem('uipc_ultimo_evento_visto', eventoActual.id);
+            }
+            window.open('Modulos/calendario_actividades.html', '_blank');
+            cerrarToastEvento();
+        }
+
         function enviarHeartbeat() {
             try {
                 const userStr = sessionStorage.getItem('uipc_current_user');
@@ -327,32 +404,39 @@ function irAlCalendario() {
         }
     </script>
 
+    <!-- COMPONENTE HTML DEL TOAST NOTIFICATION CON BOTÓN "DESCARTAR TODO" -->
+    <div id="toastNuevoEvento" class="fixed bottom-6 right-6 z-[2000] hidden">
+        <div class="toast-card-uipc text-slate-800 backdrop-blur-md relative overflow-hidden flex flex-col items-center text-center">
+            
+            <button onclick="ocultarToastUI()" class="absolute top-3.5 right-3.5 text-slate-400 hover:text-slate-800 transition-colors font-black text-sm cursor-pointer w-7 h-7 flex items-center justify-center rounded-full hover:bg-[#77af9c]/15">
+                ✕
+            </button>
 
-
-
-   <!-- VENTANA FLOTANTE DE NUEVO EVENTO (BOTONES AMPLIOS / MÁS VUELO) -->
-    <div id="modalNuevoEvento" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-white w-full max-w-xl rounded-2xl shadow-2xl border-4 border-[#77af9c] overflow-hidden p-8 text-center space-y-6">
-            <div class="w-16 h-16 bg-emerald-100 text-[#77af9c] rounded-xl mx-auto flex items-center justify-center font-black text-2xl border border-emerald-200 shadow-inner">
-                🔔
+            <div class="bg-[#77af9c]/20 text-[#497566] w-12 h-12 rounded-xl flex items-center justify-center border border-[#77af9c]/30 shadow-inner mb-3">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
+                </svg>
             </div>
-            <div class="space-y-2">
-                <h3 class="text-xl font-black text-slate-800 uppercase tracking-tight">¡Nuevo Evento o Curso Disponible!</h3>
-                <p id="modalEventoTexto" class="text-sm text-slate-600 font-medium px-4">Se ha publicado una nueva actividad en el sistema.</p>
+
+            <div class="w-full space-y-1">
+                <h4 class="font-black text-xs text-[#497566] tracking-wider uppercase">¡Nuevo Evento Publicado!</h4>
+                <div id="toastEventoTexto" class="text-xs text-slate-700 font-medium leading-relaxed"></div>
             </div>
-            <div class="flex gap-6 justify-center pt-3">
-                <!-- Botón Cerrar (Con más vuelo / más ancho) -->
-                <button onclick="cerrarModalEvento()" class="bg-rose-600 hover:bg-rose-500 text-white font-black text-sm py-3.5 px-10 rounded-md transition-all cursor-pointer border border-rose-400 shadow-md">
-                    Cerrar
+            
+            <!-- Botones de Acción incluyendo Descartar Todo -->
+            <div class="mt-4 flex flex-wrap gap-2 justify-center w-full">
+                <button onclick="irAlCalendario()" class="bg-[#77af9c] hover:bg-[#5e9381] text-white text-xs font-bold px-3 py-2 rounded-lg shadow-sm transition-all cursor-pointer border border-[#5e9381]">
+                    Ver Calendario
                 </button>
-                <!-- Botón Ir al Calendario (Con más vuelo / más ancho) -->
-                <button onclick="irAlCalendario()" style="background-color: #77af9c;" class="hover:bg-[#5e9381] text-white font-black text-sm py-3.5 px-10 rounded-md transition-all cursor-pointer border border-emerald-600 shadow-md">
-                    Ir al calendario
+                <button onclick="cerrarToastEvento()" class="bg-[#E2D1CC]/80 hover:bg-[#E2D1CC] text-slate-700 text-xs font-semibold px-3 py-2 rounded-lg transition-all cursor-pointer border border-slate-300">
+                    Siguiente
+                </button>
+                <button onclick="descartarTodo()" class="bg-rose-100 hover:bg-rose-200 text-rose-800 text-xs font-bold px-3 py-2 rounded-lg transition-all cursor-pointer border border-rose-300 w-full mt-1">
+                    Descartar todo
                 </button>
             </div>
         </div>
     </div>
-</div>
+
 </body>
 </html>
-```[cite: 12, 13]
