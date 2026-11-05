@@ -208,5 +208,305 @@
     "cantidad": 330,
     "observaciones": "conteo dgpyrf",
     "fecha": "04-11-2026"
+  },
+  {
+    "id": "179900010101",
+    "usuario": "julio.bautista",
+    "nombre": "Julio Bautista Flores",
+    "ur": "DGME",
+    "nivel": "1",
+    "cantidad": 4,
+    "observaciones": "Conteo UR 311 Biblioteca Gabriela Mistral",
+    "fecha": "05-11-2026"
+  },
+  {
+    "id": "179900010102",
+    "usuario": "julio.bautista",
+    "nombre": "Julio Bautista Flores",
+    "ur": "DGME",
+    "nivel": "6",
+    "cantidad": 144,
+    "observaciones": "Conteo UR 311 DGME",
+    "fecha": "05-11-2026"
+  },
+  {
+    "id": "179900010103",
+    "usuario": "noemi.cortes",
+    "nombre": "Noemi Cortés Martinez",
+    "ur": "DGUTYP",
+    "nivel": "3",
+    "cantidad": 52,
+    "observaciones": "UR 514",
+    "fecha": "05-11-2026"
+  },
+  {
+    "id": "179900010104",
+    "usuario": "noemi.cortes",
+    "nombre": "Noemi Cortés Martinez",
+    "ur": "SEMS",
+    "nivel": "3",
+    "cantidad": 25,
+    "observaciones": "UR 600",
+    "fecha": "05-11-2026"
+  },
+  {
+    "id": "179900010105",
+    "usuario": "noemi.cortes",
+    "nombre": "Noemi Cortés Martinez",
+    "ur": "DGETI",
+    "nivel": "3",
+    "cantidad": 6,
+    "observaciones": "UR 611",
+    "fecha": "05-11-2026"
+  },
+  {
+    "id": "179900010106",
+    "usuario": "noemi.cortes",
+    "nombre": "Noemi Cortés Martinez",
+    "ur": "DGPYRF",
+    "nivel": "3",
+    "cantidad": 334,
+    "observaciones": "UR 710",
+    "fecha": "05-11-2026"
+  },
+  {
+    "id": "179900010107",
+    "usuario": "noemi.cortes",
+    "nombre": "Noemi Cortés Martinez",
+    "ur": "DGRHO",
+    "nivel": "3",
+    "cantidad": 863,
+    "observaciones": "UR 711",
+    "fecha": "05-11-2026"
+  },
+  {
+    "id": "179900010108",
+    "usuario": "noemi.cortes",
+    "nombre": "Noemi Cortés Martinez",
+    "ur": "DGRMYS",
+    "nivel": "3",
+    "cantidad": 417,
+    "observaciones": "UR 712",
+    "fecha": "05-11-2026"
+  },
+  {
+    "id": "179900010109",
+    "usuario": "noemi.cortes",
+    "nombre": "Noemi Cortés Martinez",
+    "ur": "DGRMYS",
+    "nivel": "3",
+    "cantidad": 47,
+    "observaciones": "Personal de limpieza",
+    "fecha": "05-11-2026"
+  },
+  {
+    "id": "179900010110",
+    "usuario": "coordinador.uipc",
+    "nombre": "Administrador Coordinador Operativo",
+    "ur": "DGDYSNEM",
+    "nivel": "0",
+    "cantidad": 10,
+    "observaciones": "Conteo Américo Rios",
+    "fecha": "05-11-2026"
+  },
+  {
+    "id": "179900010111",
+    "usuario": "coordinador.uipc",
+    "nombre": "Administrador Coordinador Operativo",
+    "ur": "DGDYSNEM",
+    "nivel": "2",
+    "cantidad": 70,
+    "observaciones": "Conteo Américo Rios",
+    "fecha": "05-11-2026"
+  },
+  {
+    "id": "179900010112",
+    "usuario": "coordinador.uipc",
+    "nombre": "Administrador Coordinador Operativo",
+    "ur": "SEMS",
+    "nivel": "5",
+    "cantidad": 28,
+    "observaciones": "Conteo Anselmo Licea",
+    "fecha": "05-11-2026"
+  },
+  {
+    "id": "179900010113",
+    "usuario": "coordinador.uipc",
+    "nombre": "Administrador Coordinador Operativo",
+    "ur": "SEMS",
+    "nivel": "1",
+    "cantidad": 28,
+    "observaciones": "Conteo Anselmo Licea",
+    "fecha": "05-11-2026"
+  },
+  {
+    "id": "179900010114",
+    "usuario": "coordinador.uipc",
+    "nombre": "Administrador Coordinador Operativo",
+    "ur": "SEMS",
+    "nivel": "0",
+    "cantidad": 26,
+    "observaciones": "Conteo Anselmo Licea",
+    "fecha": "05-11-2026"
+  },
+  {
+    "id": "179900010115",
+    "usuario": "coordinador.uipc",
+    "nombre": "Administrador Coordinador Operativo",
+    "ur": "SEMS",
+    "nivel": "4",
+    "cantidad": 316,
+    "observaciones": "Conteo Anselmo Licea",
+    "fecha": "05-11-2026"
+  },
+  {
+    "id": "179900010116",
+    "usuario": "coordinador.uipc",
+    "nombre": "Administrador Coordinador Operativo",
+    "ur": "SEMS",
+    "nivel": "6",
+    "cantidad": 30,
+    "observaciones": "Conteo Anselmo Licea",
+    "fecha": "05-11-2026"
+  },
+  {
+    "id": "179900010117",
+    "usuario": "hector.victoria",
+    "nombre": "Hector Victoria Cortes",
+    "ur": "DGCFT",
+    "nivel": "5",
+    "cantidad": 290,
+    "observaciones": "Conteo-DGCFT",
+    "fecha": "05-11-2026"
+  },
+  {
+    "id": "179900010118",
+    "usuario": "hector.victoria",
+    "nombre": "Hector Victoria Cortes",
+    "ur": "DGPPYEE",
+    "nivel": "5",
+    "cantidad": 53,
+    "observaciones": "Conteo- DGPPE",
+    "fecha": "05-11-2026"
+  },
+  {
+    "id": "179900010119",
+    "usuario": "hector.victoria",
+    "nombre": "Hector Victoria Cortes",
+    "ur": "SES",
+    "nivel": "5",
+    "cantidad": 21,
+    "observaciones": "Conteo- SES",
+    "fecha": "05-11-2026"
+  },
+  {
+    "id": "179900010120",
+    "usuario": "jorge.osorio",
+    "nombre": "Jorge Alejandro Osorio García.",
+    "ur": "DGTIC",
+    "nivel": "2",
+    "cantidad": 98,
+    "observaciones": "Conteo DGTIC",
+    "fecha": "05-11-2026"
+  },
+  {
+    "id": "179900010121",
+    "usuario": "hector.victoria",
+    "nombre": "Hector Victoria Cortes",
+    "ur": "DGESUM",
+    "nivel": "5",
+    "cantidad": 52,
+    "observaciones": "Conteo-DGESUM",
+    "fecha": "05-11-2026"
+  },
+  {
+    "id": "179900010122",
+    "usuario": "jorge.osorio",
+    "nombre": "Jorge Alejandro Osorio García.",
+    "ur": "CONAFE",
+    "nivel": "2",
+    "cantidad": 274,
+    "observaciones": "Conteo CONAFE",
+    "fecha": "05-11-2026"
+  },
+  {
+    "id": "179900010123",
+    "usuario": "hector.victoria",
+    "nombre": "Hector Victoria Cortes",
+    "ur": "DGESUI",
+    "nivel": "5",
+    "cantidad": 179,
+    "observaciones": "Conteo- DGESUI",
+    "fecha": "05-11-2026"
+  },
+  {
+    "id": "179900010124",
+    "usuario": "jorge.osorio",
+    "nombre": "Jorge Alejandro Osorio García.",
+    "ur": "ÁREA EJECUTIVA",
+    "nivel": "2",
+    "cantidad": 55,
+    "observaciones": "Conteo Área ejecutiva",
+    "fecha": "05-11-2026"
+  },
+  {
+    "id": "179900010125",
+    "usuario": "hector.victoria",
+    "nombre": "Hector Victoria Cortes",
+    "ur": "DGETI",
+    "nivel": "5",
+    "cantidad": 173,
+    "observaciones": "Conteo-DGETI",
+    "fecha": "05-11-2026"
+  },
+  {
+    "id": "179900010126",
+    "usuario": "jorge.osorio",
+    "nombre": "Jorge Alejandro Osorio García.",
+    "ur": "SALAS DE CAPACITACIÓN",
+    "nivel": "2",
+    "cantidad": 140,
+    "observaciones": "Conteo Salas de Capacitación",
+    "fecha": "05-11-2026"
+  },
+  {
+    "id": "179900010127",
+    "usuario": "jorge.osorio",
+    "nombre": "Jorge Alejandro Osorio García.",
+    "ur": "USICAMM",
+    "nivel": "2",
+    "cantidad": 22,
+    "observaciones": "Conteo USICAMM",
+    "fecha": "05-11-2026"
+  },
+  {
+    "id": "179900010128",
+    "usuario": "jorge.osorio",
+    "nombre": "Jorge Alejandro Osorio García.",
+    "ur": "SES",
+    "nivel": "2",
+    "cantidad": 70,
+    "observaciones": "Conteo SES",
+    "fecha": "05-11-2026"
+  },
+  {
+    "id": "179900010129",
+    "usuario": "coordinador.uipc",
+    "nombre": "Ludwing Ivan Gutierrez Romero",
+    "ur": "DGBTED",
+    "nivel": "5",
+    "cantidad": 4,
+    "observaciones": "Conteo de Ludwing Ivan Gutierrez Romero",
+    "fecha": "05-11-2026"
+  },
+  {
+    "id": "179900010130",
+    "usuario": "coordinador.uipc",
+    "nombre": "Ludwing Ivan Gutierrez Romero",
+    "ur": "DGBTED",
+    "nivel": "6",
+    "cantidad": 52,
+    "observaciones": "conteo Ludwing Ivan Gutierrez Romero",
+    "fecha": "05-11-2026"
   }
 ]
