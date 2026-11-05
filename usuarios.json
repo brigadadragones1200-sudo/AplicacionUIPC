@@ -554,5 +554,41 @@
     "suplente": "Anaid Chávez Martínez",
     "ubicacion": "3-32",
     "extension": "54629"
+  },
+  {
+    "usuario": "jorge.espindola",
+    "password": "5151200",
+    "nombre": "Jorge Espindola Espindola",
+    "correo": "jorge.espindola@sep.gob.mx",
+    "indicativo": "Chinchu",
+    "ur": "DEGESUM",
+    "cargo": "Suplente",
+    "suplente": "N/A",
+    "ubicacion": "5-15",
+    "extension": "53561"
+  },
+  {
+    "usuario": "jonathan.david",
+    "password": "1200515",
+    "nombre": "Jonathan David Lira Beltrán",
+    "correo": "jlira@serp.gob.mx",
+    "indicativo": "Craven",
+    "ur": "DEGESUM",
+    "cargo": "Enalce PC",
+    "suplente": "Jorge Espindola",
+    "ubicacion": "5-15",
+    "extension": "53561"
+  },
+  {
+    "usuario": "vega.elvia",
+    "password": "5261200",
+    "nombre": "Elvia Vega Zambrano",
+    "correo": "elviav@sep.gob.mx",
+    "indicativo": "ZETA",
+    "ur": "DGESUI",
+    "cargo": "Enalce PC",
+    "suplente": "Sergio David Mendoza Toledo",
+    "ubicacion": "5-26",
+    "extension": "65945"
   }
 ]
