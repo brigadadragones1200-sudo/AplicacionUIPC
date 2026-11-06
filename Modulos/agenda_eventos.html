@@ -130,7 +130,7 @@
             <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-6 max-h-[75vh] overflow-y-auto bg-slate-50">
                 <div class="md:col-span-2 bg-amber-50 border-l-4 border-amber-400 p-3.5 rounded-xl text-amber-800 text-xs font-medium flex items-center gap-2.5 shadow-sm">
                     <span class="text-base">ℹ️</span>
-                    <p><strong>Nota operativa:</strong> Los eventos agrupados bajo la categoría <span class="font-bold underline decoration-amber-400">GENERAL</span> corresponden a solicitudes que no especifican las siglas explícitas de su Unidad Responsable (UR) en el texto del registro.</p>
+                    <p><strong>Nota operativa:</strong> Los eventos agrupados bajo la categoría <span class="font-bold underline decoration-amber-400">GENERAL</span> corresponden a solicitudes que no especifican las siglas explícitas de su Unidad Responsable (UR) en el texto del registro[cite: 3].</p>
                 </div>
                 <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col">
                     <h3 class="text-xs font-black text-slate-700 uppercase mb-2 text-center">Asistentes por UR (Salas en Hover)</h3>
@@ -204,6 +204,65 @@
         let chartUrInstance = null;
         let chartSalasInstance = null;
 
+        // Diccionario completo que asocia nombres desglosados y siglas a su respectiva UR oficial
+        const mapaUrs = [
+            { sigla: "DGDCYPEI", frases: ["dirección general de desarrollo curricular y política de educación inicial", "ur 312"] },
+            { sigla: "DGME", frases: ["dirección general de materiales educativos", "ur 311"] },
+            { sigla: "DGBTED", frases: ["dirección general de bachillerato tecnológico de educación y promoción deportiva"] },
+            { sigla: "DGFCDD", frases: ["dirección general de formación continua a docentes y directivos"] },
+            { sigla: "SEB", frases: ["subsecretaría de educación básica", "ur 300"] },
+            { sigla: "DGGEyET", frases: ["dirección general de gestión escolar y enfoque territorial"] },
+            { sigla: "DGEIIB", frases: ["dirección general de educación indígena, intercultural y bilingüe", "ur 313"] },
+            { sigla: "DGETI", frases: ["dirección general de educación tecnológica industrial y de servicios"] },
+            { sigla: "DGCFT", frases: ["dirección general de centros de formación para el trabajo", "ur 613"] },
+            { sigla: "TecNM", frases: ["tecnológico nacional de méxico", "tecnologico nacional de mexico"] },
+            { sigla: "UNEM", frases: ["unidad de la nueva escuela mexicana", "ur 170"] },
+            { sigla: "DGESUI", frases: ["dirección general de educación superior universitaria e intercultural", "ur 511"] },
+            { sigla: "DGESUM", frases: ["dirección general de educación superior para el magisterio", "ur 515"] },
+            { sigla: "DGPPyEE", frases: ["dirección general de planeación, programación y estadística educativa"] },
+            { sigla: "SEMS", frases: ["subsecretaría de educación media superior - dirección técnica administrativa", "subsecretaria de educacion media superior"] },
+            { sigla: "DGETAYCM", frases: ["dirección general de educación tecnológica agropecuaria y ciencias del mar"] },
+            { sigla: "DGSANEF", frases: ["dirección general del sistema de administración de la nómina educativa federalizada", "ur 715"] },
+            { sigla: "DGUTyP", frases: ["dirección general de universidades tecnológicas y politécnicas", "ur 514"] },
+            { sigla: "DGRHO", frases: ["dirección de relaciones laborales"] },
+            { sigla: "DGPyRF", frases: ["dirección general de presupuesto y recursos financieros"] },
+            { sigla: "CSI", frases: ["coordinación sectorial de inmuebles", "ur 712"] },
+            { sigla: "DGDySNEM", frases: ["dirección general de diagnóstico y seguimiento de la nueva escuela mexicana", "ur 171"] },
+            { sigla: "CONAFE", frases: ["consejo nacional de fomento educativo"] },
+            { sigla: "SES", frases: ["subsecretaría de educación superior", "ur 500"] },
+            { sigla: "DGTIC", frases: ["dirección general de tecnologías de la información y comunicaciones"] },
+            { sigla: "AEFCM", frases: ["autoridad educativa federal en la ciudad de méxico", "autoridad educativa federal en la ciudad de mexico"] },
+            { sigla: "UnADM", frases: ["universidad abierta y a distancia de méxico", "universidad abierta y a distancia de mexico"] },
+            { sigla: "USICAMM", frases: ["unidad del sistema para la carrera de las maestras y los maestros"] },
+            { sigla: "DGAIR", frases: ["dirección general de acreditación, incorporación y revalidación"] }
+        ];
+
+        // Función auxiliar para quitar acentos y pasar a minúsculas (búsqueda robusta)
+        function normalizarTexto(str) {
+            return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+        }
+
+        // Función inteligente para detectar la UR (busca tanto siglas exactas como frases desglosadas)
+        function detectarUR(textoBruto) {
+            let textoNorm = normalizarTexto(textoBruto);
+
+            for (let item of mapaUrs) {
+                // 1. Revisar si la sigla exacta aparece en el texto (ej. TecNM, DGETI)
+                let regexSigla = new RegExp(`\\b${item.sigla}\\b`, 'i');
+                if (regexSigla.test(textoBruto) || textoNorm.includes(item.sigla.toLowerCase())) {
+                    return item.sigla;
+                }
+
+                // 2. Revisar si alguna de las frases desglosadas o sinónimos aparece en el texto
+                for (let frase of item.frases) {
+                    if (textoNorm.includes(normalizarTexto(frase))) {
+                        return item.sigla;
+                    }
+                }
+            }
+            return "No especificada";
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
             const opciones = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone: 'America/Mexico_City' };
             const fechaStr = new Date().toLocaleDateString('es-MX', opciones);
@@ -250,27 +309,13 @@
             let salasEventosMap = {};
             let salaNombresCompletos = {};
 
-            const listaUrs = [
-                "DGBTED", "DGFCDD", "SEB", "DGGEyET", "DGEIIB", "DGETI", "DGCFT", 
-                "TecNM", "UNEM", "DGESUI", "DGESUM", "DGPPyEE", "SEMS", "DGETAYCM", 
-                "DGSANEF", "DGUTyP", "DGRHO", "DGRHYO", "DGPyRF", "CSI", "DGDySNEM", 
-                "CONAFE", "SES", "DGTIC", "AEFCM", "UnADM", "USICAMM", "DGAIR"
-            ];
-
             eventosGlobales.forEach(ev => {
                 let texto = ev.texto_completo || "";
                 let matchNum = texto.match(/(\d+)\s*(personas|participantes|asistentes)/i);
                 let numAsistentes = matchNum ? parseInt(matchNum[1]) : 0;
 
-                let ur = "GENERAL";
-                let textoUpper = texto.toUpperCase();
-
-                for (let sigla of listaUrs) {
-                    if (textoUpper.includes(sigla)) {
-                        ur = sigla;
-                        break;
-                    }
-                }
+                // Detección centralizada de UR por nombre o sigla
+                let ur = detectarUR(texto);
 
                 let lineas = texto.split('\n').map(l => l.trim());
                 let salaEncontrada = "Sala No Especificada";
@@ -382,13 +427,6 @@
             let hayExplanada = false;
             let totalAsistentesSuma = 0;
 
-            const listaUrs = [
-                "DGBTED", "DGFCDD", "SEB", "DGGEyET", "DGEIIB", "DGETI", "DGCFT", 
-                "TecNM", "UNEM", "DGESUI", "DGESUM", "DGPPyEE", "SEMS", "DGETAYCM", 
-                "DGSANEF", "DGUTyP", "DGRHO", "DGRHYO", "DGPyRF", "CSI", "DGDySNEM", 
-                "CONAFE", "SES", "DGTIC", "AEFCM", "UnADM", "USICAMM", "DGAIR"
-            ];
-
             eventosGlobales.forEach(ev => {
                 let texto = ev.texto_completo || "";
                 let matchNum = texto.match(/(\d+)\s*(personas|participantes|asistentes)/i);
@@ -400,17 +438,9 @@
                     eventoMax = texto;
                 }
 
-                let ur = "GENERAL";
-                let textoUpper = texto.toUpperCase();
+                let ur = detectarUR(texto);
 
-                for (let sigla of listaUrs) {
-                    if (textoUpper.includes(sigla)) {
-                        ur = sigla;
-                        break;
-                    }
-                }
-
-                if (ur !== "GENERAL") {
+                if (ur !== "No especificada") {
                     conteoUis[ur] = (conteoUis[ur] || 0) + 1;
                 }
 
@@ -488,14 +518,9 @@
             let horario = "No especificado";
             let tema = "No especificado";
             let asistentes = "No especificados";
-            let ur = "No especificada";
-
-            const listaUrs = [
-                "DGBTED", "DGFCDD", "SEB", "DGGEyET", "DGEIIB", "DGETI", "DGCFT", 
-                "TecNM", "UNEM", "DGESUI", "DGESUM", "DGPPyEE", "SEMS", "DGETAYCM", 
-                "DGSANEF", "DGUTyP", "DGRHO", "DGRHYO", "DGPyRF", "CSI", "DGDySNEM", 
-                "CONAFE", "SES", "DGTIC", "AEFCM", "UnADM", "USICAMM", "DGAIR"
-            ];
+            
+            // Detección automática mediante el nuevo mapeo inteligente
+            let ur = detectarUR(textoBruto);
 
             const regexSede = /(cubo|área|area|acceso|ala|bodega|auditorio|explanada|sala)/i;
             const lineaSedeEncontrada = lineas.find(l => regexSede.test(l));
@@ -504,21 +529,10 @@
                 sede = lineaSedeEncontrada;
             } else if (lineas.length > 0 && !lineas[0].toUpperCase().includes('FECHA:')) {
                 sede = lineas[0];
-           
-             } else if (upper.includes('TEMA:') || upper.includes('ASUNTO:')) {
-        tema = linea.replace(/^.*?(tema|asunto):\s*/i, '');
-    }   
-
+            }
 
             lineas.forEach(linea => {
                 const upper = linea.toUpperCase();
-                
-                for (let sigla of listaUrs) {
-                    if (upper.includes(sigla)) {
-                        ur = sigla;
-                        break;
-                    }
-                }
 
                 if (upper.startsWith('FECHA:')) {
                     fecha = linea.replace(/^fecha:\s*/i, '');
