@@ -206,6 +206,9 @@
 
         // Diccionario completo que asocia nombres desglosados y siglas a su respectiva UR oficial
         const mapaUrs = [
+            { sigla: "DGRHO", frases: ["dirección de relaciones laborales"] },
+            { sigla: "DGRHyO", frases: ["dgrhyo", "dghryo", "dgrho", "dirección general de recursos humanos y organización", "direccion general de recursos humanos y organizacion",
+                                         "dirección de relaciones laborales"] },
             { sigla: "DGDCYPEI", frases: ["dirección general de desarrollo curricular y política de educación inicial", "ur 312"] },
             { sigla: "DGME", frases: ["dirección general de materiales educativos", "ur 311"] },
             { sigla: "DGBTED", frases: ["dirección general de bachillerato tecnológico de educación y promoción deportiva"] },
@@ -224,7 +227,7 @@
             { sigla: "DGETAYCM", frases: ["dirección general de educación tecnológica agropecuaria y ciencias del mar"] },
             { sigla: "DGSANEF", frases: ["dirección general del sistema de administración de la nómina educativa federalizada", "ur 715"] },
             { sigla: "DGUTyP", frases: ["dirección general de universidades tecnológicas y politécnicas", "ur 514"] },
-            { sigla: "DGRHO", frases: ["dirección de relaciones laborales"] },
+            
             { sigla: "DGPyRF", frases: ["dirección general de presupuesto y recursos financieros"] },
             { sigla: "CSI", frases: ["coordinación sectorial de inmuebles", "ur 712"] },
             { sigla: "DGDySNEM", frases: ["dirección general de diagnóstico y seguimiento de la nueva escuela mexicana", "ur 171"] },
@@ -235,8 +238,7 @@
             { sigla: "UnADM", frases: ["universidad abierta y a distancia de méxico", "universidad abierta y a distancia de mexico"] },
             { sigla: "USICAMM", frases: ["unidad del sistema para la carrera de las maestras y los maestros"] },
             { sigla: "DGAIR", frases: ["dirección general de acreditación, incorporación y revalidación"] }
-            { sigla: "DGRHyO", frases: ["dgrhyo", "dghryo", "dgrho", "dirección general de recursos humanos y organización", "direccion general de recursos humanos y organizacion",
-                                         "dirección de relaciones laborales"] }
+            
         ];
 
         // Función auxiliar para quitar acentos y pasar a minúsculas (búsqueda robusta)
