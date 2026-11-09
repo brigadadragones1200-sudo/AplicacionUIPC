@@ -590,5 +590,31 @@
     "suplente": "Sergio David Mendoza Toledo",
     "ubicacion": "5-26",
     "extension": "65945"
+  },
+  {
+    "usuario": "jose.maldonado",
+    "password": "2231200",
+    "contrasena": "2231200",
+    "nombre": "José Edmundo Maldonado Borjas",
+    "correo": "jose.maldonado@sep.gob.mx",
+    "indicativo": "N/A",
+    "ur": "DGTIC",
+    "cargo": "Enalce PC",
+    "suplente": "Eduardo de Jesús Corona Lerma",
+    "ubicacion": "2-23",
+    "extension": "55829"
+  },
+  {
+    "usuario": "eduardo.corona",
+    "password": "1200223",
+    "contrasena": "1200223",
+    "nombre": "Eduardo de Jesús Corona Lerma",
+    "correo": "eduardo.coronal@sep.gob.mx",
+    "indicativo": "N/A",
+    "ur": "DGTIC",
+    "cargo": "N/A",
+    "suplente": "N/A",
+    "ubicacion": "2-23",
+    "extension": "N/A"
   }
 ]
