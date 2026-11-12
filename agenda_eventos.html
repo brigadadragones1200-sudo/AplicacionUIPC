@@ -225,6 +225,7 @@
             { sigla: "DGETAYCM", frases: ["dirección general de educación tecnológica agropecuaria y ciencias del mar"] },
             { sigla: "DGSANEF", frases: ["dirección general del sistema de administración de la nómina educativa federalizada", "ur 715"] },
             { sigla: "DGUTyP", frases: ["dirección general de universidades tecnológicas y politécnicas", "ur 514"] },
+            { sigla: "DGTUYP", frases: ["dirección general de universidades tecnológicas y politécnicas", "ur 514"] },
             { sigla: "DGPyRF", frases: ["dirección general de presupuesto y recursos financieros"] },
             { sigla: "CSI", frases: ["coordinación sectorial de inmuebles", "ur 712"] },
             { sigla: "DGDySNEM", frases: ["dirección general de diagnóstico y seguimiento de la nueva escuela mexicana", "ur 171"] },
@@ -234,36 +235,58 @@
             { sigla: "AEFCM", frases: ["autoridad educativa federal en la ciudad de méxico", "autoridad educativa federal en la ciudad de mexico"] },
             { sigla: "UnADM", frases: ["universidad abierta y a distancia de méxico", "universidad abierta y a distancia de mexico"] },
             { sigla: "USICAMM", frases: ["unidad del sistema para la carrera de las maestras y los maestros"] },
-            { sigla: "DGAIR", frases: ["dirección general de acreditación, incorporación y revalidación"] }
+            { sigla: "DGAIR", frases: ["dirección general de acreditación, incorporación y revalidación"] },
+            /* --- NUEVA UNIDAD: COORDINACIÓN SECTORIAL DE IGUALDAD DE GÉNERO --- */
+            { sigla: "CSIGPT", frases: ["coordinadora sectorial de igualdad de género y programas transversales", "igualdad de genero y programas transversales", "coordinación sectorial de igualdad de género"] },
+            /* --- BRIGADAS DE PROTECCIÓN CIVIL --- */
+            { sigla: "BÚSQUEDA Y RESCATE", frases: ["brigada de búsqueda y rescate", "busqueda y rescate"] },
+            { sigla: "PRIMEROS AUXILIOS", frases: ["brigada de primeros auxilios", "primeros auxilios"] },
+            { sigla: "EVACUACIÓN", frases: ["brigada de evacuación", "evacuacion"] },
+            { sigla: "INCENDIOS", frases: ["prevención y combate de incendios", "combate de incendios", "incendios"] },
+            { sigla: "COMUNICACIÓN", frases: ["brigada de comunicación", "comunicacion"] }
         ];
 
-        // Función auxiliar para quitar acentos y pasar a minúsculas (búsqueda robusta)
         function normalizarTexto(str) {
             return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
         }
 
-        // Función inteligente para detectar la UR con regla prioritaria para DGRHyO / DGHRyO y stands bancarios
+        // Función unificada para extraer el número de asistentes de forma segura (evita teléfonos o folios)
+        function obtenerNumeroAsistentes(texto) {
+            let matchEtiqueta = texto.match(/(?:no\.?\s*de\s*)?(?:asistentes|participantes|asistencia(?:\s+para)?|aforo(?:\s+estimado)?)\s*:?\s*(\d{1,4})\b/i);
+            if (matchEtiqueta) {
+                let num = parseInt(matchEtiqueta[1], 10);
+                if (num > 0 && num <= 3500) return num;
+            }
+            let matchSuelto = texto.match(/\b(\d{1,4})\s*(?:personas|participantes|asistentes)\b/i);
+            if (matchSuelto) {
+                let num = parseInt(matchSuelto[1], 10);
+                if (num > 0 && num <= 3500) return num;
+            }
+            return 0;
+        }
+
+        // Función inteligente para detectar la UR con prioridad para siglas institucionales antes de RH
         function detectarUR(textoBruto) {
             let textoNorm = normalizarTexto(textoBruto);
 
-            // 1. Regla de respaldo prioritaria: Si contiene palabras clave de aseguradoras, stands o siglas de RH
-            if (textoNorm.includes("banorte") || textoNorm.includes("metlife") || textoNorm.includes("dghryo") || textoNorm.includes("dgrhyo") || textoNorm.includes("recursos humanos")) {
-                return "DGRHyO";
-            }
-
-            // 2. Búsqueda general en el mapa de siglas
+            // 1. PRIORIDAD ABSOLUTA: Buscar primero si el texto menciona explícitamente alguna sigla de UR
             for (let item of mapaUrs) {
                 let regexSigla = new RegExp(`\\b${item.sigla}\\b`, 'i');
                 if (regexSigla.test(textoBruto) || textoNorm.includes(item.sigla.toLowerCase())) {
                     return item.sigla;
                 }
-
                 for (let frase of item.frases) {
                     if (textoNorm.includes(normalizarTexto(frase))) {
                         return item.sigla;
                     }
                 }
             }
+
+            // 2. RESPALDO SECUNDARIO: Si no hay siglas explícitas, evaluar palabras clave genéricas
+            if (textoNorm.includes("banorte") || textoNorm.includes("metlife") || textoNorm.includes("dghryo") || textoNorm.includes("dgrhyo") || (textoNorm.includes("recursos humanos") && !textoNorm.includes("dgutyp") && !textoNorm.includes("dgtuyp"))) {
+                return "DGRHyO";
+            }
+
             return "No especificada";
         }
 
@@ -315,10 +338,7 @@
 
             eventosGlobales.forEach(ev => {
                 let texto = ev.texto_completo || "";
-                let matchNum = texto.match(/(\d+)\s*(personas|participantes|asistentes)/i);
-                let numAsistentes = matchNum ? parseInt(matchNum[1]) : 0;
-
-                // Detección centralizada de UR por nombre o sigla
+                let numAsistentes = obtenerNumeroAsistentes(texto);
                 let ur = detectarUR(texto);
 
                 let lineas = texto.split('\n').map(l => l.trim());
@@ -433,8 +453,7 @@
 
             eventosGlobales.forEach(ev => {
                 let texto = ev.texto_completo || "";
-                let matchNum = texto.match(/(\d+)\s*(personas|participantes|asistentes)/i);
-                let num = matchNum ? parseInt(matchNum[1]) : 0;
+                let num = obtenerNumeroAsistentes(texto);
                 totalAsistentesSuma += num;
 
                 if (num > maxAsistentes) {
@@ -523,7 +542,6 @@
             let tema = "No especificado";
             let asistentes = "No especificados";
             
-            // Detección automática mediante el nuevo mapeo inteligente
             let ur = detectarUR(textoBruto);
 
             const regexSede = /(cubo|área|area|acceso|ala|bodega|auditorio|explanada|sala)/i;
@@ -548,12 +566,8 @@
                     tema = linea.replace(/^.*?(tema|asunto):\s*/i, '');
                 } else if (upper.startsWith('EVENTO:')) {
                     tema = linea.replace(/^evento:\s*/i, '');
-                } else if (upper.startsWith('ASISTENTES:') || upper.startsWith('PARTICIPANTES:') || upper.startsWith('ASISTENCIA:') || upper.startsWith('ASISTENCIA PARA:')) {
-                    asistentes = linea.replace(/^(asistentes|participantes|asistencia para|asistencia):\s*/i, '');
-                } else if (/^aforo\s+estimado:/i.test(linea) || /^aforo:/i.test(linea)) {
-                    asistentes = linea.replace(/^(aforo\s+estimado|aforo):\s*/i, '');
-                } else if (/^asistentes\s+\d+/i.test(linea) || /^participantes\s+\d+/i.test(linea)) {
-                    asistentes = linea.replace(/^(asistentes|participantes)\s*/i, '');
+                } else if (/^(?:no\.?\s*de\s*)?(?:asistentes|participantes|asistencia(?:\s+para)?|aforo(?:\s+estimado)?)\s*:?\s*/i.test(linea)) {
+                    asistentes = linea.replace(/^(?:no\.?\s*de\s*)?(?:asistentes|participantes|asistencia(?:\s+para)?|aforo(?:\s+estimado)?)\s*:?\s*/i, '');
                 }
             });
 
