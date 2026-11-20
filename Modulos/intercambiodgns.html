@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🎄 Intercambio Dragones 2026 🔥</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background-color: #141618;
+      color: #f3f4f6;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .card-dragon {
+      background-color: #2c2f33;
+      border: 1px solid rgba(244, 178, 51, 0.35);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    }
+    .btn-gold {
+      background-color: #f4b233;
+      color: #141618;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .btn-gold:hover { background-color: #ffca57; }
+    .btn-red {
+      background-color: #b91c1c;
+      color: #ffffff;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .btn-red:hover { background-color: #dc2626; }
+    .tab-active {
+      border-bottom: 3px solid #f4b233;
+      color: #f4b233;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+  <!-- ENCABEZADO -->
+  <header class="bg-[#1e2022] border-b-2 border-[#f4b233] py-4 px-4 shadow-lg">
+    <div class="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-4">
+        <img src="logo-dragones-png.png" alt="Logo Brigada Dragones" class="w-16 h-16 sm:w-20 sm:h-20 object-contain drop-shadow-md" />
+        <div>
+          <span class="text-xs uppercase tracking-widest text-[#f4b233] font-bold block">Brigada Prevención y Combate de Incendios</span>
+          <h1 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+            🎄 Intercambio <span class="text-[#f4b233]">Dragones 2026</span> 🔥
+          </h1>
+        </div>
+      </div>
+
+      <div class="flex flex-col sm:items-end gap-1.5">
+        <div id="estadoFechaBadge" class="text-xs px-3 py-1 rounded-full bg-amber-900/60 border border-amber-500 text-amber-200 font-semibold text-center">
+          ⏳ Sorteo inicia: 23 de Noviembre 2026
+        </div>
+        <div id="barraUsuarioLogueado" style="display:none;" class="items-center gap-2 bg-[#25282c] px-3 py-1 rounded-lg border border-gray-600 text-xs">
+          <span>👤 <strong id="headerIndicativo" class="text-[#f4b233]"></strong></span>
+          <button type="button" onclick="cerrarSesionUsuario()" class="text-red-400 hover:text-red-300 font-bold underline ml-1 cursor-pointer">Salir</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- PANTALLA 0: ACCESO OBLIGATORIO -->
+  <main id="vistaAcceso" class="max-w-md mx-auto w-full p-4 sm:p-6 flex-grow flex flex-col justify-center">
+    <div class="card-dragon rounded-xl p-6">
+      <div class="grid grid-cols-2 border-b border-gray-700 mb-5 text-center text-sm font-bold">
+        <button type="button" id="btnModoLogin" onclick="cambiarModoAcceso('login')" class="py-2.5 tab-active cursor-pointer">
+          Iniciar Sesión
+        </button>
+        <button type="button" id="btnModoRegistro" onclick="cambiarModoAcceso('registro')" class="py-2.5 text-gray-400 hover:text-white cursor-pointer">
+          Registrarme
+        </button>
+      </div>
+
+      <!-- FORMULARIO INICIAR SESIÓN -->
+      <div id="boxLogin" class="space-y-4">
+        <p class="text-xs text-gray-300">Ingresa con tu indicativo y contraseña para capturar tus deseos o ver tu intercambio.</p>
+        <div>
+          <label class="block text-sm font-semibold text-gray-200 mb-1">Indicativo *</label>
+          <input type="text" id="loginIndicativo" placeholder="Ej. Delta, Dragón 1"
+            class="w-full rounded-lg bg-[#181a1c] border border-gray-600 px-3 py-2 text-white focus:outline-none focus:border-[#f4b233]" />
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-gray-200 mb-1">Contraseña (máx. 8 caracteres) *</label>
+          <input type="password" id="loginPassword" maxlength="8" placeholder="Máx. 8 caracteres"
+            class="w-full rounded-lg bg-[#181a1c] border border-gray-600 px-3 py-2 text-white focus:outline-none focus:border-[#f4b233]" />
+        </div>
+        <button type="button" onclick="procesarLogin()" class="w-full btn-gold py-2.5 rounded-lg text-base shadow-md">
+          🎄 Entrar al Intercambio
+        </button>
+      </div>
+
+      <!-- FORMULARIO REGISTRO BÁSICO -->
+      <div id="boxRegistro" style="display:none;" class="space-y-4">
+        <p class="text-xs text-gray-300">Registra tu cuenta básica primero. Después inicia sesión para capturar tus 3 deseos.</p>
+        <div>
+          <label class="block text-sm font-semibold text-gray-200 mb-1">Nombre Completo *</label>
+          <input type="text" id="regNombre" placeholder="Ej. Daniel González"
+            class="w-full rounded-lg bg-[#181a1c] border border-gray-600 px-3 py-2 text-white focus:outline-none focus:border-[#f4b233]" />
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-gray-200 mb-1">Indicativo *</label>
+          <input type="text" id="regIndicativo" placeholder="Ej. Delta, Dragón 1..."
+            class="w-full rounded-lg bg-[#181a1c] border border-gray-600 px-3 py-2 text-white focus:outline-none focus:border-[#f4b233]" />
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-gray-200 mb-1">Crea tu Contraseña (Máx. 8 caracteres) *</label>
+          <input type="password" id="regPassword" maxlength="8" placeholder="Máximo 8 caracteres"
+            class="w-full rounded-lg bg-[#181a1c] border border-gray-600 px-3 py-2 text-white focus:outline-none focus:border-[#f4b233]" />
+        </div>
+        <button type="button" onclick="procesarRegistro()" class="w-full btn-red py-2.5 rounded-lg text-base shadow-md">
+          🔥 Completar Registro
+        </button>
+      </div>
+
+      <div class="mt-6 pt-4 border-t border-gray-700 text-center">
+        <button type="button" onclick="abrirModalAdmin()" class="text-xs text-gray-400 hover:text-[#f4b233] underline cursor-pointer">
+          🔐 Acceso Administrador
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <!-- VISTA 1: APLICACIÓN INTERNA (SOLO LOGUEADOS) -->
+  <div id="vistaApp" style="display:none;" class="flex-grow flex flex-col">
+    <nav class="bg-[#25282c] border-b border-gray-700 sticky top-0 z-10">
+      <div class="max-w-5xl mx-auto flex justify-around sm:justify-start sm:gap-8 px-4 text-sm sm:text-base">
+        <button type="button" id="tab-mis-deseos" onclick="cambiarTabApp('mis-deseos')" class="py-3 px-2 tab-active cursor-pointer">1. Mis 3 Deseos</button>
+        <button type="button" id="tab-lista-general" onclick="cambiarTabApp('lista-general')" class="py-3 px-2 text-gray-300 hover:text-white cursor-pointer">2. Lista de Deseos</button>
+        <button type="button" id="tab-mi-intercambio" onclick="cambiarTabApp('mi-intercambio')" class="py-3 px-2 text-gray-300 hover:text-white cursor-pointer">3. ¿Quién me tocó?</button>
+      </div>
+    </nav>
+
+    <main class="max-w-5xl mx-auto w-full p-4 sm:p-6 flex-grow">
+
+      <!-- PESTAÑA 1: MIS 3 DESEOS -->
+      <section id="sec-mis-deseos" class="max-w-xl mx-auto card-dragon rounded-xl p-6">
+        <div class="flex items-center justify-between border-b border-gray-700 pb-3 mb-4 gap-2">
+          <div>
+            <h2 class="text-xl font-bold text-[#f4b233]">🎁 Mis 3 Deseos</h2>
+            <p id="saludoUsuario" class="text-sm text-gray-300"></p>
+          </div>
+          <span id="badgeEstadoDeseos" class="text-xs px-2.5 py-1 rounded-full font-bold"></span>
+        </div>
+
+        <div class="space-y-4">
+          <div>
+            <label class="block text-sm font-semibold text-gray-200 mb-1">Deseo 1 *</label>
+            <input type="text" id="inputDeseo1" placeholder="Ej. Taza térmica"
+              class="w-full rounded-lg bg-[#181a1c] border border-gray-600 px-3 py-2 text-white focus:outline-none focus:border-[#f4b233]" />
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-gray-200 mb-1">Deseo 2 *</label>
+            <input type="text" id="inputDeseo2" placeholder="Ej. Playera talla G"
+              class="w-full rounded-lg bg-[#181a1c] border border-gray-600 px-3 py-2 text-white focus:outline-none focus:border-[#f4b233]" />
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-gray-200 mb-1">Deseo 3 *</label>
+            <input type="text" id="inputDeseo3" placeholder="Ej. Chocolates o libreta"
+              class="w-full rounded-lg bg-[#181a1c] border border-gray-600 px-3 py-2 text-white focus:outline-none focus:border-[#f4b233]" />
+          </div>
+
+          <button type="button" onclick="guardarMisDeseos()" class="w-full btn-gold py-2.5 rounded-lg text-base shadow-md">
+            🎁 Guardar Mi Lista de Deseos
+          </button>
+        </div>
+      </section>
+
+      <!-- PESTAÑA 2: LISTA GENERAL DE DESEOS -->
+      <section id="sec-lista-general" style="display:none;">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
+          <div>
+            <h2 class="text-xl font-bold text-[#f4b233]">📋 Lista de Deseos de los Participantes</h2>
+            <p class="text-sm text-gray-300">Consulta los deseos registrados por tus compañeros de brigada.</p>
+          </div>
+          <input type="text" id="buscadorDeseos" onkeyup="renderizarMuroDeseos()" placeholder="Buscar nombre o indicativo..."
+            class="rounded-lg bg-[#181a1c] border border-gray-600 px-3 py-2 text-sm text-white focus:outline-none focus:border-[#f4b233] w-full sm:w-64" />
+        </div>
+
+        <div id="gridDeseos" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+      </section>
+
+      <!-- PESTAÑA 3: MI INTERCAMBIO -->
+      <section id="sec-mi-intercambio" style="display:none;" class="max-w-xl mx-auto card-dragon rounded-xl p-6 text-center">
+        <h2 class="text-xl font-bold text-[#f4b233] mb-2">🎅 Resultado del Intercambio Dragones 2026</h2>
+
+        <div id="bloqueEsperaFecha" style="display:none;" class="bg-amber-900/40 border border-amber-500 text-amber-200 rounded-xl p-5 my-4 text-sm">
+          ⏳ <strong>El sorteo aún no comienza.</strong><br/>
+          A partir del <strong>23 de noviembre de 2026</strong>, al entrar aquí verás a quién te tocó regalarle.
+        </div>
+
+        <div id="bloquePendienteSorteo" style="display:none;" class="bg-blue-900/40 border border-blue-500 text-blue-200 rounded-xl p-5 my-4 text-sm">
+          🎲 <strong>¡Ya estamos en fecha!</strong><br/>
+          En cuanto el Administrador realice el sorteo, aquí aparecerá tu asignación y sus 3 deseos.
+        </div>
+
+        <div id="bloqueResultadoSorteo" style="display:none;" class="mt-4 bg-[#181a1c] border-2 border-[#f4b233] rounded-xl p-6">
+          <p class="text-xs uppercase tracking-widest text-gray-400">🎄 Te tocó regalarle a:</p>
+          <h3 id="resNombre" class="text-3xl font-extrabold text-[#f4b233] mt-1"></h3>
+          <p id="resIndicativo" class="text-sm font-bold text-red-400 mb-5"></p>
+
+          <div class="text-left bg-[#25282c] rounded-lg p-4 border border-gray-700">
+            <p class="text-xs font-bold text-[#f4b233] uppercase mb-2">🎁 Sus 3 deseos son:</p>
+            <ol id="resListaDeseos" class="list-decimal list-inside text-sm text-white space-y-1.5"></ol>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- VISTA 2: PANEL ADMINISTRADOR -->
+  <main id="vistaAdmin" style="display:none;" class="max-w-5xl mx-auto w-full p-4 sm:p-6 flex-grow">
+    <div id="adminLoginBox" class="max-w-md mx-auto card-dragon rounded-xl p-6">
+      <div class="flex justify-between items-center mb-3">
+        <h2 class="text-xl font-bold text-[#f4b233]">🔐 Acceso Administrador</h2>
+        <button type="button" onclick="volverAInicio()" class="text-xs text-gray-400 hover:text-white underline cursor-pointer">← Volver</button>
+      </div>
+      <div class="space-y-4">
+        <div>
+          <label class="block text-sm font-semibold text-gray-200 mb-1">Usuario</label>
+          <input type="text" id="adminUser" placeholder="admin"
+            class="w-full rounded-lg bg-[#181a1c] border border-gray-600 px-3 py-2 text-white focus:outline-none focus:border-[#f4b233]" />
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-gray-200 mb-1">Contraseña</label>
+          <input type="password" id="adminPass" placeholder="••••••••"
+            class="w-full rounded-lg bg-[#181a1c] border border-gray-600 px-3 py-2 text-white focus:outline-none focus:border-[#f4b233]" />
+        </div>
+        <button type="button" onclick="procesarAdminLogin()" class="w-full btn-gold py-2.5 rounded-lg">Entrar al Panel</button>
+      </div>
+    </div>
+
+    <div id="adminDashboard" style="display:none;" class="space-y-6">
+      <div class="card-dragon rounded-xl p-5 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div>
+          <h2 class="text-xl font-bold text-[#f4b233]">Panel de Control — Intercambio Dragones 2026</h2>
+          <p id="adminStats" class="text-sm text-gray-300"></p>
+        </div>
+        <div class="flex flex-wrap gap-2">
+          <button type="button" onclick="ejecutarSorteoAdmin()" class="btn-red px-4 py-2 rounded-lg text-sm">
+            🎲 Realizar Sorteo
+          </button>
+          <button type="button" onclick="descargarJSON()" class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg text-sm font-semibold cursor-pointer">
+            ⬇️ Descargar JSON
+          </button>
+          <button type="button" onclick="volverAInicio()" class="bg-gray-800 hover:bg-gray-700 text-gray-300 px-3 py-2 rounded-lg text-sm cursor-pointer">
+            Salir Admin
+          </button>
+        </div>
+      </div>
+
+      <div class="card-dragon rounded-xl overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse text-sm">
+            <thead>
+              <tr class="bg-[#181a1c] text-[#f4b233] border-b border-gray-700">
+                <th class="p-3">Participante</th>
+                <th class="p-3">Indicativo</th>
+                <th class="p-3">Clave</th>
+                <th class="p-3">Deseos</th>
+                <th class="p-3">Le regala a ➡️</th>
+                <th class="p-3">Acción</th>
+              </tr>
+            </thead>
+            <tbody id="tablaAdminBody" class="divide-y divide-gray-700"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div id="toast" style="display:none;" class="fixed bottom-5 right-5 max-w-sm bg-[#1e2022] border-l-4 border-[#f4b233] text-white px-4 py-3 rounded shadow-2xl z-50 text-sm"></div>
+
+  <footer class="bg-[#1e2022] border-t border-gray-800 py-4 text-center text-xs text-gray-400 mt-8">
+    🎄 Brigada de Prevención y Combate de Incendios "Dragones" • Intercambio Navideño 2026 🔥
+  </footer>
+
+  <script>
+    var FECHA_ACTIVACION = new Date('2026-11-23T00:00:00');
+    var ADMIN_USER = 'admin';
+    var ADMIN_PASS = '12001200';
+    var STORAGE_KEY = 'intercambio_dragones_2026_local_v6';
+
+    var dbCache = {
+      sorteoRealizado: false,
+      participantes: []
+    };
+
+    var usuarioActualId = null;
+
+    function cargarLocal() {
+      try {
+        var raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) {
+          var parsed = JSON.parse(raw);
+          if (parsed && Array.isArray(parsed.participantes)) {
+            dbCache = parsed;
+          }
+        }
+      } catch (e) {}
+    }
+
+    function guardarLocal() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(dbCache));
+      } catch (e) {}
+    }
+
+    function esFechaActiva() {
+      return new Date() >= FECHA_ACTIVACION;
+    }
+
+    function actualizarEstadoFechaUI() {
+      var badge = document.getElementById('estadoFechaBadge');
+      if (esFechaActiva()) {
+        badge.className = 'text-xs px-3 py-1 rounded-full bg-green-900/60 border border-green-500 text-green-200 font-semibold text-center';
+        badge.textContent = '✅ Sorteo Activo (Desde 23 Nov 2026)';
+      } else {
+        badge.className = 'text-xs px-3 py-1 rounded-full bg-amber-900/60 border border-amber-500 text-amber-200 font-semibold text-center';
+        badge.textContent = '⏳ Sorteo inicia: 23 de Noviembre 2026';
+      }
+    }
+
+    function mostrarToast(msg, esError) {
+      var toast = document.getElementById('toast');
+      toast.textContent = msg;
+      toast.style.borderLeftColor = esError ? '#ef4444' : '#f4b233';
+      toast.style.display = 'block';
+      clearTimeout(window._toastTimer);
+      window._toastTimer = setTimeout(function () {
+        toast.style.display = 'none';
+      }, 4000);
+    }
+
+    function escapeHTML(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    function cambiarModoAcceso(modo) {
+      var boxLogin = document.getElementById('boxLogin');
+      var boxReg = document.getElementById('boxRegistro');
+      var btnLogin = document.getElementById('btnModoLogin');
+      var btnReg = document.getElementById('btnModoRegistro');
+
+      if (modo === 'login') {
+        boxLogin.style.display = 'block';
+        boxReg.style.display = 'none';
+        btnLogin.className = 'py-2.5 tab-active cursor-pointer';
+        btnReg.className = 'py-2.5 text-gray-400 hover:text-white cursor-pointer';
+      } else {
+        boxLogin.style.display = 'none';
+        boxReg.style.display = 'block';
+        btnReg.className = 'py-2.5 tab-active cursor-pointer';
+        btnLogin.className = 'py-2.5 text-gray-400 hover:text-white cursor-pointer';
+      }
+    }
+
+    function procesarRegistro() {
+      cargarLocal();
+      var nombre = document.getElementById('regNombre').value.trim();
+      var indicativo = document.getElementById('regIndicativo').value.trim();
+      var password = document.getElementById('regPassword').value.trim();
+
+      if (!nombre || !indicativo || !password) {
+        mostrarToast('⚠️ Llena nombre, indicativo y contraseña.', true);
+        return;
+      }
+      if (password.length > 8) {
+        mostrarToast('⚠️ La contraseña debe tener máximo 8 caracteres.', true);
+        return;
+      }
+
+      var duplicado = dbCache.participantes.some(function (p) {
+        return p.indicativo.toLowerCase() === indicativo.toLowerCase();
+      });
+      if (duplicado) {
+        mostrarToast('⚠️ Ese indicativo ya está registrado.', true);
+        return;
+      }
+
+      dbCache.participantes.push({
+        id: Date.now().toString() + '-' + Math.random().toString(36).slice(2, 6),
+        nombre: nombre,
+        indicativo: indicativo,
+        password: password,
+        deseos: [],
+        asignadoAId: null
+      });
+
+      dbCache.sorteoRealizado = false;
+      dbCache.participantes.forEach(function (p) { p.asignadoAId = null; });
+      guardarLocal();
+
+      document.getElementById('regNombre').value = '';
+      document.getElementById('regIndicativo').value = '';
+      document.getElementById('regPassword').value = '';
+
+      cambiarModoAcceso('login');
+      document.getElementById('loginIndicativo').value = indicativo;
+      document.getElementById('loginPassword').focus();
+      mostrarToast('✅ Registro exitoso. Ahora inicia sesión para capturar tus 3 deseos.');
+    }
+
+    function procesarLogin() {
+      cargarLocal();
+      var indicativo = document.getElementById('loginIndicativo').value.trim().toLowerCase();
+      var password = document.getElementById('loginPassword').value.trim();
+
+      if (!indicativo || !password) {
+        mostrarToast('⚠️ Escribe tu indicativo y contraseña.', true);
+        return;
+      }
+
+      var usuario = dbCache.participantes.find(function (p) {
+        return p.indicativo.toLowerCase() === indicativo && p.password === password;
+      });
+
+      if (!usuario) {
+        mostrarToast('❌ Indicativo o contraseña incorrectos.', true);
+        return;
+      }
+
+      usuarioActualId = usuario.id;
+      document.getElementById('headerIndicativo').textContent = usuario.indicativo;
+      document.getElementById('barraUsuarioLogueado').style.display = 'flex';
+      document.getElementById('vistaAcceso').style.display = 'none';
+      document.getElementById('vistaApp').style.display = 'flex';
+
+      cargarDatosUsuarioLogueado();
+      if (esFechaActiva() && dbCache.sorteoRealizado && usuario.asignadoAId) {
+        cambiarTabApp('mi-intercambio');
+      } else {
+        cambiarTabApp('mis-deseos');
+      }
+      mostrarToast('🎄 Bienvenido, ' + usuario.indicativo);
+    }
+
+    function cerrarSesionUsuario() {
+      usuarioActualId = null;
+      document.getElementById('vistaApp').style.display = 'none';
+      document.getElementById('barraUsuarioLogueado').style.display = 'none';
+      document.getElementById('vistaAcceso').style.display = 'flex';
+      document.getElementById('loginIndicativo').value = '';
+      document.getElementById('loginPassword').value = '';
+      mostrarToast('Sesión cerrada.');
+    }
+
+    function cambiarTabApp(tab) {
+      ['mis-deseos', 'lista-general', 'mi-intercambio'].forEach(function (t) {
+        document.getElementById('sec-' + t).style.display = 'none';
+        document.getElementById('tab-' + t).className = 'py-3 px-2 text-gray-300 hover:text-white cursor-pointer';
+      });
+      document.getElementById('sec-' + tab).style.display = 'block';
+      document.getElementById('tab-' + tab).className = 'py-3 px-2 tab-active cursor-pointer';
+
+      cargarLocal();
+      if (tab === 'mis-deseos') cargarDatosUsuarioLogueado();
+      if (tab === 'lista-general') renderizarMuroDeseos();
+      if (tab === 'mi-intercambio') renderizarResultadoUsuario();
+    }
+
+    function cargarDatosUsuarioLogueado() {
+      var usuario = dbCache.participantes.find(function (p) { return p.id === usuarioActualId; });
+      if (!usuario) return;
+
+      document.getElementById('saludoUsuario').textContent = usuario.nombre + ' (' + usuario.indicativo + ')';
+      var badge = document.getElementById('badgeEstadoDeseos');
+
+      if (usuario.deseos && usuario.deseos.length === 3) {
+        badge.className = 'text-xs px-2.5 py-1 rounded-full font-bold bg-green-900/70 text-green-300 border border-green-500';
+        badge.textContent = '✅ Deseos guardados';
+        document.getElementById('inputDeseo1').value = usuario.deseos[0];
+        document.getElementById('inputDeseo2').value = usuario.deseos[1];
+        document.getElementById('inputDeseo3').value = usuario.deseos[2];
+      } else {
+        badge.className = 'text-xs px-2.5 py-1 rounded-full font-bold bg-amber-900/70 text-amber-300 border border-amber-500';
+        badge.textContent = '⚠️ Pendiente';
+        document.getElementById('inputDeseo1').value = '';
+        document.getElementById('inputDeseo2').value = '';
+        document.getElementById('inputDeseo3').value = '';
+      }
+    }
+
+    function guardarMisDeseos() {
+      cargarLocal();
+      var usuario = dbCache.participantes.find(function (p) { return p.id === usuarioActualId; });
+      if (!usuario) return;
+
+      var d1 = document.getElementById('inputDeseo1').value.trim();
+      var d2 = document.getElementById('inputDeseo2').value.trim();
+      var d3 = document.getElementById('inputDeseo3').value.trim();
+
+      if (!d1 || !d2 || !d3) {
+        mostrarToast('⚠️ Captura tus 3 deseos antes de guardar.', true);
+        return;
+      }
+
+      usuario.deseos = [d1, d2, d3];
+      guardarLocal();
+      cargarDatosUsuarioLogueado();
+      mostrarToast('🎁 ¡Tus 3 deseos quedaron guardados!');
+    }
+
+    function renderizarMuroDeseos() {
+      var grid = document.getElementById('gridDeseos');
+      var filtro = (document.getElementById('buscadorDeseos').value || '').toLowerCase().trim();
+      grid.innerHTML = '';
+
+      var filtrados = dbCache.participantes.filter(function (p) {
+        return p.nombre.toLowerCase().includes(filtro) ||
+               p.indicativo.toLowerCase().includes(filtro);
+      });
+
+      if (filtrados.length === 0) {
+        grid.innerHTML = '<p class="text-gray-400 col-span-full text-center py-8">No hay participantes registrados.</p>';
+        return;
+      }
+
+      filtrados.forEach(function (p) {
+        var tieneDeseos = p.deseos && p.deseos.length === 3;
+        var card = document.createElement('div');
+        card.className = 'card-dragon rounded-xl p-4';
+        card.innerHTML =
+          '<div class="flex items-center justify-between border-b border-gray-700 pb-2 mb-3 gap-2">' +
+            '<h3 class="font-bold text-white text-base">' + escapeHTML(p.nombre) + '</h3>' +
+            '<span class="text-xs bg-[#f4b233] text-black font-extrabold px-2.5 py-0.5 rounded-full shrink-0">' +
+              escapeHTML(p.indicativo) +
+            '</span>' +
+          '</div>' +
+          (tieneDeseos
+            ? '<ol class="list-decimal list-inside text-sm text-gray-200 space-y-1">' +
+                '<li>' + escapeHTML(p.deseos[0]) + '</li>' +
+                '<li>' + escapeHTML(p.deseos[1]) + '</li>' +
+                '<li>' + escapeHTML(p.deseos[2]) + '</li>' +
+              '</ol>'
+            : '<p class="text-xs text-amber-400 italic py-2">⏳ Aún no captura sus 3 deseos.</p>');
+        grid.appendChild(card);
+      });
+    }
+
+    function renderizarResultadoUsuario() {
+      var usuario = dbCache.participantes.find(function (p) { return p.id === usuarioActualId; });
+      var esperaFecha = document.getElementById('bloqueEsperaFecha');
+      var pendienteSorteo = document.getElementById('bloquePendienteSorteo');
+      var resultado = document.getElementById('bloqueResultadoSorteo');
+
+      esperaFecha.style.display = 'none';
+      pendienteSorteo.style.display = 'none';
+      resultado.style.display = 'none';
+
+      if (!esFechaActiva()) {
+        esperaFecha.style.display = 'block';
+        return;
+      }
+      if (!dbCache.sorteoRealizado || !usuario || !usuario.asignadoAId) {
+        pendienteSorteo.style.display = 'block';
+        return;
+      }
+      var pareja = dbCache.participantes.find(function (p) { return p.id === usuario.asignadoAId; });
+      if (!pareja) {
+        pendienteSorteo.style.display = 'block';
+        return;
+      }
+
+      document.getElementById('resNombre').textContent = pareja.nombre;
+      document.getElementById('resIndicativo').textContent = 'Indicativo: ' + pareja.indicativo;
+      var ul = document.getElementById('resListaDeseos');
+      ul.innerHTML = (pareja.deseos && pareja.deseos.length === 3)
+        ? pareja.deseos.map(function (d) { return '<li>' + escapeHTML(d) + '</li>'; }).join('')
+        : '<li class="text-amber-300">Aún no captura sus 3 deseos.</li>';
+      resultado.style.display = 'block';
+    }
+
+    // ADMIN
+    function abrirModalAdmin() {
+      document.getElementById('vistaAcceso').style.display = 'none';
+      document.getElementById('vistaApp').style.display = 'none';
+      document.getElementById('vistaAdmin').style.display = 'block';
+      document.getElementById('adminLoginBox').style.display = 'block';
+      document.getElementById('adminDashboard').style.display = 'none';
+    }
+
+    function volverAInicio() {
+      document.getElementById('vistaAdmin').style.display = 'none';
+      document.getElementById('adminUser').value = '';
+      document.getElementById('adminPass').value = '';
+      if (usuarioActualId) {
+        document.getElementById('vistaApp').style.display = 'flex';
+      } else {
+        document.getElementById('vistaAcceso').style.display = 'flex';
+      }
+    }
+
+    function procesarAdminLogin() {
+      var user = document.getElementById('adminUser').value.trim();
+      var pass = document.getElementById('adminPass').value.trim();
+
+      if (user === ADMIN_USER && pass === ADMIN_PASS) {
+        cargarLocal();
+        document.getElementById('adminLoginBox').style.display = 'none';
+        document.getElementById('adminDashboard').style.display = 'block';
+        renderizarTablaAdmin();
+        mostrarToast('🔐 Bienvenido, Administrador.');
+      } else {
+        mostrarToast('❌ Usuario o contraseña incorrectos.', true);
+      }
+    }
+
+    function generarAsignacionesSinAutoRegalo(lista) {
+      if (lista.length < 2) return false;
+      var receptores = lista.slice();
+      var valido = false;
+      var intentos = 0;
+
+      while (!valido && intentos < 500) {
+        intentos++;
+        for (var i = receptores.length - 1; i > 0; i--) {
+          var j = Math.floor(Math.random() * (i + 1));
+          var temp = receptores[i];
+          receptores[i] = receptores[j];
+          receptores[j] = temp;
+        }
+        valido = lista.every(function (giver, idx) {
+          return giver.id !== receptores[idx].id;
+        });
+      }
+
+      if (!valido) return false;
+      lista.forEach(function (giver, idx) {
+        giver.asignadoAId = receptores[idx].id;
+      });
+      return true;
+    }
+
+    function ejecutarSorteoAdmin() {
+      cargarLocal();
+      if (dbCache.participantes.length < 2) {
+        mostrarToast('⚠️ Registra al menos 2 participantes para sortear.', true);
+        return;
+      }
+      if (generarAsignacionesSinAutoRegalo(dbCache.participantes)) {
+        dbCache.sorteoRealizado = true;
+        guardarLocal();
+        renderizarTablaAdmin();
+        mostrarToast('🎲 ¡Sorteo realizado sin autoasignaciones!');
+      }
+    }
+
+    function renderizarTablaAdmin() {
+      var tbody = document.getElementById('tablaAdminBody');
+      var stats = document.getElementById('adminStats');
+      tbody.innerHTML = '';
+
+      stats.textContent = 'Registrados: ' + dbCache.participantes.length + ' | Sorteo: ' + (dbCache.sorteoRealizado ? '✅ Realizado' : '⏳ Pendiente');
+
+      if (dbCache.participantes.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" class="p-4 text-center text-gray-400">Sin registros aún.</td></tr>';
+        return;
+      }
+
+      dbCache.participantes.forEach(function (p) {
+        var receptor = dbCache.participantes.find(function (r) { return r.id === p.asignadoAId; });
+        var tieneDeseos = p.deseos && p.deseos.length === 3;
+        var tr = document.createElement('tr');
+        tr.className = 'hover:bg-[#23262a]';
+        tr.innerHTML =
+          '<td class="p-3 font-semibold text-white">' + escapeHTML(p.nombre) + '</td>' +
+          '<td class="p-3 text-[#f4b233] font-bold">' + escapeHTML(p.indicativo) + '</td>' +
+          '<td class="p-3 text-gray-400 font-mono">' + escapeHTML(p.password) + '</td>' +
+          '<td class="p-3 text-xs">' + (tieneDeseos ? '<span class="text-green-400">✅ Listos</span>' : '<span class="text-amber-400">⏳ Pendiente</span>') + '</td>' +
+          '<td class="p-3 text-green-400 font-semibold">' +
+            (receptor ? escapeHTML(receptor.nombre) + ' (' + escapeHTML(receptor.indicativo) + ')' : '<span class="text-gray-500">Sin asignar</span>') +
+          '</td>' +
+          '<td class="p-3">' +
+            '<button type="button" onclick="eliminarParticipante(\'' + p.id + '\')" class="text-xs bg-red-900/70 hover:bg-red-700 text-red-200 px-2.5 py-1 rounded cursor-pointer">Eliminar</button>' +
+          '</td>';
+        tbody.appendChild(tr);
+      });
+    }
+
+    function eliminarParticipante(id) {
+      if (!confirm('¿Eliminar a este participante?')) return;
+      dbCache.participantes = dbCache.participantes.filter(function (p) { return p.id !== id; });
+      dbCache.sorteoRealizado = false;
+      dbCache.participantes.forEach(function (p) { p.asignadoAId = null; });
+      guardarLocal();
+      renderizarTablaAdmin();
+      mostrarToast('Participante eliminado.');
+    }
+
+    function descargarJSON() {
+      var blob = new Blob([JSON.stringify(dbCache, null, 2)], { type: 'application/json' });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = 'intercambio_dragones_2026.json';
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    cargarLocal();
+    actualizarEstadoFechaUI();
+  </script>
+</body>
+</html>
