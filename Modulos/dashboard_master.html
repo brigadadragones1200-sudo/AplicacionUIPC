@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <script>
+        (function() {
+            try {
+                const currentUser = sessionStorage.getItem('uipc_current_user');
+                if (!currentUser) {
+                    window.location.replace('loginuipc.html');
+                }
+            } catch(e) {
+                window.location.replace('loginuipc.html');
+            }
+        })();
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard UIPC - Maestro</title>
+    <link rel="icon" type="image/png" href="images/logo_UIPC.png">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #fff7ef;
+            display: flex;
+            justify-content: center;
+            padding: 0;
+            overflow-x: hidden; 
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        .maqueta-container {
+            width: 100%;
+            max-width: 1200px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            margin: 0 auto;
+            padding: 10px;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: transparent;
+        }
+
+        .encabezado {
+            width: 100%;
+            max-width: 1200px;
+            height: 64px;
+            background-color: #EFDDB1;
+            overflow: hidden;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            position: fixed;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .content-wrapper {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 70px;
+        }
+
+        /* --- CONTENEDORES RESPONSIVOS --- */
+        .botonera {
+            width: 100%;
+            min-height: 75px;
+            background-color: #E2D1CC;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .avisos {
+            width: 100%;
+            min-height: 75px;
+            background-color: #e2dece;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .perfil {
+            width: 100%;
+            min-height: 350px;
+            background-color: rgba(214, 206, 161, 0.45);
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .actividades {
+            width: 100%;
+            min-height: 500px;
+            background-color: #e2dece;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+        .humo {
+            width: 100%;
+            min-height: 230px;
+            background-color: #e2dece;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .minutas {
+            width: 100%;
+            min-height: 500px;
+            background-color: #FFFFFF;
+            border: 2px solid #e2dece;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .module-large {
+            width: 100%;
+            min-height: 400px;
+            border-radius: 20px;
+            overflow: hidden; 
+        }
+
+        .frap {
+            background-color: #e2dece;
+            min-height: 90px;
+            display: flex;
+            align-items: center;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+        
+        .formato-red {
+            background-color: #e2dece;
+            min-height: 120px;
+            display: flex;
+            align-items: center;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .poblacion {
+            background-color: #e2dece;
+            min-height: 800px;
+        }
+        .documentos {
+            background-color: #f7efda;
+            min-height: 700px;
+        }
+        .directorio {
+            background-color: #f7efda;
+            min-height: 500px;
+        }
+        .conexiones {
+            background-color: #f7efda;
+            min-height: 700px;
+        }
+
+        /* --- AJUSTES ESPECÍFICOS PARA DISPOSITIVOS MÓVILES --- */
+        @media (max-width: 768px) {
+            .maqueta-container {
+                padding: 5px;
+            }
+
+            .encabezado {
+                border-radius: 0 0 12px 12px;
+                height: 58px;
+            }
+
+            .content-wrapper {
+                margin-top: 65px;
+                gap: 12px;
+            }
+
+            .botonera, .avisos {
+                min-height: 90px;
+                border-radius: 15px;
+            }
+
+            .perfil, .actividades, .minutas, .module-large, .frap, .formato-red, .poblacion {
+                border-radius: 15px;
+            }
+
+            .actividades { min-height: 450px; }
+            .minutas { min-height: 400px; }
+            .poblacion { min-height: 600px; }
+            .documentos { min-height: 550px; }
+            .conexiones { min-height: 550px; }
+            .directorio { min-height: 400px; }
+        }
+
+        /* ESTILOS Y ANIMACIÓN AISLADOS PARA EL TOAST */
+        @keyframes toastEntrada {
+            0% {
+                transform: translateY(60px) scale(0.92);
+                opacity: 0;
+            }
+            70% {
+                transform: translateY(-8px) scale(1.02);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(0) scale(1);
+                opacity: 1;
+            }
+        }
+        .toast-animado {
+            animation: toastEntrada 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+        .toast-card-uipc {
+            background-color: #f7efda;
+            border: 2px solid #77af9c;
+            width: 100%;
+            max-width: 390px;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.25);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="maqueta-container">
+        
+        <div class="encabezado">
+            <iframe src="Modulos/encabezado.html" title="Encabezado"></iframe>
+        </div>
+
+        <div class="content-wrapper">
+
+            <div class="botonera">
+                <iframe src="Modulos/botonera.html" title="Botonera"></iframe>
+            </div>
+
+            <div class="avisos">
+                <iframe src="Modulos/avisos.html" title="Avisos"></iframe>
+            </div>
+
+            <div class="perfil" id="perfilPanel">
+                <iframe src="Modulos/perfil.html" title="Perfil"></iframe>
+            </div>
+            <div class="humo" id="humo">
+                <iframe src="Modulos/detechumo.html" title="DHumo"></iframe>
+            </div>
+            <div class="module-large poblacion">
+                <iframe src="Modulos/poblacion_user.html" title="poblacion"></iframe>
+            </div>
+            <div class="actividades" id="actividadesContainerFrame">
+                <iframe id="iframeActividades" src="Modulos/actividades.html" title="Actividades"></iframe>
+            </div>
+
+            <div class="minutas" id="minutasPanel">
+                <iframe src="Modulos/minutas.html" title="Minutas"></iframe>
+            </div>
+
+            <div class="module-large frap">
+                <iframe src="Modulos/frapc.html" title="FRAP"></iframe>
+            </div>
+            
+            <div class="module-large formato-red">
+                <iframe src="Modulos/RED.html" title="Formato RED"></iframe>
+            </div>
+
+            <div class="module-large documentos">
+                <iframe src="Modulos/documentos.html" title="Documentos"></iframe>
+            </div>
+            <div class="module-large conexiones">
+                <iframe src="Modulos/conexiones.html" title="Conexiones"></iframe>
+            </div>
+            <div class="module-large directorio">
+                <iframe src="Modulos/directorio.html" title="Directorio"></iframe>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- SCRIPT GENERAL Y DE CONTROL DEL TOAST CON SOPORTE MULTI-EVENTO Y DESCARTAR TODO -->
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            verificarNuevosEventosUsuario();
+
+            try {
+                const userStr = sessionStorage.getItem('uipc_current_user');
+                if (userStr) {
+                    const userObj = JSON.parse(userStr);
+                    const username = (userObj.usuario || '').toLowerCase();
+                    
+                    if (username === 'myriam.rojas') {
+                        const iframeAct = document.getElementById('iframeActividades');
+                        if (iframeAct) {
+                            iframeAct.src = 'Modulos/actividades_captura_curso.html';
+                        }
+                    }
+                }
+            } catch (e) {}
+
+            enviarHeartbeat();
+            setInterval(enviarHeartbeat, 10000); 
+        });
+
+        let eventosPendientes = [];
+        let eventoActualIndex = 0;
+        let listaCompletaActividades = [];
+
+        async function verificarNuevosEventosUsuario() {
+            try {
+                const response = await fetch('/api/actividades');
+                const data = await response.json();
+                listaCompletaActividades = Array.isArray(data) ? data : (data.activities || []);
+                
+                if (listaCompletaActividades.length === 0) return;
+
+                listaCompletaActividades.sort((a, b) => Number(b.id || 0) - Number(a.id || 0));
+
+                const ultimoVisto = localStorage.getItem('uipc_ultimo_evento_visto');
+
+                if (ultimoVisto) {
+                    eventosPendientes = listaCompletaActividades.filter(ev => Number(ev.id) > Number(ultimoVisto));
+                } else {
+                    eventosPendientes = listaCompletaActividades;
+                }
+
+                if (eventosPendientes.length > 0) {
+                    eventoActualIndex = 0;
+                    mostrarEventoActualToast();
+                }
+            } catch (e) {
+                console.error("Error al comprobar nuevos eventos:", e);
+            }
+        }
+
+        function mostrarEventoActualToast() {
+            if (eventosPendientes.length === 0) return;
+
+            const evento = eventosPendientes[eventoActualIndex];
+            const textoElemento = document.getElementById('toastEventoTexto');
+            
+            if (textoElemento) {
+                let badgeConteo = eventosPendientes.length > 1 
+                    ? `<span class="bg-[#77af9c] text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full mb-1 inline-block">Evento ${eventoActualIndex + 1} de ${eventosPendientes.length} nuevos</span><br>` 
+                    : '';
+
+                textoElemento.innerHTML = `${badgeConteo}<b>${evento.titulo}</b><br><span class="text-slate-500 text-[11px] block mt-0.5">Fecha: ${evento.fecha} | Sede: ${evento.sede}</span>`;
+            }
+            mostrarToast();
+        }
+
+        function mostrarToast() {
+            const toast = document.getElementById('toastNuevoEvento');
+            if (toast) {
+                toast.classList.remove('hidden');
+                toast.classList.add('toast-animado');
+            }
+        }
+
+        function cerrarToastEvento() {
+            const eventoActual = eventosPendientes[eventoActualIndex];
+            if (eventoActual) {
+                localStorage.setItem('uipc_ultimo_evento_visto', eventoActual.id);
+            }
+
+            eventoActualIndex++;
+            if (eventoActualIndex < eventosPendientes.length) {
+                const toast = document.getElementById('toastNuevoEvento');
+                if (toast) {
+                    toast.style.opacity = '0';
+                    setTimeout(() => {
+                        toast.style.opacity = '1';
+                        mostrarEventoActualToast();
+                    }, 250);
+                }
+            } else {
+                ocultarToastUI();
+            }
+        }
+
+        function descartarTodo() {
+            if (listaCompletaActividades.length > 0) {
+                const maxId = listaCompletaActividades[0].id;
+                localStorage.setItem('uipc_ultimo_evento_visto', maxId);
+            }
+            ocultarToastUI();
+        }
+
+        function ocultarToastUI() {
+            const toast = document.getElementById('toastNuevoEvento');
+            if (toast) {
+                toast.style.transition = 'all 0.3s ease-in';
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(30px)';
+                setTimeout(() => {
+                    toast.classList.add('hidden');
+                    toast.style.opacity = '1';
+                    toast.style.transform = 'translateY(0)';
+                }, 300);
+            }
+        }
+
+        function irAlCalendario() {
+            const eventoActual = eventosPendientes[eventoActualIndex];
+            if (eventoActual) {
+                localStorage.setItem('uipc_ultimo_evento_visto', eventoActual.id);
+            }
+            window.open('Modulos/calendario_actividades.html', '_blank');
+            cerrarToastEvento();
+        }
+
+        function enviarHeartbeat() {
+            try {
+                const userStr = sessionStorage.getItem('uipc_current_user');
+                if (userStr) {
+                    const userObj = JSON.parse(userStr);
+                    if (userObj && userObj.usuario) {
+                        fetch('/api/heartbeat', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ userId: userObj.usuario })
+                        }).catch(err => {});
+                    }
+                }
+            } catch (e) {}
+        }
+    </script>
+
+    <!-- COMPONENTE HTML DEL TOAST NOTIFICATION CON BOTÓN "DESCARTAR TODO" -->
+    <div id="toastNuevoEvento" class="fixed bottom-6 right-4 left-4 sm:left-auto z-[2000] hidden flex justify-center sm:justify-end">
+        <div class="toast-card-uipc text-slate-800 backdrop-blur-md relative overflow-hidden flex flex-col items-center text-center">
+            
+            <button onclick="ocultarToastUI()" class="absolute top-3.5 right-3.5 text-slate-400 hover:text-slate-800 transition-colors font-black text-sm cursor-pointer w-7 h-7 flex items-center justify-center rounded-full hover:bg-[#77af9c]/15">
+                ✕
+            </button>
+
+            <div class="bg-[#77af9c]/20 text-[#497566] w-12 h-12 rounded-xl flex items-center justify-center border border-[#77af9c]/30 shadow-inner mb-3">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
+                </svg>
+            </div>
+
+            <div class="w-full space-y-1">
+                <h4 class="font-black text-xs text-[#497566] tracking-wider uppercase">¡Nuevo Evento Publicado!</h4>
+                <div id="toastEventoTexto" class="text-xs text-slate-700 font-medium leading-relaxed"></div>
+            </div>
+            
+            <!-- Botones de Acción incluyendo Descartar Todo -->
+            <div class="mt-4 flex flex-wrap gap-2 justify-center w-full">
+                <button onclick="irAlCalendario()" class="bg-[#77af9c] hover:bg-[#5e9381] text-white text-xs font-bold px-3 py-2 rounded-lg shadow-sm transition-all cursor-pointer border border-[#5e9381]">
+                    Ver Calendario
+                </button>
+                <button onclick="cerrarToastEvento()" class="bg-[#E2D1CC]/80 hover:bg-[#E2D1CC] text-slate-700 text-xs font-semibold px-3 py-2 rounded-lg transition-all cursor-pointer border border-slate-300">
+                    Siguiente
+                </button>
+                <button onclick="descartarTodo()" class="bg-rose-100 hover:bg-rose-200 text-rose-800 text-xs font-bold px-3 py-2 rounded-lg transition-all cursor-pointer border border-rose-300 w-full mt-1">
+                    Descartar todo
+                </button>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
