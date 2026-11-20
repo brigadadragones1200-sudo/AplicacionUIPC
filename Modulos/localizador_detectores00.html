@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UIPC Universidad 1200 - Localizador Táctico de Detectores PCI</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        uipc: {
+                            navy: '#0F2537',
+                            navyLight: '#1B365D',
+                            orange: '#FF6B00',
+                            orangeDark: '#E65100',
+                            red: '#D32F2F',
+                            redLight: '#FFEBEE',
+                            yellow: '#F59E0B',
+                            gray: '#F4F6F9',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F4F6F9;
+        }
+        @keyframes pulse-red {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(211, 47, 47, 0.7); }
+            50% { box-shadow: 0 0 0 15px rgba(211, 47, 47, 0); }
+        }
+        .alarm-pulsing {
+            animation: pulse-red 1.5s infinite;
+        }
+        @media print {
+            .no-print { display: none !important; }
+            .print-only { display: block !important; }
+            body { background: white; color: black; }
+        }
+    </style>
+</head>
+<body class="text-slate-800 antialiased min-h-screen flex flex-col">
+
+    <!-- TOP HEADER INSTITUCIONAL UIPC -->
+    <header class="bg-uipc-navy text-white shadow-lg border-b-4 border-uipc-orange sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+                
+                <!-- LOGO Y TITULO -->
+                <div class="flex items-center space-x-3">
+                    <div class="bg-uipc-orange p-2.5 rounded-xl shadow-md flex items-center justify-center">
+                        <i data-lucide="shield-alert" class="w-7 h-7 text-white"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center space-x-2">
+                            <span class="bg-uipc-orange/20 text-uipc-orange text-xs px-2 py-0.5 rounded font-bold uppercase tracking-wider border border-uipc-orange/30">UIPC</span>
+                            <span class="text-slate-300 text-xs font-semibold">UNIVERSIDAD 1200</span>
+                        </div>
+                        <h1 class="text-xl sm:text-2xl font-extrabold tracking-tight">Localizador Táctico de Detectores</h1>
+                    </div>
+                </div>
+
+                <!-- ALERTA QUICK ACTIONS -->
+                <div class="flex items-center space-x-2">
+                    <button onclick="simularDisparoPanel()" class="bg-uipc-red hover:bg-red-700 text-white font-bold px-3 py-2 rounded-lg text-sm flex items-center space-x-2 transition shadow-md">
+                        <i data-lucide="siren" class="w-4 h-4 animate-bounce"></i>
+                        <span>Simular Evento de Panel</span>
+                    </button>
+                    <button onclick="limpiarBusqueda()" class="bg-slate-700 hover:bg-slate-600 text-white px-3 py-2 rounded-lg text-sm font-medium transition flex items-center space-x-1">
+                        <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+                        <span class="hidden sm:inline">Reset</span>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </header>
+
+    <!-- CONTAINER PRINCIPAL -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+
+        <!-- BANNER DE RESPUESTA A EMERGENCIA (DISPARO EN PANEL) -->
+        <div id="alarmBanner" class="hidden bg-red-600 text-white rounded-2xl p-4 sm:p-6 shadow-2xl alarm-pulsing border-2 border-red-400">
+            <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                <div class="flex items-start space-x-4">
+                    <div class="bg-white text-uipc-red p-3 rounded-full flex-shrink-0 mt-1 md:mt-0">
+                        <i data-lucide="flame" class="w-8 h-8"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center space-x-2">
+                            <span class="bg-red-900 text-red-100 font-extrabold text-xs px-2 py-0.5 rounded uppercase">Alarma Activa en Panel Central</span>
+                            <span id="alarmTime" class="text-xs text-red-100 font-mono">--:--:--</span>
+                        </div>
+                        <h2 class="text-2xl sm:text-3xl font-black tracking-wide mt-1" id="alarmTitle">DETECTOR L09D050 ALARMADO</h2>
+                        <p class="text-red-100 text-sm mt-0.5 font-medium" id="alarmSubtitle">Sector 4-3 • Detector en el pasillo exterior inferior, límite del sector</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-2 w-full md:w-auto">
+                    <button onclick="verDetalleAlarma()" class="flex-1 md:flex-none bg-white text-uipc-red hover:bg-red-50 font-bold px-4 py-2.5 rounded-xl text-sm transition shadow">
+                        Ver Ruta de Brigada
+                    </button>
+                    <button onclick="cerrarAlarma()" class="bg-red-800 hover:bg-red-900 text-white p-2.5 rounded-xl transition">
+                        <i data-lucide="x" class="w-5 h-5"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- SEARCH BAR CENTRAL HIPER-ACCESIBLE -->
+        <section class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200">
+            <div class="max-w-3xl mx-auto space-y-3">
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
+                    <label for="searchInput" class="text-sm font-bold text-slate-700 flex items-center space-x-2">
+                        <i data-lucide="search" class="w-4 h-4 text-uipc-orange"></i>
+                        <span>Búsqueda Rápida de Detector / Sector / Dirección</span>
+                    </label>
+                    
+                    <!-- SELECTOR Y ESTATUS DE CARGA DE JSON EXTERNO -->
+                    <div class="flex items-center space-x-2">
+                        <label class="cursor-pointer bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold px-2.5 py-1 rounded-lg border border-slate-300 transition flex items-center space-x-1">
+                            <i data-lucide="upload" class="w-3.5 h-3.5 text-slate-500"></i>
+                            <span>Cargar JSON</span>
+                            <input type="file" id="jsonFilePicker" accept=".json" class="hidden" onchange="cargarArchivoJSONManual(event)">
+                        </label>
+                        <span id="jsonStatusBadge" class="inline-flex items-center space-x-1 bg-amber-100 text-amber-800 text-[11px] font-semibold px-2.5 py-0.5 rounded-full border border-amber-200">
+                            <i data-lucide="loader" class="w-3 h-3 animate-spin text-amber-600"></i>
+                            <span>Leyendo archivo...</span>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="relative">
+                    <input 
+                        type="text" 
+                        id="searchInput"
+                        placeholder="Escribe el código del panel (Ej. L09D050, L01D001, L02D031)..." 
+                        class="w-full pl-12 pr-28 py-3.5 text-base sm:text-lg font-semibold text-slate-900 bg-slate-50 border-2 border-slate-300 rounded-xl focus:outline-none focus:border-uipc-orange focus:bg-white focus:ring-4 focus:ring-uipc-orange/20 transition placeholder-slate-400"
+                        oninput="ejecutarBusqueda()"
+                    />
+                    <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                        <i data-lucide="scan-line" class="w-6 h-6"></i>
+                    </div>
+                    <div class="absolute inset-y-0 right-0 pr-2 flex items-center space-x-1">
+                        <button onclick="limpiarBusqueda()" id="btnClear" class="hidden text-slate-400 hover:text-slate-600 p-1.5 rounded-lg">
+                            <i data-lucide="x-circle" class="w-5 h-5"></i>
+                        </button>
+                        <span class="bg-uipc-navy text-white text-xs font-bold px-2.5 py-1.5 rounded-lg uppercase tracking-wider">
+                            JSON v2
+                        </span>
+                    </div>
+                </div>
+
+                <!-- TAGS DE BÚSQUEDA RÁPIDA -->
+                <div class="flex flex-wrap items-center gap-1.5 text-xs text-slate-500 pt-1">
+                    <span class="font-semibold text-slate-600">Búsquedas rápidas:</span>
+                    <button onclick="setQuery('L01D001')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-2 py-0.5 rounded-md font-mono border border-slate-200">Piso 1: L01D001</button>
+                    <button onclick="setQuery('L02D031')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-2 py-0.5 rounded-md font-mono border border-slate-200">Elevador 4: L02D031</button>
+                    <button onclick="setQuery('6-1')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-2 py-0.5 rounded-md font-mono border border-slate-200">Sector 6-1</button>
+                    <button onclick="setQuery('L03D049')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-2 py-0.5 rounded-md font-mono border border-slate-200">Elevador 1</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- DASHBOARD TARJETAS DE ESTADÍSTICAS Y FILTROS -->
+        <div class="grid grid-cols-1 md:grid-cols-5 gap-4 no-print">
+            
+            <!-- TARJETA FILTRO PISO -->
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex flex-col justify-between">
+                <label class="text-xs font-bold text-slate-500 uppercase tracking-wider block mb-1">Filtrar por Piso</label>
+                <select id="filterPiso" onchange="actualizarSectoresDisponibles(); ejecutarBusqueda();" class="w-full bg-slate-50 border border-slate-300 text-slate-800 text-sm rounded-lg p-2.5 font-medium focus:ring-uipc-orange focus:border-uipc-orange">
+                    <option value="">Todos los Pisos</option>
+                    <option value="1">Piso 1</option>
+                    <option value="2">Piso 2</option>
+                    <option value="3">Piso 3</option>
+                    <option value="4">Piso 4</option>
+                    <option value="5">Piso 5</option>
+                    <option value="6">Piso 6</option>
+                </select>
+            </div>
+
+            <!-- TARJETA FILTRO LAZO (SLC) -->
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex flex-col justify-between">
+                <label class="text-xs font-bold text-slate-500 uppercase tracking-wider block mb-1">Filtrar por Lazo (SLC)</label>
+                <select id="filterLazo" onchange="ejecutarBusqueda()" class="w-full bg-slate-50 border border-slate-300 text-slate-800 text-sm rounded-lg p-2.5 font-medium focus:ring-uipc-orange focus:border-uipc-orange">
+                    <option value="">Todos los Lazos</option>
+                    <option value="L01">Lazo L01</option>
+                    <option value="L02">Lazo L02</option>
+                    <option value="L03">Lazo L03</option>
+                    <option value="L04">Lazo L04</option>
+                    <option value="L05">Lazo L05</option>
+                    <option value="L06">Lazo L06</option>
+                    <option value="L07">Lazo L07</option>
+                    <option value="L08">Lazo L08</option>
+                    <option value="L09">Lazo L09</option>
+                    <option value="L10">Lazo L10</option>
+                </select>
+            </div>
+
+            <!-- TARJETA FILTRO SECTORES POR PISO -->
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex flex-col justify-between">
+                <label class="text-xs font-bold text-slate-500 uppercase tracking-wider block mb-1">Filtrar por Sectores</label>
+                <select id="filterSectores" onchange="ejecutarBusqueda()" class="w-full bg-slate-50 border border-slate-300 text-slate-800 text-sm rounded-lg p-2.5 font-medium focus:ring-uipc-orange focus:border-uipc-orange">
+                    <option value="">Todos los Sectores</option>
+                </select>
+            </div>
+
+            <!-- TARJETA FILTRO COBERTURA -->
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex flex-col justify-between">
+                <label class="text-xs font-bold text-slate-500 uppercase tracking-wider block mb-1">Búsqueda Sector (Texto)</label>
+                <input type="text" id="filterSector" oninput="ejecutarBusqueda()" placeholder="Ej. 1-Ga, Elevador 4..." class="w-full bg-slate-50 border border-slate-300 text-slate-800 text-sm rounded-lg p-2 font-medium focus:ring-uipc-orange focus:border-uipc-orange" />
+            </div>
+
+            <!-- COUNTER RAPIDO -->
+            <div class="bg-uipc-navy text-white p-4 rounded-xl shadow-sm flex items-center justify-between">
+                <div>
+                    <span class="text-xs text-slate-300 font-semibold uppercase tracking-wider block">Total Coincidencias</span>
+                    <span id="counterText" class="text-2xl font-extrabold text-uipc-orange">0</span>
+                    <span class="text-xs text-slate-300 font-normal"> detectores</span>
+                </div>
+                <div class="bg-uipc-navyLight p-3 rounded-lg border border-slate-600">
+                    <i data-lucide="database" class="w-6 h-6 text-uipc-orange"></i>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- CONTENEDOR DE FICHA DE DETECTOR DESTACADO -->
+        <div id="tacticalCard" class="hidden bg-white rounded-2xl shadow-xl border-2 border-uipc-orange overflow-hidden">
+            <div class="bg-uipc-navy text-white px-6 py-4 flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="bg-uipc-orange p-2 rounded-lg">
+                        <i data-lucide="map-pin" class="w-5 h-5 text-white"></i>
+                    </div>
+                    <div>
+                        <span class="text-xs text-uipc-orange font-bold uppercase tracking-wider">Ficha Táctica de Intervención</span>
+                        <h3 class="text-lg font-bold" id="cardTitle">L09D050</h3>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <button onclick="copiarFicha()" class="bg-slate-700 hover:bg-slate-600 text-white text-xs px-3 py-1.5 rounded-lg font-medium transition flex items-center space-x-1">
+                        <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                        <span>Copiar Ficha</span>
+                    </button>
+                    <button onclick="cerrarFicha()" class="text-slate-400 hover:text-white p-1">
+                        <i data-lucide="x" class="w-6 h-6"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="p-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- COLUMNA 1: DATOS CLAVE -->
+                <div class="space-y-4 border-b md:border-b-0 md:border-r border-slate-200 pb-4 md:pb-0 md:pr-6">
+                    <div>
+                        <span class="text-xs text-slate-400 font-bold uppercase tracking-wider block">ID Normalizado (Panel)</span>
+                        <span class="text-xl font-extrabold text-uipc-navy font-mono" id="cardIdNorm">-</span>
+                    </div>
+                    <div>
+                        <span class="text-xs text-slate-400 font-bold uppercase tracking-wider block">Alias / Nomenclatura Plano</span>
+                        <span class="text-lg font-bold text-slate-700 font-mono" id="cardAlias">-</span>
+                    </div>
+                    <div>
+                        <span class="text-xs text-slate-400 font-bold uppercase tracking-wider block">Lazo (Loop SLC)</span>
+                        <span class="inline-block bg-blue-100 text-blue-800 text-xs font-bold px-2.5 py-1 rounded-md mt-1" id="cardLazo">-</span>
+                    </div>
+                </div>
+
+                <!-- COLUMNA 2: UBICACIÓN Y SECTOR -->
+                <div class="space-y-4 border-b md:border-b-0 md:border-r border-slate-200 pb-4 md:pb-0 md:pr-6">
+                    <div>
+                        <span class="text-xs text-slate-400 font-bold uppercase tracking-wider block">Piso & Sector</span>
+                        <span class="text-lg font-extrabold text-uipc-orange" id="cardSector">-</span>
+                    </div>
+                    <div>
+                        <span class="text-xs text-slate-400 font-bold uppercase tracking-wider block">Ubicación Física Exacta</span>
+                        <p class="text-sm text-slate-700 font-medium leading-relaxed mt-0.5" id="cardUbicacion">-</p>
+                    </div>
+                </div>
+
+                <!-- COLUMNA 3: RUTA BRIGADISTA Y PROTOCOLO -->
+                <div class="space-y-4">
+                    <div>
+                        <span class="text-xs text-slate-400 font-bold uppercase tracking-wider block">Imagen Plano Asociada</span>
+                        <span class="inline-block bg-slate-100 text-slate-800 text-xs font-bold px-2.5 py-1 rounded-md mt-1" id="cardImagen">-</span>
+                    </div>
+                    <div>
+                        <span class="text-xs text-uipc-orange font-bold uppercase tracking-wider block flex items-center space-x-1">
+                            <i data-lucide="footprints" class="w-3.5 h-3.5"></i>
+                            <span>Ruta de Aproximación Recomendada</span>
+                        </span>
+                        <p class="text-xs text-slate-600 bg-amber-50 border border-amber-200 p-2.5 rounded-lg mt-1 font-medium leading-relaxed" id="cardRuta">
+                            Acceder por Pasillo Principal de Circulación. Verificar zona con cámara térmica y kit de respuesta.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TABLA PRINCIPAL DE RESULTADOS DE DETECTORES -->
+        <section class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden mb-12">
+            
+            <div class="px-6 py-4 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-50">
+                <div>
+                    <h3 class="text-base font-bold text-uipc-navy">Inventario de Detectores de Humo y Sectores PCI</h3>
+                    <p class="text-xs text-slate-500" id="tableSubtitle">Base de datos unificada multi-piso</p>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <button onclick="window.print()" class="bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 font-medium text-xs px-3 py-2 rounded-lg transition flex items-center space-x-1 shadow-sm">
+                        <i data-lucide="printer" class="w-4 h-4"></i>
+                        <span>Imprimir Reporte</span>
+                    </button>
+                    <button onclick="exportarCSV()" class="bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 font-medium text-xs px-3 py-2 rounded-lg transition flex items-center space-x-1 shadow-sm">
+                        <i data-lucide="download" class="w-4 h-4"></i>
+                        <span>Exportar CSV</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- TABLE RESPONSIVE -->
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-uipc-navy text-white text-xs font-bold uppercase tracking-wider">
+                            <th class="py-3.5 px-4">Piso</th>
+                            <th class="py-3.5 px-4">Panel ID</th>
+                            <th class="py-3.5 px-4">Rotulado Plano</th>
+                            <th class="py-3.5 px-4">Lazo</th>
+                            <th class="py-3.5 px-4">Sector</th>
+                            <th class="py-3.5 px-4">Ubicación Física</th>
+                            <th class="py-3.5 px-4 text-center">Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody" class="divide-y divide-slate-200 text-sm">
+                        <!-- Las filas se llenarán dinámicamente vía JS -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- ESTADO VACÍO -->
+            <div id="emptyState" class="hidden py-12 text-center">
+                <div class="inline-flex bg-slate-100 p-4 rounded-full text-slate-400 mb-3">
+                    <i data-lucide="search-x" class="w-8 h-8"></i>
+                </div>
+                <h4 class="text-base font-bold text-slate-700">No se encontraron detectores</h4>
+                <p class="text-xs text-slate-500 mt-1">Intenta ajustando tu término de búsqueda o limpiando los filtros.</p>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- FOOTER INSTITUCIONAL -->
+    <footer class="bg-uipc-navy text-slate-400 text-xs py-4 mt-auto border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-2">
+            <p>© 2026 UIPC Universidad 1200 • Sistema de Protección Contra Incendios (PCI)</p>
+            <p id="footerInfo" class="font-mono text-uipc-orange">Leyendo registros externos...</p>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT LOGIC DE CARGA DINÁMICA DE JSON EXTERNO -->
+    <script>
+        let DB_DETECTORES = [];
+        let METADATA_JSON = null;
+
+        // Leer obligatoriamente el archivo externo JSON mediante fetch
+        async function cargarJSONDetectores() {
+            const badge = document.getElementById('jsonStatusBadge');
+            const tableSubtitle = document.getElementById('tableSubtitle');
+            const footerInfo = document.getElementById('footerInfo');
+
+            // Nombres de archivos externos permitidos
+            const jsonFiles = ['./detectores_humo_2.json', 'detectores_humo_2.json', './detectores_humo.json', 'detectores_humo.json'];
+
+            let jsonCargadoExitosamente = false;
+
+            for (let fileName of jsonFiles) {
+                try {
+                    const response = await fetch(fileName);
+                    if (response.ok) {
+                        const data = await response.json();
+                        METADATA_JSON = data;
+                        
+                        // Extraer array de inventario del archivo JSON externo (soporta más de 1034 registros)
+                        if (data.inventario && Array.isArray(data.inventario)) {
+                            DB_DETECTORES = data.inventario;
+                        } else if (Array.isArray(data)) {
+                            DB_DETECTORES = data;
+                        }
+
+                        if (DB_DETECTORES.length > 0) {
+                            jsonCargadoExitosamente = true;
+                            
+                            if (badge) {
+                                badge.className = "inline-flex items-center space-x-1 bg-emerald-100 text-emerald-800 text-[11px] font-semibold px-2.5 py-0.5 rounded-full border border-emerald-200";
+                                badge.innerHTML = `<i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-emerald-600"></i><span>Externo OK (${DB_DETECTORES.length} regs)</span>`;
+                            }
+
+                            if (tableSubtitle) {
+                                tableSubtitle.innerText = `${data.sistema || 'Base de datos PCI'} • ${DB_DETECTORES.length} Detectores leídos de ${fileName}`;
+                            }
+
+                            if (footerInfo) {
+                                footerInfo.innerText = `Archivo externo: ${fileName} • Registros cargados: ${DB_DETECTORES.length}`;
+                            }
+
+                            break;
+                        }
+                    }
+                } catch (e) {
+                    console.warn(`No se pudo leer ${fileName} vía Fetch:`, e);
+                }
+            }
+
+            // Si el navegador bloquea fetch local por seguridad (CORS en file://), mostrar aviso para usar el botón de carga manual
+            if (!jsonCargadoExitosamente || DB_DETECTORES.length === 0) {
+                if (badge) {
+                    badge.className = "inline-flex items-center space-x-1 bg-red-100 text-red-800 text-[11px] font-semibold px-2.5 py-0.5 rounded-full border border-red-200";
+                    badge.innerHTML = `<i data-lucide="alert-circle" class="w-3.5 h-3.5 text-red-600"></i><span>Requiere Cargar Archivo</span>`;
+                }
+                if (tableSubtitle) {
+                    tableSubtitle.innerText = `Aviso: Abre este HTML mediante servidor local (Live Server) o usa el botón "Cargar JSON" superior para seleccionar tu archivo de 1,034+ registros.`;
+                }
+                if (footerInfo) {
+                    footerInfo.innerText = `Sin registros en memoria. Por favor cargue el archivo detectores_humo_2.json externamente.`;
+                }
+            }
+
+            actualizarSectoresDisponibles();
+            lucide.createIcons();
+            ejecutarBusqueda();
+        }
+
+        // Carga manual mediante selector de archivos (evita problemas de CORS al abrir directos archivos locales)
+        function cargarArchivoJSONManual(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    METADATA_JSON = data;
+
+                    if (data.inventario && Array.isArray(data.inventario)) {
+                        DB_DETECTORES = data.inventario;
+                    } else if (Array.isArray(data)) {
+                        DB_DETECTORES = data;
+                    }
+
+                    const badge = document.getElementById('jsonStatusBadge');
+                    if (badge) {
+                        badge.className = "inline-flex items-center space-x-1 bg-emerald-100 text-emerald-800 text-[11px] font-semibold px-2.5 py-0.5 rounded-full border border-emerald-200";
+                        badge.innerHTML = `<i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-emerald-600"></i><span>Archivo Local (${DB_DETECTORES.length} regs)</span>`;
+                    }
+
+                    document.getElementById('tableSubtitle').innerText = `Archivo cargado manualmente • ${DB_DETECTORES.length} detectores`;
+                    document.getElementById('footerInfo').innerText = `Fuente externa: ${file.name} • Total Registros: ${DB_DETECTORES.length}`;
+
+                    actualizarSectoresDisponibles();
+                    lucide.createIcons();
+                    ejecutarBusqueda();
+                } catch (err) {
+                    alert("Error al parsear el archivo JSON. Asegúrate de que sea un archivo JSON válido.");
+                    console.error(err);
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        // Actualizar dinámicamente las opciones del selector de "Sectores" basado en el piso seleccionado
+        function actualizarSectoresDisponibles() {
+            const pisoSel = document.getElementById('filterPiso').value;
+            const selectSectores = document.getElementById('filterSectores');
+            
+            // Guardar valor actual si es posible
+            const valorActual = selectSectores.value;
+
+            // Filtrar detectores por piso si hay uno seleccionado
+            let detectoresFiltrados = DB_DETECTORES;
+            if (pisoSel !== "") {
+                detectoresFiltrados = DB_DETECTORES.filter(d => String(d.piso) === String(pisoSel));
+            }
+
+            // Extraer sectores únicos ordenados
+            const sectoresUnicos = [...new Set(detectoresFiltrados.map(d => d.sector).filter(Boolean))].sort((a, b) => {
+                return a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' });
+            });
+
+            // Reconstruir opciones del select indicando el total de sectores encontrados
+            let htmlOptions = `<option value="">Todos los Sectores (${sectoresUnicos.length} disponibles)</option>`;
+            sectoresUnicos.forEach(sec => {
+                htmlOptions += `<option value="${sec}">Sector ${sec}</option>`;
+            });
+
+            selectSectores.innerHTML = htmlOptions;
+
+            // Intentar mantener selección anterior si aún existe en la lista
+            if (sectoresUnicos.includes(valorActual)) {
+                selectSectores.value = valorActual;
+            } else {
+                selectSectores.value = "";
+            }
+        }
+
+        function normalizarQuery(q) {
+            if (!q) return "";
+            let s = q.toUpperCase().trim();
+            s = s.replace(/\s+|-/g, '');
+            return s;
+        }
+
+        function buscarDetectores(query, pisoFiltro, lazoFiltro, sectorSelectFiltro, sectorInputFiltro) {
+            let rawQ = query.trim().toUpperCase();
+            let normQ = normalizarQuery(query);
+
+            return DB_DETECTORES.filter(item => {
+                if (pisoFiltro && String(item.piso) !== String(pisoFiltro)) return false;
+                if (lazoFiltro && item.lazo && !item.lazo.toUpperCase().includes(lazoFiltro.toUpperCase())) return false;
+                if (sectorSelectFiltro && item.sector !== sectorSelectFiltro) return false;
+                if (sectorInputFiltro && item.sector && !item.sector.toUpperCase().includes(sectorInputFiltro.toUpperCase())) return false;
+
+                if (!query) return true;
+
+                let idUp = item.id_detector ? item.id_detector.toUpperCase() : "";
+                let aliasUp = item.nomenclatura_alt ? item.nomenclatura_alt.toUpperCase() : "";
+                let sectorUp = item.sector ? item.sector.toUpperCase() : "";
+
+                let idNorm = normalizarQuery(idUp);
+                let aliasNorm = normalizarQuery(aliasUp);
+                let sectorNorm = normalizarQuery(sectorUp);
+
+                if (idUp === rawQ || aliasUp === rawQ || sectorUp === rawQ) return true;
+                if (normQ && (idNorm === normQ || aliasNorm === normQ || sectorNorm === normQ)) return true;
+
+                return false;
+            });
+        }
+
+        let detectorSeleccionado = null;
+
+        function ejecutarBusqueda() {
+            const q = document.getElementById('searchInput').value;
+            const piso = document.getElementById('filterPiso').value;
+            const lazo = document.getElementById('filterLazo').value;
+            const sectorSel = document.getElementById('filterSectores').value;
+            const sectorInp = document.getElementById('filterSector').value;
+
+            const btnClear = document.getElementById('btnClear');
+            if (q.length > 0) {
+                btnClear.classList.remove('hidden');
+            } else {
+                btnClear.classList.add('hidden');
+            }
+
+            const resultados = buscarDetectores(q, piso, lazo, sectorSel, sectorInp);
+            renderTabla(resultados);
+
+            if (resultados.length === 1 && q.trim().length >= 4) {
+                mostrarFicha(resultados[0]);
+            }
+        }
+
+        function renderTabla(lista) {
+            const tbody = document.getElementById('tableBody');
+            const emptyState = document.getElementById('emptyState');
+            const counter = document.getElementById('counterText');
+
+            counter.innerText = lista.length;
+            tbody.innerHTML = '';
+
+            if (lista.length === 0) {
+                emptyState.classList.remove('hidden');
+                return;
+            } else {
+                emptyState.classList.add('hidden');
+            }
+
+            lista.forEach((item, index) => {
+                const tr = document.createElement('tr');
+                tr.className = index % 2 === 0 ? 'bg-white hover:bg-slate-50 transition' : 'bg-slate-50/60 hover:bg-slate-100 transition';
+
+                const badgePiso = `<span class="bg-indigo-100 text-indigo-800 text-xs font-black px-2 py-0.5 rounded">PISO ${item.piso || '-'}</span>`;
+                const badgeLazo = `<span class="bg-blue-100 text-blue-800 text-xs font-extrabold px-2 py-0.5 rounded">${item.lazo || '-'}</span>`;
+
+                tr.innerHTML = `
+                    <td class="py-3 px-4 font-bold">${badgePiso}</td>
+                    <td class="py-3 px-4 font-mono font-bold text-uipc-navy">${item.id_detector || '-'}</td>
+                    <td class="py-3 px-4 font-mono text-slate-600 text-xs">${item.nomenclatura_alt || item.id_detector || '-'}</td>
+                    <td class="py-3 px-4">${badgeLazo}</td>
+                    <td class="py-3 px-4 font-extrabold text-uipc-orange">${item.sector || '-'}</td>
+                    <td class="py-3 px-4 text-xs text-slate-600 font-medium">${item.ubicacion || '-'}</td>
+                    <td class="py-3 px-4 text-center">
+                        <button onclick='mostrarFichaDirecta("${item.id_detector}", ${item.piso}, "${item.sector}")' class="bg-uipc-navy hover:bg-uipc-navyLight text-white text-xs font-bold px-3 py-1.5 rounded-lg transition shadow-sm flex items-center justify-center space-x-1 mx-auto">
+                            <i data-lucide="eye" class="w-3.5 h-3.5"></i>
+                            <span>Ver Ficha</span>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            lucide.createIcons();
+        }
+
+        function mostrarFicha(item) {
+            detectorSeleccionado = item;
+            const card = document.getElementById('tacticalCard');
+            
+            document.getElementById('cardTitle').innerText = `${item.id_detector} • Piso ${item.piso} • Sector ${item.sector}`;
+            document.getElementById('cardIdNorm').innerText = item.id_detector;
+            document.getElementById('cardAlias').innerText = item.nomenclatura_alt || item.id_detector;
+            document.getElementById('cardLazo').innerText = `${item.lazo} (SLC)`;
+            document.getElementById('cardSector').innerText = `Piso ${item.piso} - Sector ${item.sector}`;
+            document.getElementById('cardUbicacion').innerText = item.ubicacion;
+            document.getElementById('cardImagen').innerText = item.imagen || 'Sin plano específico adjunto';
+
+            let rutaText = `1. Acceder al Piso ${item.piso} por núcleo de escaleras o elevadores de emergencia.\n2. Ubicar el Sector ${item.sector}.\n3. Dispositivo en: "${item.ubicacion}".`;
+            document.getElementById('cardRuta').innerText = rutaText;
+
+            card.classList.remove('hidden');
+            card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function mostrarFichaDirecta(id, piso, sector) {
+            const item = DB_DETECTORES.find(d => d.id_detector === id && d.piso === piso && d.sector === sector) || DB_DETECTORES.find(d => d.id_detector === id);
+            if (item) mostrarFicha(item);
+        }
+
+        function cerrarFicha() {
+            document.getElementById('tacticalCard').classList.add('hidden');
+            detectorSeleccionado = null;
+        }
+
+        function setQuery(val) {
+            document.getElementById('searchInput').value = val;
+            ejecutarBusqueda();
+        }
+
+        function limpiarBusqueda() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('filterPiso').value = '';
+            document.getElementById('filterLazo').value = '';
+            document.getElementById('filterSectores').value = '';
+            document.getElementById('filterSector').value = '';
+            actualizarSectoresDisponibles();
+            cerrarFicha();
+            ejecutarBusqueda();
+        }
+
+        function copiarFicha() {
+            if (!detectorSeleccionado) return;
+            const text = `[UIPC PISO ${detectorSeleccionado.piso} - FICHA DETECTOR]
+ID Panel: ${detectorSeleccionado.id_detector}
+Nomenclatura Plano: ${detectorSeleccionado.nomenclatura_alt || detectorSeleccionado.id_detector}
+Lazo: ${detectorSeleccionado.lazo}
+Piso: ${detectorSeleccionado.piso}
+Sector: ${detectorSeleccionado.sector}
+Ubicación: ${detectorSeleccionado.ubicacion}`;
+
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+
+            alert('Ficha táctica copiada al portapapeles.');
+        }
+
+        function simularDisparoPanel() {
+            if (DB_DETECTORES.length === 0) {
+                alert("Primero debes cargar el archivo JSON con los detectores.");
+                return;
+            }
+            const item = DB_DETECTores.find(d => d.id_detector === "L02D031") || DB_DETECTORES[0];
+            
+            const banner = document.getElementById('alarmBanner');
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString();
+
+            document.getElementById('alarmTime').innerText = timeStr;
+            document.getElementById('alarmTitle').innerText = `¡ALERTA EN PANEL! DETECTOR ${item.id_detector} ALARMADO`;
+            document.getElementById('alarmSubtitle').innerText = `Piso ${item.piso} • Sector ${item.sector} • ${item.ubicacion}`;
+
+            banner.classList.remove('hidden');
+            mostrarFicha(item);
+            banner.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        function verDetalleAlarma() {
+            if (DB_DETECTORES.length === 0) return;
+            const item = DB_DETECTORES.find(d => d.id_detector === "L02D031") || DB_DETECTORES[0];
+            mostrarFicha(item);
+        }
+
+        function cerrarAlarma() {
+            document.getElementById('alarmBanner').classList.add('hidden');
+        }
+
+        function exportarCSV() {
+            const q = document.getElementById('searchInput').value;
+            const piso = document.getElementById('filterPiso').value;
+            const lazo = document.getElementById('filterLazo').value;
+            const sectorSel = document.getElementById('filterSectores').value;
+            const sectorInp = document.getElementById('filterSector').value;
+            const data = buscarDetectores(q, piso, lazo, sectorSel, sectorInp);
+
+            let csvContent = "data:text/csv;charset=utf-8,Piso,ID_Detector,Nomenclatura_Alt,Lazo,Sector,Ubicacion,Imagen\n";
+            data.forEach(row => {
+                csvContent += `"${row.piso || ''}","${row.id_detector || ''}","${row.nomenclatura_alt || ''}","${row.lazo || ''}","${row.sector || ''}","${(row.ubicacion || '').replace(/"/g, '""')}","${row.imagen || ''}"\n`;
+            });
+
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", `UIPC_Detectores_PCI_${new Date().toISOString().slice(0,10)}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        window.onload = function() {
+            cargarJSONDetectores();
+        }
+    </script>
+</body>
+</html>
