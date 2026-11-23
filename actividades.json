@@ -188,5 +188,17 @@
     "descripcion": "",
     "esCapacitacion": false,
     "creadoPor": "coordinador.uipc"
+  },
+  {
+    "id": "1795445490691",
+    "titulo": "Reunión de la UIPC",
+    "fecha": "2026-11-26",
+    "fechaFin": "2026-11-26",
+    "hora": "11:00 Hrs",
+    "sede": "Sala 8",
+    "modalidad": "Presencial",
+    "descripcion": "",
+    "esCapacitacion": false,
+    "creadoPor": "coordinador.uipc"
   }
 ]
