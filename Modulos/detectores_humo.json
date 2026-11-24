@@ -957,7 +957,7 @@
             "id_detector": "L05D065",
             "nomenclatura_alt": "L5-DH-065",
             "piso": "0",
-            "sector": "Sector DGTIC, ubicación borde ala sur",
+            "sector": "Sector 0-10, Bodega DGTIC, ubicación borde ala sur",
             "lazo": "L05",
             "ubicacion": "Franja superior (bodegas 20), lado izquierdo."
         },
@@ -965,7 +965,7 @@
             "id_detector": "L05D066",
             "nomenclatura_alt": "L5-DH-066",
             "piso": "0",
-            "sector": "Sector DGTIC, ubicación borde ala sur",
+            "sector": "Sector 0-10, Bodega DGTIC, ubicación borde ala sur",
             "lazo": "L05",
             "ubicacion": "Franja superior (bodegas 20), lado central."
         },
@@ -973,7 +973,7 @@
             "id_detector": "L05D067",
             "nomenclatura_alt": "L5-DH-067",
             "piso": "0",
-            "sector": "Sector DGTIC, ubicación borde ala sur",
+            "sector": "Sector 0-10, Bodega DGTIC, ubicación borde ala sur",
             "lazo": "L05",
             "ubicacion": "Franja superior (bodegas 20), lado derecho."
         },
@@ -981,7 +981,7 @@
             "id_detector": "L05D062",
             "nomenclatura_alt": "L5-DH-062",
             "piso": "0",
-            "sector": "Sector DGTIC, ubicación borde ala sur",
+            "sector": "Sector 0-10, Bodega DGTIC, ubicación borde ala sur",
             "lazo": "L05",
             "ubicacion": "Área superior de estaciones, fila superior izquierda."
         },
@@ -989,7 +989,7 @@
             "id_detector": "L05D063",
             "nomenclatura_alt": "L5-DH-063",
             "piso": "0",
-            "sector": "Sector DGTIC, ubicación borde ala sur",
+            "sector": "Sector 0-10, Bodega DGTIC, ubicación borde ala sur",
             "lazo": "L05",
             "ubicacion": "Área superior de estaciones, fila superior derecha."
         },
@@ -997,7 +997,7 @@
             "id_detector": "L05D060",
             "nomenclatura_alt": "L5-DH-060",
             "piso": "0",
-            "sector": "Sector DGTIC, ubicación borde ala sur",
+            "sector": "Sector 0-10, Bodega DGTIC, ubicación borde ala sur",
             "lazo": "L05",
             "ubicacion": "Área superior de estaciones, fila inferior izquierda."
         },
@@ -1005,7 +1005,7 @@
             "id_detector": "L05D061",
             "nomenclatura_alt": "L5-DH-061",
             "piso": "0",
-            "sector": "Sector DGTIC, ubicación borde ala sur",
+            "sector": "Sector 0-10, Bodega DGTIC, ubicación borde ala sur",
             "lazo": "L05",
             "ubicacion": "Área superior de estaciones, fila inferior derecha."
         },
@@ -1013,7 +1013,7 @@
             "id_detector": "L05D056",
             "nomenclatura_alt": "L5-DH-056",
             "piso": "0",
-            "sector": "Sector DGTIC, ubicación borde ala sur",
+            "sector": "Sector 0-10, Bodega DGTIC, ubicación borde ala sur",
             "lazo": "L05",
             "ubicacion": "Zona central, columna izquierda superior."
         },
@@ -1021,7 +1021,7 @@
             "id_detector": "L05D057",
             "nomenclatura_alt": "L5-DH-057",
             "piso": "0",
-            "sector": "Sector DGTIC, ubicación borde ala sur",
+            "sector": "Sector 0-10, Bodega DGTIC, ubicación borde ala sur",
             "lazo": "L05",
             "ubicacion": "Zona central, mesa redonda/central."
         },
@@ -1029,7 +1029,7 @@
             "id_detector": "L05D055",
             "nomenclatura_alt": "L5-DH-055",
             "piso": "0",
-            "sector": "Sector DGTIC, ubicación borde ala sur",
+            "sector": "Sector 0-10, Bodega DGTIC, ubicación borde ala sur",
             "lazo": "L05",
             "ubicacion": "Zona central (SECTOR 09), columna izquierda inferior."
         },
@@ -1037,7 +1037,7 @@
             "id_detector": "L05D054",
             "nomenclatura_alt": "L5-DH-054",
             "piso": "0",
-            "sector": "Sector DGTIC, ubicación borde ala sur",
+            "sector": "Sector 0-10, Bodega DGTIC, ubicación borde ala sur",
             "lazo": "L05",
             "ubicacion": "Zona central, fila media-inferior central."
         },
@@ -1045,7 +1045,7 @@
             "id_detector": "L05D053",
             "nomenclatura_alt": "L5-DH-053",
             "piso": "0",
-            "sector": "Sector DGTIC, ubicación borde ala sur",
+            "sector": "Sector 0-10, Bodega DGTIC, ubicación borde ala sur",
             "lazo": "L05",
             "ubicacion": "Zona central, fila media-inferior derecha (junto a borde derecho)."
         },
@@ -1053,7 +1053,7 @@
             "id_detector": "L05D051",
             "nomenclatura_alt": "L5-DH-051",
             "piso": "0",
-            "sector": "Sector DGTIC, ubicación borde ala sur",
+            "sector": "Sector 0-10, Bodega DGTIC, ubicación borde ala sur",
             "lazo": "L05",
             "ubicacion": "Franja inferior-media, lado izquierdo."
         },
@@ -1061,7 +1061,7 @@
             "id_detector": "L05D052",
             "nomenclatura_alt": "L5-DH-052",
             "piso": "0",
-            "sector": "Sector DGTIC, ubicación borde ala sur",
+            "sector": "Sector 0-10, Bodega DGTIC, ubicación borde ala sur",
             "lazo": "L05",
             "ubicacion": "Franja inferior-media, lado derecho."
         },
@@ -1069,7 +1069,7 @@
             "id_detector": "L05D047",
             "nomenclatura_alt": "L5-DH-047",
             "piso": "0",
-            "sector": "Sector DGTIC, ubicación borde ala sur",
+            "sector": "Sector 0-10, Bodega DGTIC, ubicación borde ala sur",
             "lazo": "L05",
             "ubicacion": "Borde inferior, lado izquierdo (sala de juntas/mesa)."
         },
@@ -1077,7 +1077,7 @@
             "id_detector": "L05D046",
             "nomenclatura_alt": "L5-DH-046",
             "piso": "0",
-            "sector": "Sector DGTIC, ubicación borde ala sur",
+            "sector": "Sector 0-10, Bodega DGTIC, ubicación borde ala sur",
             "lazo": "L05",
             "ubicacion": "Borde inferior, lado central-derecho."
         },
@@ -1085,7 +1085,7 @@
             "id_detector": "L05D071",
             "nomenclatura_alt": "L5-DH-071",
             "piso": "0",
-            "sector": "Bodega de intendencia, Ubicación detras de sanitarios elevador 1",
+            "sector": "Sector 0-9, Bodega de intendencia, Ubicación detras de sanitarios elevador 1",
             "lazo": "L05",
             "ubicacion": "Área superior izquierda."
         },
@@ -1093,7 +1093,7 @@
             "id_detector": "L05D072",
             "nomenclatura_alt": "L5-DH-072",
             "piso": "0",
-            "sector": "Bodega de intendencia, Ubicación detras de sanitarios elevador 1",
+            "sector": "Sector 0-9, Bodega de intendencia, Ubicación detras de sanitarios elevador 1",
             "lazo": "L05",
             "ubicacion": "Área superior central (Archivo Móvil S)."
         },
@@ -1101,7 +1101,7 @@
             "id_detector": "L05D073",
             "nomenclatura_alt": "L5-DH-073",
             "piso": "0",
-            "sector": "Bodega de intendencia, Ubicación detras de sanitarios elevador 1",
+            "sector": "Sector 0-9, Bodega de intendencia, Ubicación detras de sanitarios elevador 1",
             "lazo": "L05",
             "ubicacion": "Área superior derecha (Archivo Móvil S)."
         },
@@ -1109,7 +1109,7 @@
             "id_detector": "L05D082",
             "nomenclatura_alt": "L5-DH-082",
             "piso": "0",
-            "sector": "Bodega de intendencia, Ubicación detras de sanitarios elevador 1",
+            "sector": "Sector 0-9, Bodega de intendencia, Ubicación detras de sanitarios elevador 1",
             "lazo": "L05",
             "ubicacion": "Lateral superior izquierdo (bajo L5-DH-071 / junto a DH-084)."
         },
@@ -1117,7 +1117,7 @@
             "id_detector": "L05D070",
             "nomenclatura_alt": "L5-DH-070",
             "piso": "0",
-            "sector": "Bodega de intendencia, Ubicación detras de sanitarios elevador 1",
+            "sector": "Sector 0-9, Bodega de intendencia, Ubicación detras de sanitarios elevador 1",
             "lazo": "L05",
             "ubicacion": "Franja intermedia superior (Archivo Móvil S)."
         },
@@ -1125,7 +1125,7 @@
             "id_detector": "L05D069",
             "nomenclatura_alt": "L5-DH-069",
             "piso": "0",
-            "sector": "Bodega de intendencia, Ubicación detras de sanitarios elevador 1",
+            "sector": "Sector 0-9, Bodega de intendencia, Ubicación detras de sanitarios elevador 1",
             "lazo": "L05",
             "ubicacion": "Franja intermedia central (Archivo Móvil R)."
         },
@@ -1133,7 +1133,7 @@
             "id_detector": "L05D014",
             "nomenclatura_alt": "L5-DH-014",
             "piso": "0",
-            "sector": "Bodega de intendencia, Ubicación detras de sanitarios elevador 1",
+            "sector": "Sector 0-9, Bodega de intendencia, Ubicación detras de sanitarios elevador 1",
             "lazo": "L05",
             "ubicacion": "Cuadrante inferior izquierdo, parte superior."
         },
@@ -1141,7 +1141,7 @@
             "id_detector": "L05D013",
             "nomenclatura_alt": "L5-DH-013",
             "piso": "0",
-            "sector": "Bodega de intendencia, Ubicación detras de sanitarios elevador 1",
+            "sector": "Sector 0-9, Bodega de intendencia, Ubicación detras de sanitarios elevador 1",
             "lazo": "L05",
             "ubicacion": "Cuadrante inferior izquierdo, parte superior-derecha."
         },
@@ -1149,7 +1149,7 @@
             "id_detector": "L05D011",
             "nomenclatura_alt": "L5-DH-011",
             "piso": "0",
-            "sector": "Bodega de intendencia, Ubicación detras de sanitarios elevador 1",
+            "sector": "Sector 0-9, Bodega de intendencia, Ubicación detras de sanitarios elevador 1",
             "lazo": "L05",
             "ubicacion": "Cuadrante inferior izquierdo, parte inferior izquierda (junto a elevador 1)."
         },
@@ -1157,7 +1157,7 @@
             "id_detector": "L05D012",
             "nomenclatura_alt": "L5-DH-012",
             "piso": "0",
-            "sector": "Bodega de intendencia, Ubicación detras de sanitarios elevador 1",
+            "sector": "Sector 0-9, Bodega de intendencia, Ubicación detras de sanitarios elevador 1",
             "lazo": "L05",
             "ubicacion": "Cuadrante inferior izquierdo, parte inferior derecha (detrás de sanitarios)."
         },
@@ -1165,7 +1165,7 @@
             "id_detector": "L05D068",
             "nomenclatura_alt": "L5-DH-068",
             "piso": "0",
-            "sector": "Bodega de intendencia, Ubicación detras de sanitarios elevador 1",
+            "sector": "Sector 0-9, Bodega de intendencia, Ubicación detras de sanitarios elevador 1",
             "lazo": "L05",
             "ubicacion": "Columna inferior derecha, posición superior."
         },
@@ -1173,7 +1173,7 @@
             "id_detector": "L05D059",
             "nomenclatura_alt": "L5-DH-059",
             "piso": "0",
-            "sector": "Bodega de intendencia, Ubicación detras de sanitarios elevador 1",
+            "sector": "Sector 0-9, Bodega de intendencia, Ubicación detras de sanitarios elevador 1",
             "lazo": "L05",
             "ubicacion": "Columna inferior derecha, posición media."
         },
@@ -1189,7 +1189,7 @@
             "id_detector": "L05D069B",
             "nomenclatura_alt": "L5-DH-069",
             "piso": "0",
-            "sector": "Bodega de intendencia, Ubicación detras de sanitarios elevador 1",
+            "sector": "Sector 0-9, Bodega de intendencia, Ubicación detras de sanitarios elevador 1",
             "lazo": "L05",
             "ubicacion": "Ramal vertical derecho, altura de Archivo Móvil R."
         },
@@ -1197,7 +1197,7 @@
             "id_detector": "L05D058",
             "nomenclatura_alt": "L5-DH-058",
             "piso": "0",
-            "sector": "Bodega de intendencia, Ubicación detras de sanitarios elevador 1",
+            "sector": "Sector 0-9, Bodega de intendencia, Ubicación detras de sanitarios elevador 1",
             "lazo": "L05",
             "ubicacion": "Ramal vertical derecho, parte inferior derecha (junto a L5-DH-015)."
         },
@@ -1206,7 +1206,7 @@
             "id_detector": "L05D045",
             "nomenclatura_alt": "L5-DH-045",
             "piso": "0",
-            "sector": "Sector 0-6 TecNM y bodegas ala sur frente a pasillo de elevador 1",
+            "sector": "Sector 0-8 TecNM y bodegas ala sur frente a pasillo de elevador 1",
             "lazo": "L05",
             "ubicacion": "Área superior (SECTOR 08), fila superior izquierda."
         },
@@ -1214,7 +1214,7 @@
             "id_detector": "L05D044",
             "nomenclatura_alt": "L5-DH-044",
             "piso": "0",
-            "sector": "Sector 0-6 TecNM y bodegas ala sur frente a pasillo de elevador 1",
+            "sector": "Sector 0-8 TecNM y bodegas ala sur frente a pasillo de elevador 1",
             "lazo": "L05",
             "ubicacion": "Área superior (SECTOR 08), fila superior central."
         },
@@ -1222,7 +1222,7 @@
             "id_detector": "L05D043",
             "nomenclatura_alt": "L5-DH-043",
             "piso": "0",
-            "sector": "Sector 0-6 TecNM y bodegas ala sur frente a pasillo de elevador 1",
+            "sector": "Sector 0-8 TecNM y bodegas ala sur frente a pasillo de elevador 1",
             "lazo": "L05",
             "ubicacion": "Área superior (SECTOR 08), fila superior derecha."
         },
@@ -1230,7 +1230,7 @@
             "id_detector": "L05D040",
             "nomenclatura_alt": "L5-DH-040",
             "piso": "0",
-            "sector": "Sector 0-6 TecNM y bodegas ala sur frente a pasillo de elevador 1",
+            "sector": "Sector 0-8 TecNM y bodegas ala sur frente a pasillo de elevador 1",
             "lazo": "L05",
             "ubicacion": "Área superior (SECTOR 08), fila inferior izquierda."
         },
@@ -1238,7 +1238,7 @@
             "id_detector": "L05D041",
             "nomenclatura_alt": "L5-DH-041",
             "piso": "0",
-            "sector": "Sector 0-6 TecNM y bodegas ala sur frente a pasillo de elevador 1",
+            "sector": "Sector 0-8 TecNM y bodegas ala sur frente a pasillo de elevador 1",
             "lazo": "L05",
             "ubicacion": "Área superior (SECTOR 08), fila inferior central."
         },
@@ -1246,7 +1246,7 @@
             "id_detector": "L05D042",
             "nomenclatura_alt": "L5-DH-042",
             "piso": "0",
-            "sector": "Sector 0-6 TecNM y bodegas ala sur frente a pasillo de elevador 1",
+            "sector": "Sector 0-8 TecNM y bodegas ala sur frente a pasillo de elevador 1",
             "lazo": "L05",
             "ubicacion": "Área superior (SECTOR 08), fila inferior derecha."
         },
@@ -1254,7 +1254,7 @@
             "id_detector": "L05EM004",
             "nomenclatura_alt": "L5-EM-004",
             "piso": "0",
-            "sector": "Sector 0-6 TecNM y bodegas ala sur frente a pasillo de elevador 1",
+            "sector": "Sector 0-8 TecNM y bodegas ala sur frente a pasillo de elevador 1",
             "lazo": "L05",
             "ubicacion": "Ramal izquierdo superior, estación manual."
         },
@@ -1262,7 +1262,7 @@
             "id_detector": "L05D039",
             "nomenclatura_alt": "L5-DH-039",
             "piso": "0",
-            "sector": "Sector 0-6 TecNM y bodegas ala sur frente a pasillo de elevador 1",
+            "sector": "Sector 0-8 TecNM y bodegas ala sur frente a pasillo de elevador 1",
             "lazo": "L05",
             "ubicacion": "Ramal izquierdo medio-superior."
         },
@@ -1270,7 +1270,7 @@
             "id_detector": "L05D038",
             "nomenclatura_alt": "L5-DH-038",
             "piso": "0",
-            "sector": "Sector 0-6 TecNM y bodegas ala sur frente a pasillo de elevador 1",
+            "sector": "Sector 0-8 TecNM y bodegas ala sur frente a pasillo de elevador 1",
             "lazo": "L05",
             "ubicacion": "Ramal izquierdo medio-inferior."
         },
@@ -1278,7 +1278,7 @@
             "id_detector": "L05D032",
             "nomenclatura_alt": "L5-DH-032",
             "piso": "0",
-            "sector": "Sector 0-6 TecNM y bodegas ala sur frente a pasillo de elevador 1",
+            "sector": "Sector 0-8 TecNM y bodegas ala sur frente a pasillo de elevador 1",
             "lazo": "L05",
             "ubicacion": "Esquina inferior izquierda."
         },
@@ -1286,7 +1286,7 @@
             "id_detector": "L05D031",
             "nomenclatura_alt": "L5-DH-031",
             "piso": "0",
-            "sector": "Sector 0-6 TecNM y bodegas ala sur frente a pasillo de elevador 1",
+            "sector": "Sector 0-8 TecNM y bodegas ala sur frente a pasillo de elevador 1",
             "lazo": "L05",
             "ubicacion": "Zona media superior, lado izquierdo."
         },
@@ -1294,7 +1294,7 @@
             "id_detector": "L05D030",
             "nomenclatura_alt": "L5-DH-030",
             "piso": "0",
-            "sector": "Sector 0-6 TecNM y bodegas ala sur frente a pasillo de elevador 1",
+            "sector": "Sector 0-8 TecNM y bodegas ala sur frente a pasillo de elevador 1",
             "lazo": "L05",
             "ubicacion": "Zona media superior, lado central-derecho."
         },
@@ -1302,7 +1302,7 @@
             "id_detector": "L05D029",
             "nomenclatura_alt": "L5-DH-029",
             "piso": "0",
-            "sector": "Sector 0-6 TecNM y bodegas ala sur frente a pasillo de elevador 1",
+            "sector": "Sector 0-8 TecNM y bodegas ala sur frente a pasillo de elevador 1",
             "lazo": "L05",
             "ubicacion": "Zona media superior, columna derecha."
         },
@@ -1310,7 +1310,7 @@
             "id_detector": "L05D027",
             "nomenclatura_alt": "L5-DH-027",
             "piso": "0",
-            "sector": "Sector 0-6 TecNM y bodegas ala sur frente a pasillo de elevador 1",
+            "sector": "Sector 0-8 TecNM y bodegas ala sur frente a pasillo de elevador 1",
             "lazo": "L05",
             "ubicacion": "Zona media, fila superior izquierda."
         },
@@ -1318,7 +1318,7 @@
             "id_detector": "L05D028",
             "nomenclatura_alt": "L5-DH-028",
             "piso": "0",
-            "sector": "Sector 0-6 TecNM y bodegas ala sur frente a pasillo de elevador 1",
+            "sector": "Sector 0-8 TecNM y bodegas ala sur frente a pasillo de elevador 1",
             "lazo": "L05",
             "ubicacion": "Zona media, fila superior derecha."
         },
@@ -1326,7 +1326,7 @@
             "id_detector": "L05EM003",
             "nomenclatura_alt": "L5-EM-003",
             "piso": "0",
-            "sector": "Sector 0-6 TecNM y bodegas ala sur frente a pasillo de elevador 1",
+            "sector": "Sector 0-8 TecNM y bodegas ala sur frente a pasillo de elevador 1",
             "lazo": "L05",
             "ubicacion": "Zona media derecha, estación manual junto a puerta."
         },
@@ -1334,7 +1334,7 @@
             "id_detector": "L05D026",
             "nomenclatura_alt": "L5-DH-026",
             "piso": "0",
-            "sector": "Sector 0-6 TecNM y bodegas ala sur frente a pasillo de elevador 1",
+            "sector": "Sector 0-8 TecNM y bodegas ala sur frente a pasillo de elevador 1",
             "lazo": "L05",
             "ubicacion": "ARCHIVO MOVIL O, lado izquierdo."
         },
@@ -1342,7 +1342,7 @@
             "id_detector": "L05D025",
             "nomenclatura_alt": "L5-DH-025",
             "piso": "0",
-            "sector": "Sector 0-6 TecNM y bodegas ala sur frente a pasillo de elevador 1",
+            "sector": "Sector 0-8 TecNM y bodegas ala sur frente a pasillo de elevador 1",
             "lazo": "L05",
             "ubicacion": "ARCHIVO MOVIL O, lado derecho."
         },
@@ -1350,7 +1350,7 @@
             "id_detector": "L05D024",
             "nomenclatura_alt": "L5-DH-024",
             "piso": "0",
-            "sector": "Sector 0-6 TecNM y bodegas ala sur frente a pasillo de elevador 1",
+            "sector": "Sector 0-8 TecNM y bodegas ala sur frente a pasillo de elevador 1",
             "lazo": "L05",
             "ubicacion": "Columna derecha, altura de ARCHIVO MOVIL O."
         },
@@ -1358,7 +1358,7 @@
             "id_detector": "L05D022",
             "nomenclatura_alt": "L5-DH-022",
             "piso": "0",
-            "sector": "Sector 0-6 TecNM y bodegas ala sur frente a pasillo de elevador 1",
+            "sector": "Sector 0-8 TecNM y bodegas ala sur frente a pasillo de elevador 1",
             "lazo": "L05",
             "ubicacion": "Área inferior, fila superior izquierda."
         },
@@ -1366,7 +1366,7 @@
             "id_detector": "L05D023",
             "nomenclatura_alt": "L5-DH-023",
             "piso": "0",
-            "sector": "Sector 0-6 TecNM y bodegas ala sur frente a pasillo de elevador 1",
+            "sector": "Sector 0-8 TecNM y bodegas ala sur frente a pasillo de elevador 1",
             "lazo": "L05",
             "ubicacion": "Área inferior, fila superior derecha."
         },
@@ -3903,7 +3903,7 @@
             "id_detector": "L01EM042",
             "nomenclatura_alt": "L01-EM-042",
             "piso": "0",
-            "sector": "Sector 0-2, Bodegas Detrás de la esclara A-3 (Panel Nivel 0, Sistema  de Detección de Humo)",
+            "sector": "Sector 0-2, Bodegas Detrás de la escalera A-3 (Panel Nivel 0, Sistema  de Detección de Humo)",
             "lazo": "L01",
             "ubicacion": "Estación manual superior izquierda (junto a escalera A-3)."
         },
@@ -3911,7 +3911,7 @@
             "id_detector": "L01D056",
             "nomenclatura_alt": "L01-DH-056",
             "piso": "0",
-            "sector": "Sector 0-2, Bodegas Detrás de la esclara A-3 (Panel Nivel 0, Sistema  de Detección de Humo)",
+            "sector": "Sector 0-2, Bodegas Detrás de la escalera A-3 (Panel Nivel 0, Sistema  de Detección de Humo)",
             "lazo": "L01",
             "ubicacion": "Lado izquierdo superior (a la izquierda de escalera A-3)."
         },
@@ -3919,7 +3919,7 @@
             "id_detector": "L01D060",
             "nomenclatura_alt": "L01-DH-060",
             "piso": "0",
-            "sector": "Sector 0-2, Bodegas Detrás de la esclara A-3 (Panel Nivel 0, Sistema  de Detección de Humo)",
+            "sector": "Sector 0-2, Bodegas Detrás de la escalera A-3 (Panel Nivel 0, Sistema  de Detección de Humo)",
             "lazo": "L01",
             "ubicacion": "Lado izquierdo medio-superior (junto a elevador y escalera A-3)."
         },
@@ -3927,7 +3927,7 @@
             "id_detector": "L01D059",
             "nomenclatura_alt": "L01-DH-059",
             "piso": "0",
-            "sector": "Sector 0-2, Bodegas Detrás de la esclara A-3 (Panel Nivel 0, Sistema  de Detección de Humo)",
+            "sector": "Sector 0-2, Bodegas Detrás de la escalera A-3 (Panel Nivel 0, Sistema  de Detección de Humo)",
             "lazo": "L01",
             "ubicacion": "Lado izquierdo medio-inferior (a la izquierda de escalera A-3)."
         },
@@ -3935,7 +3935,7 @@
             "id_detector": "L01D057",
             "nomenclatura_alt": "L01-DH-057",
             "piso": "0",
-            "sector": "Sector 0-2, Bodegas Detrás de la esclara A-3 (Panel Nivel 0, Sistema  de Detección de Humo)",
+            "sector": "Sector 0-2, Bodegas Detrás de la escalera A-3 (Panel Nivel 0, Sistema  de Detección de Humo)",
             "lazo": "L01",
             "ubicacion": "Lado izquierdo inferior (debajo de L01-DH-058)."
         },
@@ -3943,7 +3943,7 @@
             "id_detector": "L01D011",
             "nomenclatura_alt": "L01-DH-011",
             "piso": "0",
-            "sector": "Sector 0-2, Bodegas Detrás de la esclara A-3 (Panel Nivel 0, Sistema  de Detección de Humo)",
+            "sector": "Sector 0-2, Bodegas Detrás de la escalera A-3 (Panel Nivel 0, Sistema  de Detección de Humo)",
             "lazo": "L01",
             "ubicacion": "Franja izquierda (junto a sanitarios), detector superior."
         },
@@ -3951,7 +3951,7 @@
             "id_detector": "L01D058",
             "nomenclatura_alt": "L01-DH-058",
             "piso": "0",
-            "sector": "Sector 0-2, Bodegas Detrás de la esclara A-3 (Panel Nivel 0, Sistema  de Detección de Humo)",
+            "sector": "Sector 0-2, Bodegas Detrás de la escalera A-3 (Panel Nivel 0, Sistema  de Detección de Humo)",
             "lazo": "L01",
             "ubicacion": "Franja izquierda (junto a sanitarios), detector medio (conectado a L01-DH-059)."
         },
@@ -3959,7 +3959,7 @@
             "id_detector": "L01D012",
             "nomenclatura_alt": "L01-DH-012",
             "piso": "0",
-            "sector": "Sector 0-2, Bodegas Detrás de la esclara A-3 (Panel Nivel 0, Sistema  de Detección de Humo)",
+            "sector": "Sector 0-2, Bodegas Detrás de la escalera A-3 (Panel Nivel 0, Sistema  de Detección de Humo)",
             "lazo": "L01",
             "ubicacion": "Zona inferior izquierda (junto a FACP), detector L01-DH-012."
         },
@@ -3967,7 +3967,7 @@
             "id_detector": "L01D061",
             "nomenclatura_alt": "L01-DH-061",
             "piso": "0",
-            "sector": "Sector 0-2, Bodegas Detrás de la esclara A-3 (Panel Nivel 0, Sistema  de Detección de Humo)",
+            "sector": "Sector 0-2, Bodegas Detrás de la escalera A-3 (Panel Nivel 0, Sistema  de Detección de Humo)",
             "lazo": "L01",
             "ubicacion": "Franja inferior izquierda, detector L01-DH-061."
         },
@@ -3975,7 +3975,7 @@
             "id_detector": "L01EM037",
             "nomenclatura_alt": "L01-EM-037",
             "piso": "0",
-            "sector": "Sector 0-2, Bodegas Detrás de la esclara A-3 (Panel Nivel 0, Sistema  de Detección de Humo)",
+            "sector": "Sector 0-2, Bodegas Detrás de la escalera A-3 (Panel Nivel 0, Sistema  de Detección de Humo)",
             "lazo": "L01",
             "ubicacion": "Franja inferior izquierda, estación manual L01-EM-037."
         },
@@ -3983,7 +3983,7 @@
             "id_detector": "L01D068",
             "nomenclatura_alt": "L01-DH-068",
             "piso": "0",
-            "sector": "Sector 0-2, Bodegas Detrás de la esclara A-3 (Panel Nivel 0, Sistema  de Detección de Humo)",
+            "sector": "Sector 0-2, Bodegas Detrás de la escalera A-3 (Panel Nivel 0, Sistema  de Detección de Humo)",
             "lazo": "L01",
             "ubicacion": "Franja inferior derecha, detector L01-DH-068."
         },
@@ -3991,7 +3991,7 @@
             "id_detector": "L01D089",
             "nomenclatura_alt": "L01-DH-089",
             "piso": "0",
-            "sector": "Sector 0-2, Bodegas Detrás de la esclara A-3 (Panel Nivel 0, Sistema  de Detección de Humo)",
+            "sector": "Sector 0-2, Bodegas Detrás de la escalera A-3 (Panel Nivel 0, Sistema  de Detección de Humo)",
             "lazo": "L01",
             "ubicacion": "Columna central-derecha, fila superior."
         },
@@ -3999,7 +3999,7 @@
             "id_detector": "L01D090",
             "nomenclatura_alt": "L01-DH-090",
             "piso": "0",
-            "sector": "Sector 0-2, Bodegas Detrás de la esclara A-3 (Panel Nivel 0, Sistema  de Detección de Humo)",
+            "sector": "Sector 0-2, Bodegas Detrás de la escalera A-3 (Panel Nivel 0, Sistema  de Detección de Humo)",
             "lazo": "L01",
             "ubicacion": "Columna central-derecha, fila 2."
         },
@@ -4007,7 +4007,7 @@
             "id_detector": "L01D088",
             "nomenclatura_alt": "L01-DH-088",
             "piso": "0",
-            "sector": "Sector 0-2, Bodegas Detrás de la esclara A-3 (Panel Nivel 0, Sistema  de Detección de Humo)",
+            "sector": "Sector 0-2, Bodegas Detrás de la escalera A-3 (Panel Nivel 0, Sistema  de Detección de Humo)",
             "lazo": "L01",
             "ubicacion": "Columna central-derecha, fila 3."
         },
@@ -4015,7 +4015,7 @@
             "id_detector": "L01EM061",
             "nomenclatura_alt": "L01-EM-061",
             "piso": "0",
-            "sector": "Sector 0-2, Bodegas Detrás de la esclara A-3 (Panel Nivel 0, Sistema  de Detección de Humo)",
+            "sector": "Sector 0-2, Bodegas Detrás de la escalera A-3 (Panel Nivel 0, Sistema  de Detección de Humo)",
             "lazo": "L01",
             "ubicacion": "Columna central-derecha, estación manual fila 4."
         },
@@ -4023,7 +4023,7 @@
             "id_detector": "L01D087",
             "nomenclatura_alt": "L01-DH-087",
             "piso": "0",
-            "sector": "Sector 0-2, Bodegas Detrás de la esclara A-3 (Panel Nivel 0, Sistema  de Detección de Humo)",
+            "sector": "Sector 0-2, Bodegas Detrás de la escalera A-3 (Panel Nivel 0, Sistema  de Detección de Humo)",
             "lazo": "L01",
             "ubicacion": "Columna central-derecha, fila 5 (debajo de L01-EM-061)."
         },
@@ -4031,7 +4031,7 @@
             "id_detector": "L01D086",
             "nomenclatura_alt": "L01-DH-086",
             "piso": "0",
-            "sector": "Sector 0-2, Bodegas Detrás de la esclara A-3 (Panel Nivel 0, Sistema  de Detección de Humo)",
+            "sector": "Sector 0-2, Bodegas Detrás de la escalera A-3 (Panel Nivel 0, Sistema  de Detección de Humo)",
             "lazo": "L01",
             "ubicacion": "Columna central-derecha, fila inferior (sobre OFICINAS 14)."
         },
@@ -4039,7 +4039,7 @@
             "id_detector": "L01D081",
             "nomenclatura_alt": "L01-DH-081",
             "piso": "0",
-            "sector": "Sector 0-2, Bodegas Detrás de la esclara A-3 (Panel Nivel 0, Sistema  de Detección de Humo)",
+            "sector": "Sector 0-2, Bodegas Detrás de la escalera A-3 (Panel Nivel 0, Sistema  de Detección de Humo)",
             "lazo": "L01",
             "ubicacion": "Columna derecha, superior (BODEGAS DGFCADPMEB)."
         },
@@ -4047,7 +4047,7 @@
             "id_detector": "L01D082",
             "nomenclatura_alt": "L01-DH-082",
             "piso": "0",
-            "sector": "Sector 0-2, Bodegas Detrás de la esclara A-3 (Panel Nivel 0, Sistema  de Detección de Humo)",
+            "sector": "Sector 0-2, Bodegas Detrás de la escalera A-3 (Panel Nivel 0, Sistema  de Detección de Humo)",
             "lazo": "L01",
             "ubicacion": "Columna derecha, fila 2 (Sector 0-2)."
         },
@@ -4055,7 +4055,7 @@
             "id_detector": "L01D083",
             "nomenclatura_alt": "L01-DH-083",
             "piso": "0",
-            "sector": "Sector 0-2, Bodegas Detrás de la esclara A-3 (Panel Nivel 0, Sistema  de Detección de Humo)",
+            "sector": "Sector 0-2, Bodegas Detrás de la escalera A-3 (Panel Nivel 0, Sistema  de Detección de Humo)",
             "lazo": "L01",
             "ubicacion": "Columna derecha, fila 3 (Sector 0-2)."
         },
@@ -4063,7 +4063,7 @@
             "id_detector": "L01D084",
             "nomenclatura_alt": "L01-DH-084",
             "piso": "0",
-            "sector": "Sector 0-2, Bodegas Detrás de la esclara A-3 (Panel Nivel 0, Sistema  de Detección de Humo)",
+            "sector": "Sector 0-2, Bodegas Detrás de la escalera A-3 (Panel Nivel 0, Sistema  de Detección de Humo)",
             "lazo": "L01",
             "ubicacion": "Columna derecha, fila 4 (OFICINAS 14)."
         },
@@ -4071,7 +4071,7 @@
             "id_detector": "L01D085",
             "nomenclatura_alt": "L01-DH-085",
             "piso": "0",
-            "sector": "Sector 0-2, Bodegas Detrás de la esclara A-3 (Panel Nivel 0, Sistema  de Detección de Humo)",
+            "sector": "Sector 0-2, Bodegas Detrás de la escalera A-3 (Panel Nivel 0, Sistema  de Detección de Humo)",
             "lazo": "L01",
             "ubicacion": "Columna derecha, fila inferior (OFICINAS 14)."
         },
