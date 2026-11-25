@@ -58,33 +58,24 @@
             flex-shrink: 0;
         }
 
-        .campo-entrada {
+        .campo-texto {
             width: 100%;
-            padding: 0.85rem 1rem;
+            padding: 1rem;
             background-color: #F8FAFC;
             border: 2px solid #9baec8;
             border-radius: 1rem;
-            font-size: 0.95rem;
-            font-weight: 600;
+            font-size: 1rem;
+            font-weight: 500;
             color: var(--color-texto-principal);
             outline: none;
+            resize: vertical;
             transition: all 0.2s ease-in-out;
+            line-height: 1.6;
         }
 
-        .campo-entrada:focus {
+        .campo-texto:focus {
             border-color: var(--color-primario);
-            background-color: #FFFFFF;
             box-shadow: 0 0 0 4px rgba(119, 175, 156, 0.15);
-        }
-
-        .etiqueta-campo {
-            display: block;
-            font-size: 0.75rem;
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: #475569;
-            margin-bottom: 0.4rem;
         }
 
         .btn-accion-principal {
@@ -138,109 +129,30 @@
     <div class="contenedor-principal">
         
         <!-- Encabezado -->
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 border-b border-slate-200 pb-5">
-            <div class="flex items-center gap-4">
-                <div class="icono-encabezado">
-                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
-                </div>
-                <div>
-                    <h1 class="text-3xl font-black text-slate-800 tracking-tight">Caja de Captura de Eventos</h1>
-                    <p class="text-sm font-bold text-slate-500 mt-1">Captura estructurada con los mismos campos reportados en la Agenda de Eventos.</p>
-                </div>
+        <div class="flex items-center gap-4 mb-6 border-b border-slate-200 pb-5">
+            <div class="icono-encabezado">
+                <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
             </div>
-
-            <button type="button" onclick="llenarFechaHoy()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-extrabold text-xs py-2.5 px-4 rounded-xl border border-slate-300 transition-all cursor-pointer self-start sm:self-auto">
-                📅 Usar fecha de hoy
-            </button>
+            <div>
+                <h1 class="text-3xl font-black text-slate-800 tracking-tight">Caja de Captura de Eventos</h1>
+                <p class="text-sm font-bold text-slate-500 mt-1">Copia y pega el texto íntegro de WhatsApp. Conserva Sede/Ubicación, Fecha, Horario, Asistentes, Tema del Evento y UR.</p>
+            </div>
         </div>
 
-        <!-- Formulario de Captura por Campos de Agenda -->
+        <!-- Formulario de Captura -->
         <form id="formCajaEvento" onsubmit="publicarEvento(event)">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                
-                <!-- 1. Sede / Ubicación -->
-                <div>
-                    <label for="campoSede" class="etiqueta-campo">📍 Sede / Ubicación</label>
-                    <input type="text" id="campoSede" list="listaSedes" required
-                           placeholder="Ej. Auditorio, Explanada, Sala 1, Estudio de Grabación Nivel 0"
-                           class="campo-entrada" oninput="actualizarVistaPrevia()">
-                    <datalist id="listaSedes">
-                        <option value="Auditorio">
-                        <option value="Explanada">
-                        <option value="Explanada Principal del Centro SEP">
-                        <option value="Estudio de Grabación Nivel 0">
-                        <option value="Sala 1">
-                        <option value="Sala 2">
-                    </datalist>
-                </div>
+            <label for="textoEvento" class="block text-sm font-black text-slate-400 uppercase tracking-wider mb-2">Mensaje del Evento</label>
+            
+            <textarea id="textoEvento" required rows="8" 
+                      placeholder="Ej.&#10;BODEGA DGRHYO-DGRMyS, NIVEL 1&#10;Fecha: martes 3 de febrero de 2026 hasta nuevo aviso&#10;Horario: 9:00 a las 18:00 horas&#10;Tema: Recepción de equipos de cómputo tipo escritorio...&#10;Participantes: 20 personas por día." 
+                      class="campo-texto" oninput="actualizarPrevia()"></textarea>
 
-                <!-- 2. Fecha -->
-                <div>
-                    <label for="campoFecha" class="etiqueta-campo">📅 Fecha</label>
-                    <input type="text" id="campoFecha"
-                           placeholder="Ej. miércoles 25 de noviembre de 2026 (o déjalo vacío)"
-                           class="campo-entrada" oninput="actualizarVistaPrevia()">
-                </div>
-
-                <!-- 3. Horario -->
-                <div>
-                    <label for="campoHorario" class="etiqueta-campo">⏰ Horario</label>
-                    <input type="text" id="campoHorario"
-                           placeholder="Ej. De las 08:30 a 11:00 horas"
-                           class="campo-entrada" oninput="actualizarVistaPrevia()">
-                </div>
-
-                <!-- 4. Asistentes -->
-                <div>
-                    <label for="campoAsistentes" class="etiqueta-campo">👥 Asistentes</label>
-                    <input type="text" id="campoAsistentes"
-                           placeholder="Ej. 3 personas (o 50 asistentes)"
-                           class="campo-entrada" oninput="actualizarVistaPrevia()">
-                </div>
-
-                <!-- 5. Tema del Evento -->
-                <div class="md:col-span-2">
-                    <label for="campoTema" class="etiqueta-campo">📌 Tema del Evento</label>
-                    <input type="text" id="campoTema" required
-                           placeholder="Ej. Reunión de Trabajo para la grabación del Podcast"
-                           class="campo-entrada" oninput="actualizarVistaPrevia()">
-                </div>
-
-                <!-- 6. UR (Unidad Responsable) -->
-                <div class="md:col-span-2">
-                    <label for="campoUR" class="etiqueta-campo">🏢 UR (Unidad Responsable)</label>
-                    <input type="text" id="campoUR" list="listaURs"
-                           placeholder="Ej. DGETI, DGDySNEM, DGRHyO, CSI, INCENDIOS... (o No especificada)"
-                           class="campo-entrada" oninput="actualizarVistaPrevia()">
-                    <datalist id="listaURs">
-                        <option value="No especificada">
-                        <option value="DGDySNEM">
-                        <option value="DGRHyO">
-                        <option value="DGETI">
-                        <option value="DGME">
-                        <option value="SEB">
-                        <option value="SEMS">
-                        <option value="SES">
-                        <option value="CSI">
-                        <option value="UNEM">
-                        <option value="USICAMM">
-                        <option value="CSIGPT">
-                        <option value="EVACUACIÓN">
-                        <option value="INCENDIOS">
-                        <option value="PRIMEROS AUXILIOS">
-                        <option value="BÚSQUEDA Y RESCATE">
-                        <option value="COMUNICACIÓN">
-                    </datalist>
-                </div>
-
-            </div>
-
-            <!-- Vista previa del texto formateado que se enviará -->
-            <div class="mt-5 bg-slate-50 border border-slate-200 rounded-2xl p-4">
+            <!-- Vista previa estructurada -->
+            <div id="panelPrevia" class="hidden mt-4 bg-slate-50 border border-slate-200 rounded-2xl p-4">
                 <span class="block text-[11px] font-black uppercase tracking-wider text-[#5e9381] mb-1.5">
-                    Vista previa estructurada para la Agenda
+                    Vista previa estructurada (Sede / Ubicación, Fecha, Horario, Asistentes, Tema del Evento y UR)
                 </span>
-                <pre id="vistaPreviaTexto" class="text-xs font-semibold text-slate-700 whitespace-pre-wrap leading-relaxed"></pre>
+                <pre id="textoPrevia" class="text-xs font-semibold text-slate-700 whitespace-pre-wrap leading-relaxed"></pre>
             </div>
             
             <div id="alertaExito" class="hidden mt-4 p-4 bg-emerald-50 text-emerald-700 text-sm font-bold rounded-xl border border-emerald-200 flex items-center justify-center gap-2 transition-all">
@@ -263,44 +175,210 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            actualizarVistaPrevia();
-        });
+        const mapaUrs = [
+            { sigla: "DGRHyO", frases: ["dgrhyo", "dghryo", "dgrho", "dgrmys", "dirección general de recursos humanos y organización", "direccion general de recursos humanos y organizacion", "dirección de relaciones laborales"] },
+            { sigla: "DGDCYPEI", frases: ["dirección general de desarrollo curricular y política de educación inicial", "ur 312"] },
+            { sigla: "DGME", frases: ["dirección general de materiales educativos", "ur 311"] },
+            { sigla: "DGBTED", frases: ["dirección general de bachillerato tecnológico de educación y promoción deportiva"] },
+            { sigla: "DGFCDD", frases: ["dirección general de formación continua a docentes y directivos"] },
+            { sigla: "SEB", frases: ["subsecretaría de educación básica", "ur 300"] },
+            { sigla: "DGGEyET", frases: ["dirección general de gestión escolar y enfoque territorial"] },
+            { sigla: "DGEIIB", frases: ["dirección general de educación indígena, intercultural y bilingüe", "ur 313"] },
+            { sigla: "DGETI", frases: ["dirección general de educación tecnológica industrial y de servicios"] },
+            { sigla: "DGCFT", frases: ["dirección general de centros de formación para el trabajo", "ur 613"] },
+            { sigla: "TecNM", frases: ["tecnológico nacional de méxico", "tecnologico nacional de mexico"] },
+            { sigla: "UNEM", frases: ["unidad de la nueva escuela mexicana", "ur 170"] },
+            { sigla: "DGESUI", frases: ["dirección general de educación superior universitaria e intercultural", "ur 511"] },
+            { sigla: "DGESUM", frases: ["dirección general de educación superior para el magisterio", "ur 515"] },
+            { sigla: "DGPPyEE", frases: ["dirección general de planeación, programación y estadística educativa"] },
+            { sigla: "SEMS", frases: ["subsecretaría de educación media superior - dirección técnica administrativa", "subsecretaria de educacion media superior"] },
+            { sigla: "DGETAYCM", frases: ["dirección general de educación tecnológica agropecuaria y ciencias del mar"] },
+            { sigla: "DGSANEF", frases: ["dirección general del sistema de administración de la nómina educativa federalizada", "ur 715"] },
+            { sigla: "DGUTyP", frases: ["dirección general de universidades tecnológicas y politécnicas", "ur 514"] },
+            { sigla: "DGTUYP", frases: ["dirección general de universidades tecnológicas y politécnicas", "ur 514"] },
+            { sigla: "DGPyRF", frases: ["dirección general de presupuesto y recursos financieros"] },
+            { sigla: "CSI", frases: ["coordinación sectorial de inmuebles", "ur 712"] },
+            { sigla: "DGDySNEM", frases: ["dirección general de diagnóstico y seguimiento de la nueva escuela mexicana", "ur 171"] },
+            { sigla: "CONAFE", frases: ["consejo nacional de fomento educativo"] },
+            { sigla: "SES", frases: ["subsecretaría de educación superior", "ur 500"] },
+            { sigla: "DGTIC", frases: ["dirección general de tecnologías de la información y comunicaciones"] },
+            { sigla: "AEFCM", frases: ["autoridad educativa federal en la ciudad de méxico", "autoridad educativa federal en la ciudad de mexico"] },
+            { sigla: "UnADM", frases: ["universidad abierta y a distancia de méxico", "universidad abierta y a distancia de mexico"] },
+            { sigla: "USICAMM", frases: ["unidad del sistema para la carrera de las maestras y los maestros"] },
+            { sigla: "DGAIR", frases: ["dirección general de acreditación, incorporación y revalidación"] },
+            { sigla: "CSIGPT", frases: ["coordinadora sectorial de igualdad de género y programas transversales", "igualdad de genero y programas transversales", "coordinación sectorial de igualdad de género"] },
+            { sigla: "BÚSQUEDA Y RESCATE", frases: ["brigada de búsqueda y rescate", "busqueda y rescate"] },
+            { sigla: "PRIMEROS AUXILIOS", frases: ["brigada de primeros auxilios", "primeros auxilios"] },
+            { sigla: "EVACUACIÓN", frases: ["brigada de evacuación", "evacuacion"] },
+            { sigla: "INCENDIOS", frases: ["prevención y combate de incendios", "combate de incendios", "incendios"] },
+            { sigla: "COMUNICACIÓN", frases: ["brigada de comunicación", "comunicacion"] }
+        ];
 
-        function llenarFechaHoy() {
-            const opciones = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone: 'America/Mexico_City' };
-            const fechaStr = new Date().toLocaleDateString('es-MX', opciones);
-            document.getElementById('campoFecha').value = fechaStr.charAt(0).toUpperCase() + fechaStr.slice(1);
-            actualizarVistaPrevia();
+        function normalizarTexto(str) {
+            return (str || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
         }
 
-        function construirTextoEvento() {
-            const sede = document.getElementById('campoSede').value.trim() || 'No especificada';
-            const fecha = document.getElementById('campoFecha').value.trim() || 'No especificada';
-            const horario = document.getElementById('campoHorario').value.trim() || 'No especificado';
-            const asistentes = document.getElementById('campoAsistentes').value.trim() || 'No especificados';
-            const tema = document.getElementById('campoTema').value.trim() || 'No especificado';
-            const ur = document.getElementById('campoUR').value.trim() || 'No especificada';
+        function detectarUR(textoBruto) {
+            const textoNorm = normalizarTexto(textoBruto);
 
-            // Formato compatible con extraerResumenEvento(), detectarUR() y obtenerNumeroAsistentes()
-            return [
+            for (const item of mapaUrs) {
+                const regexSigla = new RegExp(`\\b${item.sigla}\\b`, 'i');
+                if (regexSigla.test(textoBruto) || textoNorm.includes(normalizarTexto(item.sigla))) {
+                    return item.sigla;
+                }
+                for (const frase of item.frases) {
+                    if (textoNorm.includes(normalizarTexto(frase))) {
+                        return item.sigla;
+                    }
+                }
+            }
+
+            if (
+                textoNorm.includes("banorte") ||
+                textoNorm.includes("metlife") ||
+                textoNorm.includes("dghryo") ||
+                textoNorm.includes("dgrhyo") ||
+                (textoNorm.includes("recursos humanos") && !textoNorm.includes("dgutyp") && !textoNorm.includes("dgtuyp"))
+            ) {
+                return "DGRHyO";
+            }
+
+            return "No especificada";
+        }
+
+        function limpiarTextoWhatsApp(texto) {
+            return (texto || "")
+                .split('\n')
+                .map(l => l.replace(/\u00a0/g, ' ').trim())
+                .filter(l => l.length > 0)
+                .filter(l => !/^\*?reenviado\*?$/i.test(l))
+                .filter(l => !/^\*?\[?\d{1,2}:\d{2}(?::\d{2})?\s*(?:a\.?\s*m\.?\vert{}p\.?\s*m\.?\vert{}am\vert{}pm)?\]?\*?$/i.test(l))
+                .filter(l => !/^jos[eé] madrigal ventura$/i.test(l))
+                .join('\n');
+        }
+
+        function detectarEtiqueta(linea) {
+            const l = normalizarTexto(linea);
+            if (/^ur\s*:/.test(l) || /^unidad\s+responsable\s*:/.test(l)) return 'ur';
+            if (/^fecha\s*:/.test(l)) return 'fecha';
+            if (/^(horario|hora)\s*:/.test(l)) return 'horario';
+            if (/^(tema|asunto|evento)\s*:/.test(l)) return 'tema';
+            if (/^(?:no\.?\s*de\s*)?(?:asistentes|participantes|asistencia(?:\s+para)?|aforo(?:\s+estimado)?)\s*:/.test(l)) return 'asistentes';
+            if (/^(sede|ubicacion|lugar)\s*:/.test(l)) return 'sede';
+            if (/^(contacto|responsable|enlace|telefono|tel)\s*:/.test(l)) return 'extra';
+            return null;
+        }
+
+        function normalizarTextoDesdeWhatsApp(textoCrudo) {
+            const limpio = limpiarTextoWhatsApp(textoCrudo);
+            const lineas = limpio.split('\n').map(l => l.trim()).filter(Boolean);
+
+            let sede = "No especificada";
+            let fecha = "No especificada";
+            let horario = "No especificado";
+            let asistentes = "No especificados";
+            let tema = "No especificado";
+            let ur = detectarUR(limpio);
+
+            let campoActual = null;
+            let bufSede = [];
+            let bufFecha = [];
+            let bufHorario = [];
+            let bufAsistentes = [];
+            let bufTema = [];
+            let bufExtra = [];
+
+            const regexSede = /(cubo|área|area|acceso|ala|bodega|auditorio|explanada|sala|piso|estudio|nivel)/i;
+
+            lineas.forEach((linea, idx) => {
+                const etiq = detectarEtiqueta(linea);
+
+                if (etiq) {
+                    campoActual = etiq;
+                    if (etiq === 'sede') {
+                        bufSede.push(linea.replace(/^(sede|ubicaci[oó]n|lugar)\s*:\s*/i, '').trim());
+                    } else if (etiq === 'fecha') {
+                        bufFecha.push(linea.replace(/^fecha\s*:\s*/i, '').trim());
+                    } else if (etiq === 'horario') {
+                        bufHorario.push(linea.replace(/^(horario|hora)\s*:\s*/i, '').trim());
+                    } else if (etiq === 'tema') {
+                        bufTema.push(linea.replace(/^(?:tema|asunto|evento)\s*:\s*/i, '').trim());
+                    } else if (etiq === 'asistentes') {
+                        bufAsistentes.push(
+                            linea.replace(/^(?:no\.?\s*de\s*)?(?:asistentes|participantes|asistencia(?:\s+para)?|aforo(?:\s+estimado)?)\s*:?\s*/i, '').trim()
+                        );
+                    } else if (etiq === 'ur') {
+                        const valUr = linea.replace(/^(?:ur|unidad\s+responsable)\s*:\s*/i, '').trim();
+                        if (valUr && !/^no\s+especificada?$/i.test(valUr)) {
+                            ur = detectarUR(valUr) !== "No especificada" ? detectarUR(valUr) : valUr;
+                        }
+                    } else if (etiq === 'extra') {
+                        bufExtra.push(linea);
+                    }
+                } else {
+                    if (idx === 0 && (regexSede.test(linea) || linea === linea.toUpperCase())) {
+                        bufSede.push(linea);
+                        campoActual = null;
+                    } else if (campoActual === 'tema') {
+                        bufTema.push(linea);
+                    } else if (campoActual === 'fecha' && /^(?:del?\s*)?\d{4}$/.test(linea)) {
+                        bufFecha.push(linea);
+                    } else if (campoActual === 'horario' && /(?:a\s+las|horas?|am|pm|\d{1,2}:\d{2})/i.test(linea)) {
+                        bufHorario.push(linea);
+                    } else if (campoActual === 'asistentes' && /(?:personas|asistentes|participantes|por\s+d[ií]a)/i.test(linea)) {
+                        bufAsistentes.push(linea);
+                    } else if (campoActual === 'sede') {
+                        bufSede.push(linea);
+                    } else if (campoActual === 'extra') {
+                        bufExtra.push(linea);
+                    } else if (bufSede.length === 0 && regexSede.test(linea)) {
+                        bufSede.push(linea);
+                    }
+                }
+            });
+
+            if (bufSede.length > 0) sede = bufSede.join(' ').replace(/\s+/g, ' ').trim();
+            if (bufFecha.length > 0) fecha = bufFecha.join(' ').replace(/\s+/g, ' ').trim();
+            if (bufHorario.length > 0) horario = bufHorario.join(' ').replace(/\s+/g, ' ').trim();
+            if (bufAsistentes.length > 0) asistentes = bufAsistentes.join(' ').replace(/\s+/g, ' ').trim();
+            if (bufTema.length > 0) tema = bufTema.join(' ').replace(/\s+/g, ' ').trim();
+
+            const salida = [
                 `Sede: ${sede}`,
                 `Fecha: ${fecha}`,
                 `Horario: ${horario}`,
                 `Asistentes: ${asistentes}`,
                 `Tema del Evento: ${tema}`,
                 `UR: ${ur}`
-            ].join('\n');
+            ];
+
+            if (bufExtra.length > 0) {
+                salida.push(bufExtra.join(' '));
+            }
+
+            return salida.join('\n');
         }
 
-        function actualizarVistaPrevia() {
-            document.getElementById('vistaPreviaTexto').innerText = construirTextoEvento();
+        function actualizarPrevia() {
+            const crudo = document.getElementById('textoEvento').value;
+            const panel = document.getElementById('panelPrevia');
+            const pre = document.getElementById('textoPrevia');
+
+            if (!crudo.trim()) {
+                panel.classList.add('hidden');
+                pre.innerText = '';
+                return;
+            }
+
+            panel.classList.remove('hidden');
+            pre.innerText = normalizarTextoDesdeWhatsApp(crudo);
         }
 
         async function publicarEvento(e) {
             e.preventDefault();
             
-            const textoFormateado = construirTextoEvento();
+            const textoCrudo = document.getElementById('textoEvento').value;
+            const textoLimpio = normalizarTextoDesdeWhatsApp(textoCrudo);
             const btn = document.getElementById('btnPublicar');
             const alerta = document.getElementById('alertaExito');
             
@@ -312,12 +390,12 @@
                 const response = await fetch('/api/eventos/rapido', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ contenido_whatsapp: textoFormateado })
+                    body: JSON.stringify({ contenido_whatsapp: textoLimpio })
                 });
 
                 if (response.ok) {
                     document.getElementById('formCajaEvento').reset();
-                    actualizarVistaPrevia();
+                    actualizarPrevia();
                     alerta.classList.remove('hidden');
                     
                     setTimeout(() => {
