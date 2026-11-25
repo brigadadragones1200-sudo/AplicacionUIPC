@@ -78,6 +78,26 @@
             box-shadow: 0 0 0 4px rgba(119, 175, 156, 0.15);
         }
 
+        .campo-previa-editable {
+            width: 100%;
+            padding: 0.9rem 1rem;
+            background-color: #FFFFFF;
+            border: 2px solid #77af9c;
+            border-radius: 1rem;
+            font-size: 0.92rem;
+            font-weight: 600;
+            color: var(--color-texto-principal);
+            outline: none;
+            resize: vertical;
+            transition: all 0.2s ease-in-out;
+            line-height: 1.65;
+        }
+
+        .campo-previa-editable:focus {
+            border-color: var(--color-primario-hover);
+            box-shadow: 0 0 0 4px rgba(119, 175, 156, 0.18);
+        }
+
         .btn-accion-principal {
             flex: 1;
             background-color: var(--color-primario);
@@ -135,24 +155,36 @@
             </div>
             <div>
                 <h1 class="text-3xl font-black text-slate-800 tracking-tight">Caja de Captura de Eventos</h1>
-                <p class="text-sm font-bold text-slate-500 mt-1">Copia y pega el texto íntegro de WhatsApp. Conserva Sede/Ubicación, Fecha, Horario, Asistentes, Tema del Evento y UR.</p>
+                <p class="text-sm font-bold text-slate-500 mt-1">Copia y pega el texto íntegro de WhatsApp. Revisa y edita abajo antes de subir a <code class="text-slate-700">agenda_eventos.html</code>.</p>
             </div>
         </div>
 
         <!-- Formulario de Captura -->
         <form id="formCajaEvento" onsubmit="publicarEvento(event)">
-            <label for="textoEvento" class="block text-sm font-black text-slate-400 uppercase tracking-wider mb-2">Mensaje del Evento</label>
+            <label for="textoEvento" class="block text-sm font-black text-slate-400 uppercase tracking-wider mb-2">Mensaje del Evento (Original / WhatsApp)</label>
             
-            <textarea id="textoEvento" required rows="8" 
-                      placeholder="Ej.&#10;BODEGA DGRHYO-DGRMyS, NIVEL 1&#10;Fecha: martes 3 de febrero de 2026 hasta nuevo aviso&#10;Horario: 9:00 a las 18:00 horas&#10;Tema: Recepción de equipos de cómputo tipo escritorio...&#10;Participantes: 20 personas por día." 
+            <textarea id="textoEvento" required rows="7" 
+                      placeholder="Ej.&#10;ESTUDIO DE GRABACION NIVEL 0&#10;Fechas: martes 24 y miércoles 25 de noviembre 2026&#10;horario: De las 08:30 a 11:00 horas&#10;tema: Reunión de Trabajo para la grabación del Podcast&#10;preside: Daniel García Flores&#10;cargo: Subdirección de Desarrollo integral en la DGETI&#10;no. de asistentes: 3 personas aproximadamente" 
                       class="campo-texto" oninput="actualizarPrevia()"></textarea>
 
-            <!-- Vista previa estructurada -->
-            <div id="panelPrevia" class="hidden mt-4 bg-slate-50 border border-slate-200 rounded-2xl p-4">
-                <span class="block text-[11px] font-black uppercase tracking-wider text-[#5e9381] mb-1.5">
-                    Vista previa estructurada (Sede / Ubicación, Fecha, Horario, Asistentes, Tema del Evento y UR)
-                </span>
-                <pre id="textoPrevia" class="text-xs font-semibold text-slate-700 whitespace-pre-wrap leading-relaxed"></pre>
+            <!-- Caja Inferior: Vista Previa Editable para agenda_eventos.html -->
+            <div id="panelPrevia" class="hidden mt-5 bg-slate-50 border-2 border-[#77af9c]/50 rounded-2xl p-4 shadow-sm">
+                <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                    <label for="editorPrevia" class="text-xs font-black uppercase tracking-wider text-[#5e9381]">
+                        ✏️ Vista previa editable (así se enviará y leerá en agenda_eventos.html)
+                    </label>
+                    <button type="button" onclick="regenerarPreviaDesdeOriginal()" class="text-xs font-bold text-slate-600 hover:text-slate-900 bg-white border border-slate-300 hover:bg-slate-100 px-3 py-1 rounded-lg transition cursor-pointer">
+                        ↺ Regenerar desde mensaje original
+                    </button>
+                </div>
+
+                <textarea id="editorPrevia" rows="7"
+                          class="campo-previa-editable"
+                          oninput="marcarEdicionManual()"></textarea>
+
+                <p id="estadoEdicionPrevia" class="text-[11px] text-slate-500 font-medium mt-2">
+                    Puedes corregir cualquier dato directamente aquí (Sede, Fecha, Horario, Asistentes, Tema o UR). Al publicar se enviará exactamente el texto de esta caja.
+                </p>
             </div>
             
             <div id="alertaExito" class="hidden mt-4 p-4 bg-emerald-50 text-emerald-700 text-sm font-bold rounded-xl border border-emerald-200 flex items-center justify-center gap-2 transition-all">
@@ -175,6 +207,8 @@
     </div>
 
     <script>
+        let edicionManualActiva = false;
+
         const mapaUrs = [
             { sigla: "DGRHyO", frases: ["dgrhyo", "dghryo", "dgrho", "dgrmys", "dirección general de recursos humanos y organización", "direccion general de recursos humanos y organizacion", "dirección de relaciones laborales"] },
             { sigla: "DGDCYPEI", frases: ["dirección general de desarrollo curricular y política de educación inicial", "ur 312"] },
@@ -249,10 +283,10 @@
         function limpiarTextoWhatsApp(texto) {
             return (texto || "")
                 .split('\n')
-                .map(l => l.replace(/\u00a0/g, ' ').trim())
+                .map(l => l.replace(/[\u00a0\u2000-\u200b\ufeff]/g, ' ').trim())
                 .filter(l => l.length > 0)
                 .filter(l => !/^\*?reenviado\*?$/i.test(l))
-                .filter(l => !/^\*?\[?\d{1,2}:\d{2}(?::\d{2})?\s*(?:a\.?\s*m\.?\vert{}p\.?\s*m\.?\vert{}am\vert{}pm)?\]?\*?$/i.test(l))
+                .filter(l => !/^\*?\[?\d{1,2}:\d{2}(?::\d{2})?\s*(?:a\.?\s*m\.?|p\.?\s*m\.?|am|pm)?\]?\*?$/i.test(l))
                 .filter(l => !/^jos[eé] madrigal ventura$/i.test(l))
                 .join('\n');
         }
@@ -260,12 +294,12 @@
         function detectarEtiqueta(linea) {
             const l = normalizarTexto(linea);
             if (/^ur\s*:/.test(l) || /^unidad\s+responsable\s*:/.test(l)) return 'ur';
-            if (/^fecha\s*:/.test(l)) return 'fecha';
+            if (/^fechas?\s*:/.test(l)) return 'fecha';
             if (/^(horario|hora)\s*:/.test(l)) return 'horario';
-            if (/^(tema|asunto|evento)\s*:/.test(l)) return 'tema';
+            if (/^(tema(?:\s+del\s+evento)?|asunto|evento)\s*:/.test(l)) return 'tema';
             if (/^(?:no\.?\s*de\s*)?(?:asistentes|participantes|asistencia(?:\s+para)?|aforo(?:\s+estimado)?)\s*:/.test(l)) return 'asistentes';
             if (/^(sede|ubicacion|lugar)\s*:/.test(l)) return 'sede';
-            if (/^(contacto|responsable|enlace|telefono|tel)\s*:/.test(l)) return 'extra';
+            if (/^(preside|cargo|contacto|responsable|enlace|telefono|tel)\s*:/.test(l)) return 'extra';
             return null;
         }
 
@@ -298,11 +332,11 @@
                     if (etiq === 'sede') {
                         bufSede.push(linea.replace(/^(sede|ubicaci[oó]n|lugar)\s*:\s*/i, '').trim());
                     } else if (etiq === 'fecha') {
-                        bufFecha.push(linea.replace(/^fecha\s*:\s*/i, '').trim());
+                        bufFecha.push(linea.replace(/^fechas?\s*:\s*/i, '').trim());
                     } else if (etiq === 'horario') {
                         bufHorario.push(linea.replace(/^(horario|hora)\s*:\s*/i, '').trim());
                     } else if (etiq === 'tema') {
-                        bufTema.push(linea.replace(/^(?:tema|asunto|evento)\s*:\s*/i, '').trim());
+                        bufTema.push(linea.replace(/^(?:tema(?:\s+del\s+evento)?|asunto|evento)\s*:\s*/i, '').trim());
                     } else if (etiq === 'asistentes') {
                         bufAsistentes.push(
                             linea.replace(/^(?:no\.?\s*de\s*)?(?:asistentes|participantes|asistencia(?:\s+para)?|aforo(?:\s+estimado)?)\s*:?\s*/i, '').trim()
@@ -325,7 +359,7 @@
                         bufFecha.push(linea);
                     } else if (campoActual === 'horario' && /(?:a\s+las|horas?|am|pm|\d{1,2}:\d{2})/i.test(linea)) {
                         bufHorario.push(linea);
-                    } else if (campoActual === 'asistentes' && /(?:personas|asistentes|participantes|por\s+d[ií]a)/i.test(linea)) {
+                    } else if (campoActual === 'asistentes' && /(?:personas|asistentes|participantes|por\s+d[ií]a|aproximadamente)/i.test(linea)) {
                         bufAsistentes.push(linea);
                     } else if (campoActual === 'sede') {
                         bufSede.push(linea);
@@ -343,6 +377,10 @@
             if (bufAsistentes.length > 0) asistentes = bufAsistentes.join(' ').replace(/\s+/g, ' ').trim();
             if (bufTema.length > 0) tema = bufTema.join(' ').replace(/\s+/g, ' ').trim();
 
+            if (bufExtra.length > 0) {
+                tema = `${tema} (${bufExtra.join(' | ')})`.replace(/\s+/g, ' ').trim();
+            }
+
             const salida = [
                 `Sede: ${sede}`,
                 `Fecha: ${fecha}`,
@@ -352,33 +390,61 @@
                 `UR: ${ur}`
             ];
 
-            if (bufExtra.length > 0) {
-                salida.push(bufExtra.join(' '));
-            }
-
             return salida.join('\n');
         }
 
-        function actualizarPrevia() {
+        function marcarEdicionManual() {
+            edicionManualActiva = true;
+            const estado = document.getElementById('estadoEdicionPrevia');
+            if (estado) {
+                estado.innerText = "✏️ Editado manualmente: se publicará exactamente el texto que ves en esta caja.";
+                estado.className = "text-[11px] text-amber-700 font-bold mt-2";
+            }
+        }
+
+        function regenerarPreviaDesdeOriginal() {
+            edicionManualActiva = false;
+            const estado = document.getElementById('estadoEdicionPrevia');
+            if (estado) {
+                estado.innerText = "Puedes corregir cualquier dato directamente aquí (Sede, Fecha, Horario, Asistentes, Tema o UR). Al publicar se enviará exactamente el texto de esta caja.";
+                estado.className = "text-[11px] text-slate-500 font-medium mt-2";
+            }
+            actualizarPrevia(true);
+        }
+
+        function actualizarPrevia(forzar = false) {
             const crudo = document.getElementById('textoEvento').value;
             const panel = document.getElementById('panelPrevia');
-            const pre = document.getElementById('textoPrevia');
+            const editor = document.getElementById('editorPrevia');
 
             if (!crudo.trim()) {
                 panel.classList.add('hidden');
-                pre.innerText = '';
+                editor.value = '';
+                edicionManualActiva = false;
                 return;
             }
 
             panel.classList.remove('hidden');
-            pre.innerText = normalizarTextoDesdeWhatsApp(crudo);
+
+            if (!edicionManualActiva || forzar) {
+                editor.value = normalizarTextoDesdeWhatsApp(crudo);
+            }
+        }
+
+        function obtenerTextoFinalParaPublicar() {
+            const editor = document.getElementById('editorPrevia');
+            const crudo = document.getElementById('textoEvento').value;
+
+            if (editor && editor.value.trim().length > 0) {
+                return editor.value.trim();
+            }
+            return normalizarTextoDesdeWhatsApp(crudo);
         }
 
         async function publicarEvento(e) {
             e.preventDefault();
             
-            const textoCrudo = document.getElementById('textoEvento').value;
-            const textoLimpio = normalizarTextoDesdeWhatsApp(textoCrudo);
+            const textoLimpio = obtenerTextoFinalParaPublicar();
             const btn = document.getElementById('btnPublicar');
             const alerta = document.getElementById('alertaExito');
             
@@ -395,7 +461,7 @@
 
                 if (response.ok) {
                     document.getElementById('formCajaEvento').reset();
-                    actualizarPrevia();
+                    actualizarPrevia(true);
                     alerta.classList.remove('hidden');
                     
                     setTimeout(() => {
