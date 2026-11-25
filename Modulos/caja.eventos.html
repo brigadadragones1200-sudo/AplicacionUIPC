@@ -12,7 +12,6 @@
     <!-- ======================================================= -->
     <style>
         :root {
-            /* Colores adaptados a la paleta equilibrada */
             --color-fondo-pagina: #f4f6f5;
             --color-tarjeta-bg: #FFFFFF;
             --color-primario: #77af9c;
@@ -20,15 +19,12 @@
             --color-peligro: #e06d7e;
             --color-peligro-hover: #be123c;
             
-            /* Textos y Bordes */
             --color-texto-principal: #1E293B;
             --color-texto-secundario: #64748B;
             --color-borde-caja: #77af9c;
             
-            /* Fuentes y Espaciados */
-            background-color: var(--color-fondo-pagina);
             --fuente-principal: 'Inter', sans-serif;
-            --radio-borde-principal: 1.5rem; /* 24px */
+            --radio-borde-principal: 1.5rem;
         }
 
         body {
@@ -39,7 +35,6 @@
             margin: 0;
         }
 
-        /* Clases semánticas personalizadas para fácil mantenimiento */
         .contenedor-principal {
             width: 100%;
             max-width: 1100px;
@@ -63,24 +58,33 @@
             flex-shrink: 0;
         }
 
-        .campo-texto {
+        .campo-entrada {
             width: 100%;
-            padding: 1rem;
+            padding: 0.85rem 1rem;
             background-color: #F8FAFC;
             border: 2px solid #9baec8;
             border-radius: 1rem;
-            font-size: 1rem;
-            font-weight: 500;
+            font-size: 0.95rem;
+            font-weight: 600;
             color: var(--color-texto-principal);
             outline: none;
-            resize: none;
             transition: all 0.2s ease-in-out;
-            line-height: 1.6;
         }
 
-        .campo-texto:focus {
+        .campo-entrada:focus {
             border-color: var(--color-primario);
+            background-color: #FFFFFF;
             box-shadow: 0 0 0 4px rgba(119, 175, 156, 0.15);
+        }
+
+        .etiqueta-campo {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #475569;
+            margin-bottom: 0.4rem;
         }
 
         .btn-accion-principal {
@@ -134,23 +138,110 @@
     <div class="contenedor-principal">
         
         <!-- Encabezado -->
-        <div class="flex items-center gap-4 mb-6 border-b border-slate-200 pb-5">
-            <div class="icono-encabezado">
-                <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 border-b border-slate-200 pb-5">
+            <div class="flex items-center gap-4">
+                <div class="icono-encabezado">
+                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
+                </div>
+                <div>
+                    <h1 class="text-3xl font-black text-slate-800 tracking-tight">Caja de Captura de Eventos</h1>
+                    <p class="text-sm font-bold text-slate-500 mt-1">Captura estructurada con los mismos campos reportados en la Agenda de Eventos.</p>
+                </div>
             </div>
-            <div>
-                <h1 class="text-3xl font-black text-slate-800 tracking-tight">Caja de Captura de Eventos</h1>
-                <p class="text-sm font-bold text-slate-500 mt-1">Copia y pega el texto íntegro de WhatsApp. El sistema lo publicará directo en el muro de la agenda.</p>
-            </div>
+
+            <button type="button" onclick="llenarFechaHoy()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-extrabold text-xs py-2.5 px-4 rounded-xl border border-slate-300 transition-all cursor-pointer self-start sm:self-auto">
+                📅 Usar fecha de hoy
+            </button>
         </div>
 
-        <!-- Formulario de Captura -->
+        <!-- Formulario de Captura por Campos de Agenda -->
         <form id="formCajaEvento" onsubmit="publicarEvento(event)">
-            <label for="textoEvento" class="block text-sm font-black text-slate-400 uppercase tracking-wider mb-2">Mensaje del Evento</label>
-            
-            <textarea id="textoEvento" required rows="8" 
-                      placeholder="Ej. Explanada Principal del Centro SEP, Nivel 3&#10;Fecha: miércoles 7 de octubre...&#10;Horario: de las 12 30 a 13:00 horas..." 
-                      class="campo-texto"></textarea>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                
+                <!-- 1. Sede / Ubicación -->
+                <div>
+                    <label for="campoSede" class="etiqueta-campo">📍 Sede / Ubicación</label>
+                    <input type="text" id="campoSede" list="listaSedes" required
+                           placeholder="Ej. Auditorio, Explanada, Sala 1, Estudio de Grabación Nivel 0"
+                           class="campo-entrada" oninput="actualizarVistaPrevia()">
+                    <datalist id="listaSedes">
+                        <option value="Auditorio">
+                        <option value="Explanada">
+                        <option value="Explanada Principal del Centro SEP">
+                        <option value="Estudio de Grabación Nivel 0">
+                        <option value="Sala 1">
+                        <option value="Sala 2">
+                    </datalist>
+                </div>
+
+                <!-- 2. Fecha -->
+                <div>
+                    <label for="campoFecha" class="etiqueta-campo">📅 Fecha</label>
+                    <input type="text" id="campoFecha"
+                           placeholder="Ej. miércoles 25 de noviembre de 2026 (o déjalo vacío)"
+                           class="campo-entrada" oninput="actualizarVistaPrevia()">
+                </div>
+
+                <!-- 3. Horario -->
+                <div>
+                    <label for="campoHorario" class="etiqueta-campo">⏰ Horario</label>
+                    <input type="text" id="campoHorario"
+                           placeholder="Ej. De las 08:30 a 11:00 horas"
+                           class="campo-entrada" oninput="actualizarVistaPrevia()">
+                </div>
+
+                <!-- 4. Asistentes -->
+                <div>
+                    <label for="campoAsistentes" class="etiqueta-campo">👥 Asistentes</label>
+                    <input type="text" id="campoAsistentes"
+                           placeholder="Ej. 3 personas (o 50 asistentes)"
+                           class="campo-entrada" oninput="actualizarVistaPrevia()">
+                </div>
+
+                <!-- 5. Tema del Evento -->
+                <div class="md:col-span-2">
+                    <label for="campoTema" class="etiqueta-campo">📌 Tema del Evento</label>
+                    <input type="text" id="campoTema" required
+                           placeholder="Ej. Reunión de Trabajo para la grabación del Podcast"
+                           class="campo-entrada" oninput="actualizarVistaPrevia()">
+                </div>
+
+                <!-- 6. UR (Unidad Responsable) -->
+                <div class="md:col-span-2">
+                    <label for="campoUR" class="etiqueta-campo">🏢 UR (Unidad Responsable)</label>
+                    <input type="text" id="campoUR" list="listaURs"
+                           placeholder="Ej. DGETI, DGDySNEM, DGRHyO, CSI, INCENDIOS... (o No especificada)"
+                           class="campo-entrada" oninput="actualizarVistaPrevia()">
+                    <datalist id="listaURs">
+                        <option value="No especificada">
+                        <option value="DGDySNEM">
+                        <option value="DGRHyO">
+                        <option value="DGETI">
+                        <option value="DGME">
+                        <option value="SEB">
+                        <option value="SEMS">
+                        <option value="SES">
+                        <option value="CSI">
+                        <option value="UNEM">
+                        <option value="USICAMM">
+                        <option value="CSIGPT">
+                        <option value="EVACUACIÓN">
+                        <option value="INCENDIOS">
+                        <option value="PRIMEROS AUXILIOS">
+                        <option value="BÚSQUEDA Y RESCATE">
+                        <option value="COMUNICACIÓN">
+                    </datalist>
+                </div>
+
+            </div>
+
+            <!-- Vista previa del texto formateado que se enviará -->
+            <div class="mt-5 bg-slate-50 border border-slate-200 rounded-2xl p-4">
+                <span class="block text-[11px] font-black uppercase tracking-wider text-[#5e9381] mb-1.5">
+                    Vista previa estructurada para la Agenda
+                </span>
+                <pre id="vistaPreviaTexto" class="text-xs font-semibold text-slate-700 whitespace-pre-wrap leading-relaxed"></pre>
+            </div>
             
             <div id="alertaExito" class="hidden mt-4 p-4 bg-emerald-50 text-emerald-700 text-sm font-bold rounded-xl border border-emerald-200 flex items-center justify-center gap-2 transition-all">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
@@ -172,10 +263,44 @@
     </div>
 
     <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            actualizarVistaPrevia();
+        });
+
+        function llenarFechaHoy() {
+            const opciones = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone: 'America/Mexico_City' };
+            const fechaStr = new Date().toLocaleDateString('es-MX', opciones);
+            document.getElementById('campoFecha').value = fechaStr.charAt(0).toUpperCase() + fechaStr.slice(1);
+            actualizarVistaPrevia();
+        }
+
+        function construirTextoEvento() {
+            const sede = document.getElementById('campoSede').value.trim() || 'No especificada';
+            const fecha = document.getElementById('campoFecha').value.trim() || 'No especificada';
+            const horario = document.getElementById('campoHorario').value.trim() || 'No especificado';
+            const asistentes = document.getElementById('campoAsistentes').value.trim() || 'No especificados';
+            const tema = document.getElementById('campoTema').value.trim() || 'No especificado';
+            const ur = document.getElementById('campoUR').value.trim() || 'No especificada';
+
+            // Formato compatible con extraerResumenEvento(), detectarUR() y obtenerNumeroAsistentes()
+            return [
+                `Sede: ${sede}`,
+                `Fecha: ${fecha}`,
+                `Horario: ${horario}`,
+                `Asistentes: ${asistentes}`,
+                `Tema del Evento: ${tema}`,
+                `UR: ${ur}`
+            ].join('\n');
+        }
+
+        function actualizarVistaPrevia() {
+            document.getElementById('vistaPreviaTexto').innerText = construirTextoEvento();
+        }
+
         async function publicarEvento(e) {
             e.preventDefault();
             
-            const textoInput = document.getElementById('textoEvento').value;
+            const textoFormateado = construirTextoEvento();
             const btn = document.getElementById('btnPublicar');
             const alerta = document.getElementById('alertaExito');
             
@@ -187,11 +312,12 @@
                 const response = await fetch('/api/eventos/rapido', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ contenido_whatsapp: textoInput })
+                    body: JSON.stringify({ contenido_whatsapp: textoFormateado })
                 });
 
-                if(response.ok) {
+                if (response.ok) {
                     document.getElementById('formCajaEvento').reset();
+                    actualizarVistaPrevia();
                     alerta.classList.remove('hidden');
                     
                     setTimeout(() => {
@@ -210,7 +336,7 @@
         }
 
         async function borrarTodosLosDatos() {
-            if(!confirm("⚠️ ¿Estás seguro de que deseas vaciar y borrar todos los eventos actuales del muro? Esta acción no se puede deshacer.")) {
+            if (!confirm("⚠️ ¿Estás seguro de que deseas vaciar y borrar todos los eventos actuales del muro? Esta acción no se puede deshacer.")) {
                 return;
             }
 
@@ -220,7 +346,7 @@
                     headers: { 'Content-Type': 'application/json' }
                 });
 
-                if(response.ok) {
+                if (response.ok) {
                     alert("🗑️ ¡El muro de eventos ha sido borrado y limpiado con éxito!");
                 } else {
                     alert("No se pudieron borrar los datos.");
