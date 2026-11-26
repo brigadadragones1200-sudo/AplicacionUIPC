@@ -532,44 +532,93 @@
             }
         }
 
+        // Normalización de caracteres invisibles, espacios no separables y etiquetas de fecha
+        function limpiarTextoParaExtraccion(textoBruto) {
+            return String(textoBruto || "")
+                .replace(/[\u00a0\u2000-\u200b\ufeff]/g, ' ')
+                .replace(/\r\n?/g, '\n');
+        }
+
+        function extraerFechaEvento(textoLimpio) {
+            // Buscar línea o segmento que inicie con "fecha:" o "fechas:" (con o sin acentos / espacios previos)
+            const lineas = textoLimpio.split('\n');
+            for (let i = 0; i < lineas.length; i++) {
+                const lineaTrim = lineas[i].trim();
+                const matchLinea = lineaTrim.match(/^fechas?\s*[:\-–—]?\s*(.*)$/i);
+                if (matchLinea) {
+                    let valor = (matchLinea[1] || "").trim();
+                    // Si quedó vacío en la misma línea, tomar la siguiente línea no vacía si no es otra etiqueta
+                    if (!valor && i + 1 < lineas.length) {
+                        const sig = lineas[i + 1].trim();
+                        if (sig && !/^(?:horario|hora|tema|asunto|evento|preside|cargo|no\.?\s*de\s*asistentes|asistentes|ur|contacto|sede)\s*[:\-–—]?/i.test(sig)) {
+                            valor = sig;
+                        }
+                    }
+                    // Recortar si en la misma línea viene pegada otra etiqueta conocida (ej. "horario: ...")
+                    valor = valor.replace(/\s+(?:horario|hora|tema(?:\s+del\s+evento)?|asunto|evento|preside|cargo|no\.?\s*de\s*asistentes|asistentes|participantes|ur|contacto)\s*[:\-–—].*$/i, '').trim();
+                    if (valor.length > 0) return valor;
+                }
+            }
+
+            // Respaldo: si el texto trae "fechas" o "fecha" en cualquier parte de la línea
+            const matchEnLinea = textoLimpio.match(/(?:^|\n)[^\n]*?\bfechas?\b\s*[:\-–—]?\s*([^\n]+)/i);
+            if (matchEnLinea && matchEnLinea[1]) {
+                const limpia = matchEnLinea[1]
+                    .replace(/\s+(?:horario|hora|tema|preside|cargo|no\.?\s*de\s*asistentes|asistentes|ur|contacto)\s*[:\-–—].*$/i, '')
+                    .trim();
+                if (limpia.length > 0) return limpia;
+            }
+
+            // Respaldo natural: días de la semana + fecha o formato dd/mm/aaaa
+            const patronFechaNatural = /\b(?:(?:lunes|martes|mi[eé]rcoles|jueves|viernes|s[aá]bado|domingo)(?:\s+y\s+(?:lunes|martes|mi[eé]rcoles|jueves|viernes|s[aá]bado|domingo))?\s+\d{1,2}\s+(?:de\s+)?(?:enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|setiembre|octubre|noviembre|diciembre)(?:\s+(?:de\s+)?\d{4})?|\d{1,2}[\/\-]\d{1,2}(?:[\/\-]\d{2,4})?)\b/i;
+            const matchNatural = textoLimpio.match(patronFechaNatural);
+            if (matchNatural && matchNatural[0]) {
+                return matchNatural[0].trim();
+            }
+
+            return "No especificada";
+        }
+
         function extraerResumenEvento(textoBruto) {
-            let lineas = textoBruto.split('\n').map(l => l.trim()).filter(l => l.length > 0);
-            lineas = lineas.filter(l => !/\[\d{1,2}:\d{2}.*\]/i.test(l) && !/José Madrigal Ventura/i.test(l));
+            let textoLimpio = limpiarTextoParaExtraccion(textoBruto);
+            let lineas = textoLimpio.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+            lineas = lineas.filter(
+                l => !/\[\d{1,2}:\d{2}.*\]/i.test(l) &&
+                     !/José Madrigal Ventura/i.test(l) &&
+                     !/^reenviado$/i.test(l) &&
+                     !/^\d{1,2}:\d{2}\s*(?:a\.?\s*m\.?|p\.?\s*m\.?|am|pm)?$/i.test(l)
+            );
 
             let sede = "No especificada";
-            let fecha = "No especificada";
+            let fecha = extraerFechaEvento(textoLimpio);
             let horario = "No especificado";
             let tema = "No especificado";
             let asistentes = "No especificados";
-            
-            let ur = detectarUR(textoBruto);
+            let ur = detectarUR(textoLimpio);
 
-            const regexSede = /(cubo|área|area|acceso|ala|bodega|auditorio|explanada|sala)/i;
-            const lineaSedeEncontrada = lineas.find(l => regexSede.test(l));
-            
-            if (lineaSedeEncontrada) {
-                sede = lineaSedeEncontrada;
-            } else if (lineas.length > 0 && !lineas[0].toUpperCase().includes('FECHA:')) {
-                sede = lineas[0];
+            let matchHorario = textoLimpio.match(/(?:^|\n|\s+)(?:horario|hora)\s*:\s*([^\n]+)/i);
+            if (matchHorario) {
+                horario = matchHorario[1].trim();
             }
 
-            lineas.forEach(linea => {
-                const upper = linea.toUpperCase();
+            let matchTema = textoLimpio.match(/(?:^|\n|\s+)(?:tema(?:\s+del\s+evento)?|asunto|evento)\s*:\s*([\s\S]*?)(?=\n\s*(?:preside|cargo|no\.?\s*de\s*asistentes|asistentes|participantes|asistencia(?:\s+para)?|aforo(?:\s+estimado)?|ur|unidad\s+responsable|contacto|responsable|enlace|tel[eé]fono|sede|ubicaci[oó]n|lugar|fecha|fechas|horario|hora)\s*:|$)/i);
+            if (matchTema) {
+                tema = matchTema[1].split('\n').map(l => l.trim()).filter(Boolean).join(' ').trim();
+            }
 
-                if (upper.startsWith('FECHA:')) {
-                    fecha = linea.replace(/^fecha:\s*/i, '');
-                } else if (upper.startsWith('HORARIO:') || upper.startsWith('HORA:')) {
-                    horario = linea.replace(/^(horario|hora):\s*/i, '');
-                } else if (upper.startsWith('TEMA:')) {
-                    tema = linea.replace(/^tema:\s*/i, '');
-                } else if (upper.includes('TEMA:') || upper.includes('ASUNTO:')) {
-                    tema = linea.replace(/^.*?(tema|asunto):\s*/i, '');
-                } else if (upper.startsWith('EVENTO:')) {
-                    tema = linea.replace(/^evento:\s*/i, '');
-                } else if (/^(?:no\.?\s*de\s*)?(?:asistentes|participantes|asistencia(?:\s+para)?|aforo(?:\s+estimado)?)\s*:?\s*/i.test(linea)) {
-                    asistentes = linea.replace(/^(?:no\.?\s*de\s*)?(?:asistentes|participantes|asistencia(?:\s+para)?|aforo(?:\s+estimado)?)\s*:?\s*/i, '');
-                }
-            });
+            let matchAsistentes = textoLimpio.match(/(?:^|\n|\s+)(?:no\.?\s*de\s*)?(?:asistentes|participantes|asistencia(?:\s+para)?|aforo(?:\s+estimado)?)\s*:?\s*([^\n]+)/i);
+            if (matchAsistentes) {
+                asistentes = matchAsistentes[1].trim();
+            }
+
+            const regexSede = /(cubo|área|area|acceso|ala|bodega|auditorio|explanada|sala|estudio)/i;
+            const lineaSedeEncontrada = lineas.find(l => regexSede.test(l) && !/^(?:fecha|fechas|horario|hora|tema|asunto|evento|preside|cargo|contacto|ur)\s*:/i.test(l));
+
+            if (lineaSedeEncontrada) {
+                sede = lineaSedeEncontrada.replace(/^(?:sede\s*:\s*)+/i, '').trim();
+            } else if (lineas.length > 0 && !/^(?:fecha|fechas)\s*:/i.test(lineas[0])) {
+                sede = lineas[0].replace(/^(?:sede\s*:\s*)+/i, '').trim();
+            }
 
             return `
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
