@@ -266,14 +266,11 @@
             return 0;
         }
 
-        // Función inteligente para detectar la UR con prioridad para siglas institucionales antes de RH
-        function detectarUR(textoBruto) {
-            let textoNorm = normalizarTexto(textoBruto);
-
-            // 1. PRIORIDAD ABSOLUTA: Buscar primero si el texto menciona explícitamente alguna sigla de UR
+        function buscarEnMapaUrs(texto) {
+            let textoNorm = normalizarTexto(texto);
             for (let item of mapaUrs) {
                 let regexSigla = new RegExp(`\\b${item.sigla}\\b`, 'i');
-                if (regexSigla.test(textoBruto) || textoNorm.includes(item.sigla.toLowerCase())) {
+                if (regexSigla.test(texto) || textoNorm.includes(item.sigla.toLowerCase())) {
                     return item.sigla;
                 }
                 for (let frase of item.frases) {
@@ -282,13 +279,37 @@
                     }
                 }
             }
-
-            // 2. RESPALDO SECUNDARIO: Si no hay siglas explícitas, evaluar palabras clave genéricas
             if (textoNorm.includes("banorte") || textoNorm.includes("metlife") || textoNorm.includes("dghryo") || textoNorm.includes("dgrhyo") || (textoNorm.includes("recursos humanos") && !textoNorm.includes("dgutyp") && !textoNorm.includes("dgtuyp"))) {
                 return "DGRHyO";
             }
+            return null;
+        }
 
-            return "No especificada";
+        // Función inteligente para detectar la UR respetando "UR: ..." editada manualmente y sin confundirse con el nombre de la bodega/sede
+        function detectarUR(textoBruto) {
+            let lineas = (textoBruto || "").split('\n').map(l => l.trim()).filter(Boolean);
+            const regexSede = /(cubo|área|area|acceso|ala|bodega|auditorio|explanada|sala|piso|estudio|nivel)/i;
+
+            // 1. PRIORIDAD ABSOLUTA: Si viene la línea explícita "UR: ..." (como la que manda la caja de vista previa editable), respetarla directamente
+            for (let linea of lineas) {
+                if (/^(?:ur|unidad\s+responsable)\s*:/i.test(normalizarTexto(linea))) {
+                    let val = linea.replace(/^(?:ur|unidad\s+responsable)\s*:\s*/i, '').trim();
+                    if (val && !/^no\s+especificada?$/i.test(val)) {
+                        return buscarEnMapaUrs(val) || val;
+                    }
+                }
+            }
+
+            // 2. Buscar en el resto del mensaje excluyendo la línea de Sede/Bodega/Sala
+            let textoSinSede = lineas
+                .filter((l, idx) => !(/^sede\s*:/i.test(l) || (idx === 0 && regexSede.test(l))))
+                .join('\n');
+
+            let urEnCuerpo = buscarEnMapaUrs(textoSinSede);
+            if (urEnCuerpo) return urEnCuerpo;
+
+            // 3. Respaldo: buscar en todo el texto incluyendo la sede
+            return buscarEnMapaUrs(textoBruto) || "No especificada";
         }
 
         document.addEventListener('DOMContentLoaded', () => {
